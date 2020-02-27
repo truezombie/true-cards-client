@@ -25,6 +25,8 @@
   },
   "plugins": ["prettier", "react", "@typescript-eslint"],
   "rules": {
+    "no-unused-vars": "error",
+    "no-console": "error",
     "prettier/prettier": "error",
     "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }]
   },
