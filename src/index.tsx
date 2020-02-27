@@ -7,7 +7,7 @@ const test = (name: string): string => {
   return name;
 };
 
-test(1);
+test('1');
 
 const App = () => (
   <IconButton aria-label='delete'>
