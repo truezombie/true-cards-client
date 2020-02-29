@@ -12,7 +12,7 @@ module.exports = (env = {}) => {
 
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: isProd ? '[name].[contenthash].js' : '[name].js',
+      filename: isProd ? '[name].[contenthash].js' : '[name].bundle.js',
     },
 
     resolve: {
@@ -48,6 +48,7 @@ module.exports = (env = {}) => {
     devServer: {
       open: true,
       port: 3000,
+      historyApiFallback: true,
     },
   };
 };

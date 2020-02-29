@@ -14,5 +14,22 @@
     "@babel/preset-react",
     "@babel/preset-typescript"
   ],
-  "plugins": ["@babel/plugin-transform-typescript"]
+  "plugins": [
+    "@babel/plugin-transform-typescript",
+    [
+      "babel-plugin-import",
+      {
+        "libraryName": "@material-ui/core",
+      },
+      "core"
+    ],
+    [
+      "babel-plugin-import",
+      {
+        "libraryName": "@material-ui/icons",
+      },
+      "icons"
+    ],
+    "babel-plugin-transform-imports",
+  ]
 }
