@@ -3,21 +3,17 @@ import { StyleRules } from '@material-ui/styles/withStyles';
 
 export default (theme: Theme): StyleRules =>
   createStyles({
-    paperWrapper: {
-      margin: theme.spacing(8, 0, 3),
+    logoWrapper: {
       display: 'flex',
-      flexDirection: 'column',
       alignItems: 'center',
     },
-    paper: {
-      padding: theme.spacing(3),
-      marginTop: theme.spacing(3),
+    card: {
+      padding: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      borderColor: theme.palette.primary.light,
+      backgroundColor: 'transparent',
     },
-    form: {
-      width: '100%', // Fix IE 11 issue.
+    caption: {
       marginTop: theme.spacing(1),
-    },
-    submit: {
-      margin: theme.spacing(2, 0),
     },
   });

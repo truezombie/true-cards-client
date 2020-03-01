@@ -11,7 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 
-import { Copyright } from '../../components';
+import { Copyright, Logo } from '../../components';
 import ROUTES from '../../constants/router';
 import styles from './styles';
 
@@ -20,61 +20,66 @@ interface PageLoginProps extends WithStyles<typeof styles> {}
 const PageLogin = ({ classes }: PageLoginProps) => {
   return (
     <Container component='main' maxWidth='xs'>
-      <Paper className={classes.paper}>
-        <Typography component='h1' variant='h5'>
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant='outlined'
-            margin='normal'
-            required
-            fullWidth
-            id='email'
-            label='Email Address'
-            name='email'
-            autoComplete='email'
-            autoFocus
-          />
-          <TextField
-            variant='outlined'
-            margin='normal'
-            required
-            fullWidth
-            name='password'
-            label='Password'
-            type='password'
-            id='password'
-            autoComplete='current-password'
-          />
-          <FormControlLabel
-            control={<Checkbox value='remember' color='primary' />}
-            label='Remember me'
-          />
-          <Button
-            size='large'
-            type='submit'
-            fullWidth
-            variant='contained'
-            color='primary'
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
-          <Grid container>
+      <div className={classes.paperWrapper}>
+        <Logo />
+        <Paper className={classes.paper}>
+          <Grid container alignItems='center'>
             <Grid item xs>
-              <Link href={ROUTES.forgotPassword} variant='body2'>
-                Forgot password?
-              </Link>
+              <Typography component='h1' variant='h6'>
+                Sign in
+              </Typography>
             </Grid>
             <Grid item>
               <Link href={ROUTES.registration} variant='body2'>
-                {"Don\n't have an account? Sign Up"}
+                Sign Up
               </Link>
             </Grid>
           </Grid>
-        </form>
-      </Paper>
+          <form className={classes.form} noValidate>
+            <TextField
+              variant='outlined'
+              margin='normal'
+              required
+              fullWidth
+              id='email'
+              label='Email Address'
+              name='email'
+              autoComplete='email'
+              autoFocus
+            />
+            <TextField
+              variant='outlined'
+              margin='normal'
+              required
+              fullWidth
+              name='password'
+              label='Password'
+              type='password'
+              id='password'
+              autoComplete='current-password'
+            />
+            <FormControlLabel
+              control={<Checkbox value='remember' color='primary' />}
+              label='Remember me'
+            />
+            <Button
+              size='large'
+              type='submit'
+              fullWidth
+              variant='contained'
+              color='primary'
+              className={classes.submit}
+            >
+              Sign In
+            </Button>
+            <Typography align='center'>
+              <Link href={ROUTES.forgotPassword} variant='body2'>
+                Forgot password?
+              </Link>
+            </Typography>
+          </form>
+        </Paper>
+      </div>
       <Copyright />
     </Container>
   );
