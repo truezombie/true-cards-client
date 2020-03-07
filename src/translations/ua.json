@@ -1,0 +1,11 @@
+{
+  "logo.description": "App for learning everything via cards",
+  "copyright": "Copyright",
+  "input.email.address": "Email address",
+  "input.password": "Password",
+  "checkbox.remember.me": "Remember me",
+  "page.login.title": "Login",
+  "page.login.sign.up": "Sign up",
+  "page.login.btn.sign.in": "Sign in",
+  "page.login.link.forgot.password": "Forgot password"
+}

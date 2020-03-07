@@ -1,19 +1,57 @@
 {
-  "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "corejs": 3,
-        "useBuiltIns": "usage",
-        "modules": false,
-        "loose": true,
-        "targets": ["last 1 version", "> 1%", "not dead", "not IE 11", "not ie_mob 11"],
-        "debug": true
-      }
-    ],
-    "@babel/preset-react",
-    "@babel/preset-typescript"
-  ],
+  "env": {
+    "development": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "corejs": 3,
+            "useBuiltIns": "usage",
+            "modules": false,
+            "loose": true,
+            "targets": "last 1 Chrome version",
+            "debug": true,
+          }
+        ],
+        "@babel/preset-react",
+        "@babel/preset-typescript"
+      ],
+    },
+    "production": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "corejs": 3,
+            "useBuiltIns": "usage",
+            "modules": false,
+            "loose": true,
+            "targets": ["last 1 version", "> 1%", "not dead", "not IE 11", "not ie_mob 11"],
+            "debug": true,
+          }
+        ],
+        "@babel/preset-react",
+        "@babel/preset-typescript"
+      ],
+    },
+    "test": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "corejs": 3,
+            "useBuiltIns": "usage",
+            "modules": false,
+            "loose": true,
+            "targets": "last 1 Chrome version",
+          }
+        ],
+        "@babel/preset-react",
+        "@babel/preset-typescript"
+      ],
+      "plugins": ["transform-es2015-modules-commonjs"]
+    }
+  },
   "plugins": [
     "@babel/plugin-transform-typescript",
     [
@@ -30,6 +68,5 @@
       },
       "icons"
     ],
-    "babel-plugin-transform-imports",
-  ]
+  ],
 }

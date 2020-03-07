@@ -10,7 +10,7 @@ export default (theme: Theme): StyleRules =>
     card: {
       padding: theme.spacing(1),
       marginRight: theme.spacing(1),
-      borderColor: theme.palette.primary.light,
+      border: `2px solid ${theme.palette.primary.light}`,
       backgroundColor: 'transparent',
     },
     caption: {

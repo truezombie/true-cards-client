@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { WithStyles } from '@material-ui/core/styles';
 
 import Container from '@material-ui/core/Container';
@@ -26,7 +27,10 @@ const PageLogin = ({ classes }: PageLoginProps) => {
           <Grid container alignItems='center'>
             <Grid item xs>
               <Typography component='h1' variant='h6'>
-                Sign in
+                <FormattedMessage
+                  id='page.login.title'
+                  defaultMessage='Login'
+                />
               </Typography>
             </Grid>
             <Grid item>
@@ -37,7 +41,6 @@ const PageLogin = ({ classes }: PageLoginProps) => {
           </Grid>
           <form className={classes.form} noValidate>
             <TextField
-              variant='outlined'
               margin='normal'
               required
               fullWidth
@@ -48,7 +51,6 @@ const PageLogin = ({ classes }: PageLoginProps) => {
               autoFocus
             />
             <TextField
-              variant='outlined'
               margin='normal'
               required
               fullWidth
