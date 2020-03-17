@@ -52,10 +52,9 @@ const PageLogin = ({ classes }: PageLoginProps) => {
               password: '',
             }}
             validationSchema={LoginValidationSchema}
-            // onSubmit={values => {
-            //   // same shape as initial values
-            //   console.log('Log in is submitted', values);
-            // }}
+            onSubmit={values => {
+              console.log('Log in is submitted', values); // eslint-disable-line no-console
+            }}
           >
             {({
               errors,
