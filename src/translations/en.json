@@ -1,7 +1,7 @@
 {
   "logo.description": "App for learning everything via cards",
   "copyright": "Copyright",
-  "input.email.address": "Email address",
+  "input.email": "Email address",
   "input.password": "Password",
   "checkbox.remember.me": "Remember me",
   "page.login.title": "Login",

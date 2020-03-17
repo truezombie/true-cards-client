@@ -2,10 +2,12 @@ import React, { lazy, Suspense } from 'react';
 import { IntlProvider } from 'react-intl';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
 
 import { Loader, AppWrapper } from '../../components';
 import ROUTES from '../../constants/router';
+
+import theme from './theme';
 
 import messagesEn from '../../translations/en.json';
 import messagesRu from '../../translations/ru.json';
@@ -16,7 +18,6 @@ const PageRegistration = lazy(() => import('../PageRegistration'));
 const PageForgotPassword = lazy(() => import('../PageForgotPassword'));
 const PageMain = lazy(() => import('../PageMain'));
 
-const theme = createMuiTheme({});
 const messages = {
   en: messagesEn,
   ru: messagesRu,

@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
@@ -8,9 +9,14 @@ import styles from './styles';
 
 interface LogoProps extends WithStyles<typeof styles> {
   showCaption?: boolean;
+  textCaption?: string | React.ReactNode;
 }
 
-const Logo = ({ classes, showCaption = true }: LogoProps) => {
+const Logo = ({
+  classes,
+  showCaption = true,
+  textCaption = <FormattedMessage id='logo.description' />,
+}: LogoProps) => {
   return (
     <>
       <div className={classes.logoWrapper}>
@@ -30,7 +36,7 @@ const Logo = ({ classes, showCaption = true }: LogoProps) => {
           variant='caption'
           color='textSecondary'
         >
-          App for learning everything via cards
+          {textCaption}
         </Typography>
       ) : null}
     </>
