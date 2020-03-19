@@ -1,3 +1,6 @@
-import PageRegistration from './PageRegistration';
+import { withStyles } from '@material-ui/styles';
 
-export default PageRegistration;
+import PageRegistration from './PageRegistration';
+import styles from './styles';
+
+export default withStyles(styles)(PageRegistration);

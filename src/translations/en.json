@@ -3,9 +3,13 @@
   "copyright": "Copyright",
   "input.email": "Email address",
   "input.password": "Password",
+  "input.password.confirm": "Confirm password",
+  "input.first.name": "First name",
+  "input.last.name": "Last name",
+  "input.nick.name": "Nick name",
+  "sign.in": "Sign in",
+  "sign.up": "Sign up",
   "checkbox.remember.me": "Remember me",
-  "page.login.title": "Login",
-  "page.login.sign.up": "Sign up",
-  "page.login.btn.sign.in": "Sign in",
-  "page.login.link.forgot.password": "Forgot password"
+  "page.login.link.forgot.password": "Forgot password",
+  "page.registration.title": "Registration"
 }

@@ -5,7 +5,6 @@ export default (): StyleRules =>
   createStyles({
     wrapper: {
       minHeight: '100vh',
-      minWidth: '100vw',
       display: 'flex',
     },
   });

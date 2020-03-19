@@ -1,3 +1,6 @@
-import PageForgotPassword from './PageForgotPassword';
+import { withStyles } from '@material-ui/styles';
 
-export default PageForgotPassword;
+import PageForgotPassword from './PageForgotPassword';
+import styles from './styles';
+
+export default withStyles(styles)(PageForgotPassword);
