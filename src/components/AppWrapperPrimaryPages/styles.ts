@@ -7,7 +7,7 @@ export default (theme: Theme): StyleRules =>
       marginBottom: theme.spacing(8),
     },
     paperWrapper: {
-      margin: theme.spacing(8, 0, 3),
+      margin: theme.spacing(3, 0, 3),
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',

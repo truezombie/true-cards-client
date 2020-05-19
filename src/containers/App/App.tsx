@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 
-import { Loader, AppWrapper } from '../../components';
+import { Loader, AppWrapper, PrivateRoute } from '../../components';
 import ROUTES from '../../constants/router';
 
 import theme from './theme';
@@ -33,16 +33,18 @@ const App = () => {
           <Router>
             <Suspense fallback={<Loader />}>
               <Switch>
-                <Route path={ROUTES.main} exact component={PageMain} />
-                <Route path={ROUTES.login} component={PageLogin} />
-                <Route
-                  path={ROUTES.registration}
-                  component={PageRegistration}
-                />
-                <Route
-                  path={ROUTES.forgotPassword}
-                  component={PageForgotPassword}
-                />
+                <PrivateRoute path={ROUTES.main} exact>
+                  <PageMain />
+                </PrivateRoute>
+                <Route path={ROUTES.login}>
+                  <PageLogin />
+                </Route>
+                <Route path={ROUTES.registration}>
+                  <PageRegistration />
+                </Route>
+                <Route path={ROUTES.forgotPassword}>
+                  <PageForgotPassword />
+                </Route>
               </Switch>
             </Suspense>
           </Router>

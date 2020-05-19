@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { WithStyles } from '@material-ui/core/styles';
@@ -12,27 +12,72 @@ import Link from '@material-ui/core/Link';
 
 import { AppWrapperPrimaryPages } from '../../components';
 import ROUTES from '../../constants/router';
+import APP from '../../constants/app';
 import styles from './styles';
 
 interface PageRegistrationProps extends WithStyles<typeof styles> {}
 
 const PageRegistration = ({ classes }: PageRegistrationProps) => {
+  const intl = useIntl();
+
   const LoginValidationSchema = Yup.object().shape({
-    firstName: Yup.string().required('First name is required'),
-    lastName: Yup.string().required('Last name is required'),
-    nickName: Yup.string().required('Nick name is required'),
+    firstName: Yup.string().required(
+      intl.formatMessage({
+        id: 'input.error.required.field',
+      })
+    ),
+    lastName: Yup.string().required(
+      intl.formatMessage({
+        id: 'input.error.required.field',
+      })
+    ),
     email: Yup.string()
-      .email('Please enter a valid email')
-      .required('Email is required'),
+      .email(
+        intl.formatMessage({
+          id: 'input.error.email.not.valid',
+        })
+      )
+      .required(
+        intl.formatMessage({
+          id: 'input.error.required.field',
+        })
+      ),
     password: Yup.string()
-      .min(5, 'Min password length 5 characters')
-      .max(256, 'Max password length 256 characters')
-      .required('Password is required'),
+      .min(
+        APP.minEnteredCharacters,
+        intl.formatMessage(
+          {
+            id: 'input.error.min.length',
+          },
+          { value: APP.minEnteredCharacters }
+        )
+      )
+      .max(
+        APP.maxEnteredCharacters,
+        intl.formatMessage(
+          {
+            id: 'input.error.max.length',
+          },
+          { value: APP.maxEnteredCharacters }
+        )
+      )
+      .required(
+        intl.formatMessage({
+          id: 'input.error.required.field',
+        })
+      ),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .min(5, 'Min password length 5 characters')
-      .max(256, 'Max password length 256 characters')
-      .required('Password is required'),
+      .oneOf(
+        [Yup.ref('password'), null],
+        intl.formatMessage({
+          id: 'input.error.passwords.must.match',
+        })
+      )
+      .required(
+        intl.formatMessage({
+          id: 'input.error.required.field',
+        })
+      ),
   });
 
   return (
@@ -54,13 +99,12 @@ const PageRegistration = ({ classes }: PageRegistrationProps) => {
           initialValues={{
             firstName: '',
             lastName: '',
-            nickName: '',
             email: '',
             password: '',
             confirmPassword: '',
           }}
           validationSchema={LoginValidationSchema}
-          onSubmit={values => {
+          onSubmit={(values) => {
             console.log('Log in is submitted', values); // eslint-disable-line no-console
           }}
         >
@@ -72,13 +116,12 @@ const PageRegistration = ({ classes }: PageRegistrationProps) => {
             handleBlur,
             handleChange,
             isSubmitting,
-            isValid,
-            dirty,
           }) => (
             <form className={classes.form} onSubmit={handleSubmit}>
               <TextField
                 variant='outlined'
                 margin='normal'
+                size='small'
                 required
                 fullWidth
                 id='firstName'
@@ -95,6 +138,7 @@ const PageRegistration = ({ classes }: PageRegistrationProps) => {
               <TextField
                 variant='outlined'
                 margin='normal'
+                size='small'
                 required
                 fullWidth
                 id='lastName'
@@ -110,21 +154,7 @@ const PageRegistration = ({ classes }: PageRegistrationProps) => {
               <TextField
                 variant='outlined'
                 margin='normal'
-                required
-                fullWidth
-                id='nickName'
-                label={<FormattedMessage id='input.nick.name' />}
-                name='nickName'
-                autoComplete='nickName'
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.nickName}
-                error={Boolean(touched.nickName && errors.nickName)}
-                helperText={touched.nickName && errors.nickName}
-              />
-              <TextField
-                variant='outlined'
-                margin='normal'
+                size='small'
                 required
                 fullWidth
                 id='email'
@@ -140,6 +170,7 @@ const PageRegistration = ({ classes }: PageRegistrationProps) => {
               <TextField
                 variant='outlined'
                 margin='normal'
+                size='small'
                 required
                 fullWidth
                 name='password'
@@ -156,6 +187,7 @@ const PageRegistration = ({ classes }: PageRegistrationProps) => {
               <TextField
                 variant='outlined'
                 margin='normal'
+                size='small'
                 required
                 fullWidth
                 name='confirmPassword'
@@ -171,18 +203,13 @@ const PageRegistration = ({ classes }: PageRegistrationProps) => {
                 )}
                 helperText={touched.confirmPassword && errors.confirmPassword}
               />
-              {/* <FormControlLabel
-                  control={<Checkbox value='remember' color='primary' />}
-                  label={<FormattedMessage id='checkbox.remember.me' />}
-                /> */}
               <Button
-                size='large'
                 type='submit'
                 fullWidth
                 variant='contained'
                 color='primary'
                 className={classes.submit}
-                disabled={isSubmitting || !(isValid && dirty)}
+                disabled={isSubmitting}
               >
                 <FormattedMessage id='sign.up' />
               </Button>

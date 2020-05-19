@@ -28,6 +28,7 @@
   "rules": {
     "no-unused-vars": "error",
     "no-console": "error",
+    "react/jsx-curly-newline": "off",
     "prettier/prettier": "error",
     "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
     "@typescript-eslint/no-unused-vars": [2, { "args": "none" }],

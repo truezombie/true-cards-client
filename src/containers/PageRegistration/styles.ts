@@ -8,6 +8,6 @@ export default (theme: Theme): StyleRules =>
       marginTop: theme.spacing(1),
     },
     submit: {
-      margin: theme.spacing(3, 0),
+      margin: theme.spacing(2, 0),
     },
   });

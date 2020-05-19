@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { WithStyles } from '@material-ui/core/styles';
@@ -12,19 +12,50 @@ import Link from '@material-ui/core/Link';
 
 import { AppWrapperPrimaryPages } from '../../components';
 import ROUTES from '../../constants/router';
+import APP from '../../constants/app';
 import styles from './styles';
 
 interface PageLoginProps extends WithStyles<typeof styles> {}
 
 const PageLogin = ({ classes }: PageLoginProps) => {
+  const intl = useIntl();
+
   const LoginValidationSchema = Yup.object().shape({
     email: Yup.string()
-      .email('Please enter a valid email')
-      .required('Email is required'),
+      .email(
+        intl.formatMessage({
+          id: 'input.error.email.not.valid',
+        })
+      )
+      .required(
+        intl.formatMessage({
+          id: 'input.error.required.field',
+        })
+      ),
     password: Yup.string()
-      .min(5, 'Min password length 5 characters')
-      .max(256, 'Max password length 256 characters')
-      .required('Password is required'),
+      .min(
+        APP.minEnteredCharacters,
+        intl.formatMessage(
+          {
+            id: 'input.error.min.length',
+          },
+          { value: APP.minEnteredCharacters }
+        )
+      )
+      .max(
+        APP.maxEnteredCharacters,
+        intl.formatMessage(
+          {
+            id: 'input.error.max.length',
+          },
+          { value: APP.maxEnteredCharacters }
+        )
+      )
+      .required(
+        intl.formatMessage({
+          id: 'input.error.required.field',
+        })
+      ),
   });
 
   return (
@@ -48,7 +79,7 @@ const PageLogin = ({ classes }: PageLoginProps) => {
             password: '',
           }}
           validationSchema={LoginValidationSchema}
-          onSubmit={values => {
+          onSubmit={(values) => {
             console.log('Log in is submitted', values); // eslint-disable-line no-console
           }}
         >
@@ -60,13 +91,12 @@ const PageLogin = ({ classes }: PageLoginProps) => {
             handleBlur,
             handleChange,
             isSubmitting,
-            isValid,
-            dirty,
           }) => (
             <form className={classes.form} onSubmit={handleSubmit}>
               <TextField
                 variant='outlined'
                 margin='normal'
+                size='small'
                 required
                 fullWidth
                 id='email'
@@ -83,6 +113,7 @@ const PageLogin = ({ classes }: PageLoginProps) => {
               <TextField
                 variant='outlined'
                 margin='normal'
+                size='small'
                 required
                 fullWidth
                 name='password'
@@ -96,18 +127,13 @@ const PageLogin = ({ classes }: PageLoginProps) => {
                 error={Boolean(errors.password && touched.password)}
                 helperText={touched.password && errors.password}
               />
-              {/* <FormControlLabel
-                  control={<Checkbox value='remember' color='primary' />}
-                  label={<FormattedMessage id='checkbox.remember.me' />}
-                /> */}
               <Button
-                size='large'
                 type='submit'
                 fullWidth
                 variant='contained'
                 color='primary'
                 className={classes.submit}
-                disabled={isSubmitting || !(isValid && dirty)}
+                disabled={isSubmitting}
               >
                 <FormattedMessage id='sign.in' />
               </Button>
