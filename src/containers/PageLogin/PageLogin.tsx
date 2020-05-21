@@ -1,6 +1,8 @@
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Formik } from 'formik';
+import gql from 'graphql-tag';
+import { useMutation } from '@apollo/react-hooks';
 import * as Yup from 'yup';
 import { WithStyles } from '@material-ui/core/styles';
 
@@ -15,9 +17,22 @@ import ROUTES from '../../constants/router';
 import APP from '../../constants/app';
 import styles from './styles';
 
+export const QUERY_TOKENS = gql`
+  mutation($email: String!, $password: String!) {
+    signIn(email: $email, password: $password) {
+      authToken
+      refreshToken
+    }
+  }
+`;
+
 interface PageLoginProps extends WithStyles<typeof styles> {}
 
 const PageLogin = ({ classes }: PageLoginProps) => {
+  const [mutate, { loading, error, data }] = useMutation(QUERY_TOKENS);
+
+  console.log(loading, error, data); // eslint-disable-line no-console
+
   const intl = useIntl();
 
   const LoginValidationSchema = Yup.object().shape({
@@ -80,7 +95,9 @@ const PageLogin = ({ classes }: PageLoginProps) => {
           }}
           validationSchema={LoginValidationSchema}
           onSubmit={(values) => {
-            console.log('Log in is submitted', values); // eslint-disable-line no-console
+            mutate({
+              variables: { email: values.email, password: values.password },
+            });
           }}
         >
           {({

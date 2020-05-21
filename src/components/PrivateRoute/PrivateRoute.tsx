@@ -3,14 +3,18 @@ import { Redirect, Route, RouteProps } from 'react-router-dom';
 
 import ROUTES from '../../constants/router';
 
-const PrivateRoute = (props: RouteProps) => {
-  const { children, ...rest } = props;
+interface PrivateRouteProps extends RouteProps {
+  isLoggedIn: boolean;
+}
+
+const PrivateRoute = (props: PrivateRouteProps) => {
+  const { children, isLoggedIn, ...rest } = props;
 
   return (
     <Route
       {...rest} // eslint-disable-line react/jsx-props-no-spreading
       render={() =>
-        localStorage.getItem('') ? (
+        isLoggedIn ? (
           children
         ) : (
           <Redirect
