@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { Redirect } from 'react-router-dom';
 import { Formik } from 'formik';
 import gql from 'graphql-tag';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery, useApolloClient } from '@apollo/react-hooks';
 import * as Yup from 'yup';
 import { WithStyles } from '@material-ui/core/styles';
 
@@ -12,12 +13,18 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 
-import { AppWrapperPrimaryPages } from '../../components';
+import { AppWrapperPrimaryPages, Loader } from '../../components';
 import ROUTES from '../../constants/router';
 import APP from '../../constants/app';
 import styles from './styles';
 
-export const QUERY_TOKENS = gql`
+const IS_LOGGED_IN = gql`
+  query IsUserLoggedIn {
+    isLoggedIn @client
+  }
+`;
+
+const QUERY_TOKENS = gql`
   mutation($email: String!, $password: String!) {
     signIn(email: $email, password: $password) {
       authToken
@@ -29,9 +36,22 @@ export const QUERY_TOKENS = gql`
 interface PageLoginProps extends WithStyles<typeof styles> {}
 
 const PageLogin = ({ classes }: PageLoginProps) => {
-  const [mutate, { loading, error, data }] = useMutation(QUERY_TOKENS);
+  const { data: localState } = useQuery(IS_LOGGED_IN);
+  const [mutate, { error, data: dataTokens, loading }] = useMutation(
+    QUERY_TOKENS
+  );
+  const client = useApolloClient();
 
-  console.log(loading, error, data); // eslint-disable-line no-console
+  useEffect(() => {
+    if (error) {
+      // TODO: error exeption
+    } else if (dataTokens) {
+      localStorage.setItem('authToken', dataTokens.signIn.authToken);
+      localStorage.setItem('refreshToken', dataTokens.signIn.refreshToken);
+
+      client.writeData({ data: { isLoggedIn: true } });
+    }
+  }, [error, dataTokens]);
 
   const intl = useIntl();
 
@@ -73,7 +93,14 @@ const PageLogin = ({ classes }: PageLoginProps) => {
       ),
   });
 
-  return (
+  return localState.isLoggedIn ? (
+    <Redirect
+      to={{
+        pathname: ROUTES.main,
+        state: { from: ROUTES.login },
+      }}
+    />
+  ) : (
     <AppWrapperPrimaryPages>
       <>
         <Grid container alignItems='center'>
@@ -152,7 +179,7 @@ const PageLogin = ({ classes }: PageLoginProps) => {
                 className={classes.submit}
                 disabled={isSubmitting}
               >
-                <FormattedMessage id='sign.in' />
+                {loading ? <Loader /> : <FormattedMessage id='sign.in' />}
               </Button>
             </form>
           )}

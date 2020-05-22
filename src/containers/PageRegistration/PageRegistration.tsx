@@ -10,6 +10,8 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 
+import { useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
 import { AppWrapperPrimaryPages } from '../../components';
 import ROUTES from '../../constants/router';
 import APP from '../../constants/app';
@@ -17,7 +19,27 @@ import styles from './styles';
 
 interface PageRegistrationProps extends WithStyles<typeof styles> {}
 
+export const QUERY_TOKENS = gql`
+  mutation(
+    $email: String!
+    $password: String!
+    $firstName: String!
+    $lastName: String!
+  ) {
+    signUp(
+      email: $email
+      password: $password
+      firstName: $firstName
+      lastName: $lastName
+    ) {
+      authToken
+      refreshToken
+    }
+  }
+`;
+
 const PageRegistration = ({ classes }: PageRegistrationProps) => {
+  const [mutate, query] = useMutation(QUERY_TOKENS); // eslint-disable-line
   const intl = useIntl();
 
   const LoginValidationSchema = Yup.object().shape({
@@ -105,7 +127,14 @@ const PageRegistration = ({ classes }: PageRegistrationProps) => {
           }}
           validationSchema={LoginValidationSchema}
           onSubmit={(values) => {
-            console.log('Log in is submitted', values); // eslint-disable-line no-console
+            mutate({
+              variables: {
+                email: values.email,
+                password: values.password,
+                firstName: values.firstName,
+                lastName: values.lastName,
+              },
+            });
           }}
         >
           {({
