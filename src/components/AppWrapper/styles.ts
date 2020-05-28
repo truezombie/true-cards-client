@@ -6,5 +6,6 @@ export default (): StyleRules =>
     wrapper: {
       minHeight: '100vh',
       display: 'flex',
+      flexDirection: 'column',
     },
   });

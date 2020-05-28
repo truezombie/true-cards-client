@@ -1,11 +1,11 @@
 import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { WithStyles } from '@material-ui/core/styles';
+import { WithStyles, withStyles } from '@material-ui/core/styles';
 
-import styles from './styles';
+import { loaderStyles } from './styles';
 import { LOADER_SIZE, LOADER_THICKNESS } from './constants';
 
-interface LoaderProps extends WithStyles<typeof styles> {}
+interface LoaderProps extends WithStyles<typeof loaderStyles> {}
 
 const Loader = ({ classes }: LoaderProps) => {
   return (
@@ -18,4 +18,4 @@ const Loader = ({ classes }: LoaderProps) => {
   );
 };
 
-export default Loader;
+export default withStyles(loaderStyles)(Loader);

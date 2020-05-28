@@ -1,6 +1,4 @@
-import { withStyles } from '@material-ui/styles';
-
 import Loader from './Loader';
-import styles from './styles';
+import LoaderLinear from './LoaderLinear';
 
-export default withStyles(styles)(Loader);
+export { Loader, LoaderLinear };

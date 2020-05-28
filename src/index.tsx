@@ -8,8 +8,11 @@ import { createHttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { ApolloLink, Observable } from 'apollo-link';
 import { resolvers, typeDefs } from './resolvers';
+import { ERROR_CODES } from './utils/errorMessages';
 
 import App from './containers/App';
+
+// const ErrorContext = React.createContext([]);
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000/graphql',
@@ -20,27 +23,31 @@ const httpLink = createHttpLink({
   },
 });
 
-const errorLink = onError(
-  // eslint-disable-next-line consistent-return
-  ({ graphQLErrors, networkError, operation, forward }) => {
-    if (graphQLErrors) {
-      const oldHeaders = operation.getContext().headers;
+const ApolloComponent = () => {
+  // const { handleUpdateError } = useContext(ErrorContext);
 
-      if (
-        graphQLErrors[0] &&
-        graphQLErrors[0].extensions &&
-        graphQLErrors[0].extensions.code &&
-        graphQLErrors[0].extensions.code === 'ERROR_TOKEN_AUTH_IS_NOT_VALID'
-      ) {
+  const errorLink = onError(
+    // eslint-disable-next-line consistent-return
+    ({ graphQLErrors, networkError, operation, forward }) => {
+      if (graphQLErrors) {
         const { cache } = operation.getContext();
-        const refreshToken = localStorage.getItem('refreshToken');
+        const oldHeaders = operation.getContext().headers;
+        const errorCode = graphQLErrors[0]?.message;
+        // const errorMessage = getErrorMessage(errorCode);
 
-        return new Observable((observer) => {
-          fetch('http://localhost:4000/graphql', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              query: `
+        // if (errorMessage) {
+        //   handleUpdateError([errorMessage]);
+        // }
+
+        if (errorCode === ERROR_CODES.ERROR_TOKEN_AUTH_IS_NOT_VALID) {
+          const refreshToken = localStorage.getItem('refreshToken');
+
+          return new Observable((observer) => {
+            fetch('http://localhost:4000/graphql', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                query: `
                 mutation($token: String!) {
                   generateTokens(token: $token) {
                     authToken
@@ -48,76 +55,104 @@ const errorLink = onError(
                   }
                 }
               `,
-              variables: {
-                token: refreshToken,
-              },
-            }),
-          })
-            .then((res) => res.json())
-            .then((res) => {
-              localStorage.setItem(
-                'authToken',
-                res.data.generateTokens.authToken
-              );
-              localStorage.setItem(
-                'refreshToken',
-                res.data.generateTokens.refreshToken
-              );
-
-              operation.setContext({
-                headers: {
-                  ...oldHeaders,
-                  authorization: res.data.generateTokens.authToken,
+                variables: {
+                  token: refreshToken,
                 },
-              });
-
-              const subscriber = {
-                next: observer.next.bind(observer),
-                error: observer.error.bind(observer),
-                complete: observer.complete.bind(observer),
-              };
-
-              forward(operation).subscribe(subscriber);
+              }),
             })
-            .catch((error) => {
-              localStorage.removeItem('authToken');
-              localStorage.removeItem('refreshToken');
+              .then((res) => res.json())
+              .then((res) => {
+                localStorage.setItem(
+                  'authToken',
+                  res.data.generateTokens.authToken
+                );
+                localStorage.setItem(
+                  'refreshToken',
+                  res.data.generateTokens.refreshToken
+                );
 
-              cache.writeData({
-                data: {
-                  isLoggedIn: !!localStorage.getItem('authToken'),
-                },
+                operation.setContext({
+                  headers: {
+                    ...oldHeaders,
+                    authorization: res.data.generateTokens.authToken,
+                  },
+                });
+
+                const subscriber = {
+                  next: observer.next.bind(observer),
+                  error: observer.error.bind(observer),
+                  complete: observer.complete.bind(observer),
+                };
+
+                forward(operation).subscribe(subscriber);
+              })
+              .catch((e) => {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('refreshToken');
+
+                cache.writeData({
+                  data: {
+                    isLoggedIn: !!localStorage.getItem('authToken'),
+                  },
+                });
+
+                observer.error(e);
               });
+          });
+        }
 
-              observer.error(error);
-            });
-        });
-      }
-
-      if (networkError) {
-        console.log(`[Network error]: ${networkError}`); // eslint-disable-line
+        if (networkError) {
+          console.log(`[Network error]: ${networkError}`); // eslint-disable-line
+        }
       }
     }
-  }
-);
+  );
 
-const cache = new InMemoryCache();
-const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  cache,
-  link: ApolloLink.from([errorLink, httpLink]),
-  resolvers,
-  typeDefs,
-});
+  const cache = new InMemoryCache();
 
-cache.writeData({
-  data: {
-    isLoggedIn: !!localStorage.getItem('authToken'),
-  },
-});
+  const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+    cache,
+    link: ApolloLink.from([errorLink, httpLink]),
+    resolvers,
+    typeDefs,
+  });
+
+  cache.writeData({
+    data: {
+      errorMessage: '',
+      isLoggedIn: !!localStorage.getItem('authToken'),
+    },
+  });
+
+  return (
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  );
+};
+
+// const ErrorProvider = ({ children }: { children: JSX.Element }) => {
+//   const [errors, setError] = useState<string[]>([]);
+//
+//   const handleUpdateError = (err: string[]) => {
+//     setError([...err]);
+//   };
+//
+//   const ctx = { handleUpdateError };
+//
+//   return (
+//     <ErrorContext.Provider value={ctx}>
+//       {errors.map((message) => (
+//         <SnackBar key={message} message={message} />
+//       ))}
+//       {children}
+//     </ErrorContext.Provider>
+//   );
+// };
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>,
+  // <ErrorProvider>
+  <ApolloComponent />,
+  // </ErrorProvider>,
   document.getElementById('root')
 );

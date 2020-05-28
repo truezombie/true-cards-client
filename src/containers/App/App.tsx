@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
-
 import gql from 'graphql-tag';
 
 import { Loader, AppWrapper, PrivateRoute } from '../../components';
@@ -48,13 +47,6 @@ const App = () => {
           <Router>
             <Suspense fallback={<Loader />}>
               <Switch>
-                <PrivateRoute
-                  isLoggedIn={IsLoggedIn()}
-                  path={ROUTES.main}
-                  exact
-                >
-                  <PageMain />
-                </PrivateRoute>
                 <Route path={ROUTES.login}>
                   <PageLogin />
                 </Route>
@@ -64,6 +56,9 @@ const App = () => {
                 <Route path={ROUTES.forgotPassword}>
                   <PageForgotPassword />
                 </Route>
+                <PrivateRoute isLoggedIn={IsLoggedIn()} path={ROUTES.main}>
+                  <PageMain />
+                </PrivateRoute>
               </Switch>
             </Suspense>
           </Router>
