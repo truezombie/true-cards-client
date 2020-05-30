@@ -1,3 +1,6 @@
-import DialogConfirm from './DialogConfirm';
+import { withStyles } from '@material-ui/styles';
 
-export default DialogConfirm;
+import DialogConfirm from './DialogConfirm';
+import styles from './styles';
+
+export default withStyles(styles)(DialogConfirm);

@@ -27,6 +27,7 @@ const DialogForm = ({
 }: DialogConfirmProps) => {
   return (
     <Dialog
+      maxWidth='xs'
       fullWidth
       open={isOpen}
       onClose={onClose}
@@ -44,17 +45,14 @@ const DialogForm = ({
       >
         {(props) => (
           <form onSubmit={props.handleSubmit}>
-            <DialogContent>
+            <DialogContent dividers>
               {children && isFunction(children) ? children({ ...props }) : null}
             </DialogContent>
             <DialogActions>
-              <Button onClick={onClose} color='primary'>
-                {msgClose}
-              </Button>
+              <Button onClick={onClose}>{msgClose}</Button>
               <Button
                 type='submit'
                 disabled={props.isSubmitting}
-                variant='outlined'
                 color='primary'
               >
                 {msgSubmit}

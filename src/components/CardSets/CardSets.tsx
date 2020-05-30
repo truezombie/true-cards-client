@@ -105,20 +105,20 @@ const CardSets = ({
   });
 
   const messagesModalManageCardSet: {
-    title: string;
-    submit: string;
+    title: string | JSX.Element;
+    submit: string | JSX.Element;
   } = useMemo(() => {
     if (manageCardSet.edit) {
       return {
-        title: 'Edit card set',
-        submit: 'Save',
+        title: <FormattedMessage id='card.set.modal.title.edit' />,
+        submit: <FormattedMessage id='btn.save' />,
       };
     }
 
     if (manageCardSet.create) {
       return {
-        title: 'Add new card set',
-        submit: 'Create',
+        title: <FormattedMessage id='card.set.modal.title.add' />,
+        submit: <FormattedMessage id='btn.add' />,
       };
     }
 
@@ -134,7 +134,7 @@ const CardSets = ({
 
   const noData = useMemo(() => {
     return !listCardSets.length && !isLoading ? (
-      <FullBlockMessage message='No data' />
+      <FullBlockMessage message={<FormattedMessage id='no.data' />} />
     ) : null;
   }, [isLoading, listCardSets]);
 
@@ -143,7 +143,7 @@ const CardSets = ({
       <div className={classes.header}>
         <div className={classes.headerTitle}>
           <Typography variant='h5' component='h2'>
-            Card sets
+            <FormattedMessage id='page.cardSets.title' />
           </Typography>
         </div>
         <div className={classes.headerBtn}>
@@ -215,7 +215,7 @@ const CardSets = ({
 
           setSubmitting(false);
         }}
-        msgClose='Close'
+        msgClose={<FormattedMessage id='btn.close' />}
         msgSubmit={messagesModalManageCardSet.submit}
         initialValues={{
           name: manageCardSet.name,
@@ -246,10 +246,15 @@ const CardSets = ({
         isOpen={deleteCardSet.show}
         handleAgree={handleDeleteCardSet}
         handleClose={() => setDeleteCardSet({ ...deleteCardSet, show: false })}
-        msgTitle='Delete card set'
-        msgBody={`Are you sure you want to delete the card set ${deleteCardSet.name} ?`}
-        msgClose='Close'
-        msgAgree='Delete'
+        msgTitle={<FormattedMessage id='card.set.modal.title.delete' />}
+        msgBody={
+          <FormattedMessage
+            id='card.set.modal.body.delete'
+            values={{ value: deleteCardSet.name }}
+          />
+        }
+        msgClose={<FormattedMessage id='btn.close' />}
+        msgAgree={<FormattedMessage id='btn.delete' />}
       />
     </Container>
   );

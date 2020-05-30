@@ -3,6 +3,7 @@ const ROUTES = {
   login: '/login',
   registration: '/registration',
   forgotPassword: '/forgot-password',
+  cards: '/cards/:id',
 };
 
 export default ROUTES;

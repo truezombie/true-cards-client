@@ -1,6 +1,7 @@
 {
   "logo.description": "App for learning everything via cards",
   "copyright": "Copyright",
+  "no.data": "No data",
   "input.email": "Email address",
   "input.password": "Password",
   "input.password.confirm": "Confirm password",
@@ -14,10 +15,18 @@
   "input.error.min.length": "Min field length {value} characters",
   "input.error.max.length": "Max filed length {value} characters",
   "input.error.spaces": "This field cannot include leading and trailing spaces",
+  "btn.save": "Save",
+  "btn.add": "Add",
+  "btn.close": "Close",
+  "btn.delete": "Delete",
   "sign.in": "Sign in",
   "sign.up": "Sign up",
   "checkbox.remember.me": "Remember me",
   "page.login.link.forgot.password": "Forgot password",
-  "page.registration.title": "Registration"
-
+  "page.registration.title": "Registration",
+  "page.cardSets.title": "Card sets",
+  "card.set.modal.title.delete": "Delete card set",
+  "card.set.modal.title.edit": "Edit card set",
+  "card.set.modal.title.add": "Add new card set",
+  "card.set.modal.body.delete": "Are you sure you want to delete the card set {value}?"
 }

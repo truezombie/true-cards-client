@@ -5,8 +5,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { WithStyles } from '@material-ui/core/styles';
+import styles from './styles';
 
-interface DialogConfirmProps {
+interface DialogConfirmProps extends WithStyles<typeof styles> {
   isOpen: boolean;
   handleClose: () => void;
   handleAgree: () => void;
@@ -23,6 +25,7 @@ const DialogConfirm = ({
   msgClose,
   msgAgree,
   msgBody,
+  classes,
   msgTitle,
 }: DialogConfirmProps) => {
   const onAgree = () => {
@@ -38,16 +41,17 @@ const DialogConfirm = ({
       aria-describedby='alert-dialog-description'
     >
       <DialogTitle id='alert-dialog-title'>{msgTitle}</DialogTitle>
-      <DialogContent>
-        <DialogContentText id='alert-dialog-description'>
+      <DialogContent dividers>
+        <DialogContentText
+          className={classes.body}
+          id='alert-dialog-description'
+        >
           {msgBody}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color='primary'>
-          {msgClose}
-        </Button>
-        <Button variant='outlined' onClick={onAgree} color='primary' autoFocus>
+        <Button onClick={handleClose}>{msgClose}</Button>
+        <Button onClick={onAgree} color='primary' autoFocus>
           {msgAgree}
         </Button>
       </DialogActions>

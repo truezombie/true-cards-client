@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation, useApolloClient } from '@apollo/react-hooks';
 
 import { AppToolBar, CardSets } from '../../components';
 import {
@@ -9,8 +9,11 @@ import {
   UPDATE_CARD_SET_QUERY,
   DELETE_CARD_SET_QUERY,
 } from './queries';
+import ROUTES from '../../constants/router';
 
 const MainPage = () => {
+  const client = useApolloClient();
+
   const { data, loading, refetch } = useQuery(LIST_CARD_SETS_QUERY, {
     notifyOnNetworkStatusChange: true,
   });
@@ -27,10 +30,17 @@ const MainPage = () => {
     onCompleted: () => refetch(),
   });
 
+  const onLogOut = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('refreshToken');
+
+    client.writeData({ data: { isLoggedIn: false } });
+  };
+
   return (
     <>
-      <AppToolBar />
-      <Route exact path='/'>
+      <AppToolBar onLogOut={onLogOut} />
+      <Route exact path={ROUTES.main}>
         <CardSets
           isLoading={loading}
           onUpdateCardSet={onUpdateCardSet}
@@ -39,7 +49,7 @@ const MainPage = () => {
           listCardSets={(data && data.cardSets) || []}
         />
       </Route>
-      <Route exact path='/cards/:id'>
+      <Route exact path={ROUTES.cards}>
         <h2>sdf</h2>
       </Route>
     </>

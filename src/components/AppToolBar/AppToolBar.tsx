@@ -9,12 +9,15 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { WithStyles } from '@material-ui/core/styles';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import appConstants from '../../constants/app';
 
 import styles from './styles';
 
-interface AppToolBarProps extends WithStyles<typeof styles> {}
+interface AppToolBarProps extends WithStyles<typeof styles> {
+  onLogOut: () => void;
+}
 
-const AppToolBar = ({ classes }: AppToolBarProps) => {
+const AppToolBar = ({ classes, onLogOut }: AppToolBarProps) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchorEl);
@@ -24,6 +27,11 @@ const AppToolBar = ({ classes }: AppToolBarProps) => {
   };
 
   const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogOut = () => {
+    onLogOut();
     setAnchorEl(null);
   };
 
@@ -38,7 +46,7 @@ const AppToolBar = ({ classes }: AppToolBarProps) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Log Out</MenuItem>
+      <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
     </Menu>
   );
 
@@ -49,13 +57,14 @@ const AppToolBar = ({ classes }: AppToolBarProps) => {
           <IconButton edge='start' color='inherit' aria-label='open drawer'>
             <MenuIcon />
           </IconButton>
+
           <Typography
             className={classes.title}
             variant='button'
             display='block'
             gutterBottom
           >
-            TRUE-CARDS
+            {appConstants.name}
           </Typography>
 
           <div className={classes.sectionDesktop}>
