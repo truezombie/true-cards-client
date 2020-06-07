@@ -2,6 +2,7 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+
 import { WithStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -102,7 +103,6 @@ const Login = ({ classes, onSignIn }: LoginProps) => {
                 variant='outlined'
                 margin='normal'
                 size='small'
-                required
                 fullWidth
                 id='email'
                 label={<FormattedMessage id='input.email' />}
@@ -119,7 +119,6 @@ const Login = ({ classes, onSignIn }: LoginProps) => {
                 variant='outlined'
                 margin='normal'
                 size='small'
-                required
                 fullWidth
                 name='password'
                 label={<FormattedMessage id='input.password' />}

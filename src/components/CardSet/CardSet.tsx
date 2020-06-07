@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Card from '@material-ui/core/Card';
+import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import FolderIcon from '@material-ui/icons/Folder';
@@ -11,20 +11,20 @@ import { WithStyles } from '@material-ui/core/styles';
 import styles from '../CardSets/styles';
 
 interface CardSetProps extends WithStyles<typeof styles> {
-  id: string;
   name: string;
+  link: string;
   onEdit: () => void;
   onDelete: () => void;
 }
 
-const CardSet = ({ classes, name, id, onEdit, onDelete }: CardSetProps) => {
+const CardSet = ({ classes, name, link, onEdit, onDelete }: CardSetProps) => {
   return (
-    <Card className={classes.cardSet}>
+    <Paper className={classes.cardSet}>
       <Avatar className={classes.cardSetIco}>
         <FolderIcon />
       </Avatar>
       <div className={classes.cardTitleWrap}>
-        <Link className={classes.cardSetLink} to={`/cards/${id}`}>
+        <Link className={classes.cardSetLink} to={link}>
           <Typography
             title={name}
             className={classes.cardSetTitle}
@@ -44,7 +44,7 @@ const CardSet = ({ classes, name, id, onEdit, onDelete }: CardSetProps) => {
           <DeleteIcon fontSize='inherit' />
         </IconButton>
       </div>
-    </Card>
+    </Paper>
   );
 };
 

@@ -8,11 +8,13 @@ import SnackBar from './SnackBar';
 import CardSet from './CardSet';
 import DialogConfirm from './DialogConfirm';
 import DialogForm from './DialogForm';
+import PageMainHeader from './PageMainHeader';
 // Big components
 import Login from './Login';
 import Registration from './Registration';
 import AppToolBar from './AppToolBar';
 import CardSets from './CardSets';
+import Cards from './Cards';
 import FullBlockMessage from './FullBlockMessage';
 
 export {
@@ -26,10 +28,12 @@ export {
   SnackBar,
   CardSet,
   DialogConfirm,
+  PageMainHeader,
   DialogForm,
   Login,
   Registration,
   AppToolBar,
   CardSets,
+  Cards,
   FullBlockMessage,
 };

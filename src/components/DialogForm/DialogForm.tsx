@@ -1,9 +1,11 @@
 import React from 'react';
+
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+
 import { Formik, FormikConfig, FormikValues, isFunction } from 'formik';
 
 interface DialogConfirmProps extends FormikConfig<FormikValues> {

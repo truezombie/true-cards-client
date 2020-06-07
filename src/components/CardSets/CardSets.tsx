@@ -1,28 +1,39 @@
-import React, { useMemo, useState } from 'react';
-import * as Yup from 'yup';
+import React, { useMemo, useState, useCallback } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
-import Container from '@material-ui/core/Container';
-import TextField from '@material-ui/core/TextField';
+import * as Yup from 'yup';
+
 import { WithStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Container from '@material-ui/core/Container';
 
-import { Loader, LoaderLinear } from '../Loader';
 import CardSet from '../CardSet';
-import DialogConfirm from '../DialogConfirm';
+import { Loader } from '../Loader';
 import DialogForm from '../DialogForm';
+import DialogConfirm from '../DialogConfirm';
+import PageMainHeader from '../PageMainHeader';
 import FullBlockMessage from '../FullBlockMessage';
-import styles from './styles';
-import APP from '../../constants/app';
 
-const MIN_NAME_CHARACTERS = 1;
+import APP from '../../constants/app';
+import ROUTES from '../../constants/router';
+import { CardSetsType } from '../../types';
+import styles from './styles';
+
+type ModalDeleteCardSet = {
+  show: boolean;
+  id: string;
+  name: string;
+};
+
+type ModalManageCardSet = {
+  show: boolean;
+  edit: boolean;
+  create: boolean;
+  id: string;
+  name: string;
+};
 
 interface CardSetsProps extends WithStyles<typeof styles> {
-  listCardSets: {
-    id: string;
-    name: string;
-  }[];
+  data?: CardSetsType;
   isLoading: boolean;
   onCreateCardSet: (data: { variables: { name: string } }) => void;
   onDeleteCardSet: (data: { variables: { cardSetId: string } }) => void;
@@ -31,45 +42,43 @@ interface CardSetsProps extends WithStyles<typeof styles> {
   }) => void;
 }
 
+const modalInitialStateDeleteCardSet: ModalDeleteCardSet = {
+  show: false,
+  id: '',
+  name: '',
+};
+
+const modalInitialStateManageCardSet: ModalManageCardSet = {
+  show: false,
+  edit: false,
+  create: false,
+  id: '',
+  name: '',
+};
+
 const CardSets = ({
+  data,
   classes,
   isLoading,
-  listCardSets = [],
   onUpdateCardSet,
   onCreateCardSet,
   onDeleteCardSet,
 }: CardSetsProps) => {
-  const [deleteCardSet, setDeleteCardSet] = useState<{
-    show: boolean;
-    id: string;
-    name: string;
-  }>({
-    show: false,
-    id: '',
-    name: '',
-  });
-
-  const [manageCardSet, setOpenManageCardSet] = useState<{
-    show: boolean;
-    edit: boolean;
-    create: boolean;
-    id: string;
-    name: string;
-  }>({
-    show: false,
-    edit: false,
-    create: false,
-    id: '',
-    name: '',
-  });
-
   const intl = useIntl();
+  const [deleteCardSet, setDeleteCardSet] = useState<ModalDeleteCardSet>(
+    modalInitialStateDeleteCardSet
+  );
+  const [manageCardSet, setOpenManageCardSet] = useState<ModalManageCardSet>(
+    modalInitialStateManageCardSet
+  );
 
-  const handleDeleteCardSet = () => {
+  const listCardSets = (data && data.cardSets) || [];
+
+  const handleDeleteCardSet = useCallback(() => {
     if (deleteCardSet.id) {
       onDeleteCardSet({ variables: { cardSetId: deleteCardSet.id } });
     }
-  };
+  }, [deleteCardSet.id]);
 
   const createNewCardSetValidationSchema = Yup.object().shape({
     name: Yup.string()
@@ -80,12 +89,12 @@ const CardSets = ({
       )
       .strict(true)
       .min(
-        MIN_NAME_CHARACTERS,
+        APP.minEnteredCharacters,
         intl.formatMessage(
           {
             id: 'input.error.min.length',
           },
-          { value: MIN_NAME_CHARACTERS }
+          { value: APP.minEnteredCharacters }
         )
       )
       .max(
@@ -108,24 +117,15 @@ const CardSets = ({
     title: string | JSX.Element;
     submit: string | JSX.Element;
   } = useMemo(() => {
-    if (manageCardSet.edit) {
-      return {
-        title: <FormattedMessage id='card.set.modal.title.edit' />,
-        submit: <FormattedMessage id='btn.save' />,
-      };
-    }
-
-    if (manageCardSet.create) {
-      return {
-        title: <FormattedMessage id='card.set.modal.title.add' />,
-        submit: <FormattedMessage id='btn.add' />,
-      };
-    }
-
-    return {
-      title: '',
-      submit: '',
-    };
+    return manageCardSet.edit
+      ? {
+          title: <FormattedMessage id='card.set.modal.title.edit' />,
+          submit: <FormattedMessage id='btn.save' />,
+        }
+      : {
+          title: <FormattedMessage id='card.set.modal.title.add' />,
+          submit: <FormattedMessage id='btn.add' />,
+        };
   }, [manageCardSet.edit, manageCardSet.create]);
 
   const loader = useMemo(() => {
@@ -139,33 +139,19 @@ const CardSets = ({
   }, [isLoading, listCardSets]);
 
   return (
-    <Container maxWidth='md' className={classes.container}>
-      <div className={classes.header}>
-        <div className={classes.headerTitle}>
-          <Typography variant='h5' component='h2'>
-            <FormattedMessage id='page.cardSets.title' />
-          </Typography>
-        </div>
-        <div className={classes.headerBtn}>
-          <Button
-            onClick={() => {
-              setOpenManageCardSet({
-                show: true,
-                edit: false,
-                create: true,
-                id: '',
-                name: '',
-              });
-            }}
-            variant='contained'
-            color='secondary'
-            startIcon={<AddIcon />}
-          >
-            New card set
-          </Button>
-        </div>
-      </div>
-      <LoaderLinear show={isLoading && listCardSets.length !== 0} />
+    <Container className={classes.container} maxWidth='md'>
+      <PageMainHeader
+        isLoading={isLoading && listCardSets.length !== 0}
+        onAdd={() => {
+          setOpenManageCardSet({
+            ...modalInitialStateManageCardSet,
+            show: true,
+            create: true,
+          });
+        }}
+        msgAddBtn={<FormattedMessage id='btn.new.card.set' />}
+        msgTitle={<FormattedMessage id='page.cardSets.title' />}
+      />
       {loader}
       {noData}
       {listCardSets.length ? (
@@ -173,8 +159,8 @@ const CardSets = ({
           {listCardSets.map((item) => (
             <CardSet
               key={item.id}
-              id={item.id}
               name={item.name}
+              link={ROUTES.cards.replace(':id', item.id)}
               onEdit={() => {
                 setOpenManageCardSet({
                   show: true,

@@ -1,16 +1,18 @@
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import * as Yup from 'yup';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 import { Formik } from 'formik';
-import TextField from '@material-ui/core/TextField';
+import * as Yup from 'yup';
+
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import { WithStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+
+import APP from '../../constants/app';
 import ROUTES from '../../constants/router';
 import { AppWrapperPrimaryPages } from '../index';
-import APP from '../../constants/app';
 import styles from './styles';
 
 interface RegistrationProps extends WithStyles<typeof styles> {
@@ -136,7 +138,6 @@ const Registration = ({ classes, onSignUp }: RegistrationProps) => {
                 variant='outlined'
                 margin='normal'
                 size='small'
-                required
                 fullWidth
                 id='firstName'
                 label={<FormattedMessage id='input.first.name' />}
@@ -153,7 +154,6 @@ const Registration = ({ classes, onSignUp }: RegistrationProps) => {
                 variant='outlined'
                 margin='normal'
                 size='small'
-                required
                 fullWidth
                 id='lastName'
                 label={<FormattedMessage id='input.last.name' />}
@@ -169,7 +169,6 @@ const Registration = ({ classes, onSignUp }: RegistrationProps) => {
                 variant='outlined'
                 margin='normal'
                 size='small'
-                required
                 fullWidth
                 id='email'
                 label={<FormattedMessage id='input.email' />}
@@ -185,7 +184,6 @@ const Registration = ({ classes, onSignUp }: RegistrationProps) => {
                 variant='outlined'
                 margin='normal'
                 size='small'
-                required
                 fullWidth
                 name='password'
                 label={<FormattedMessage id='input.password' />}
@@ -202,7 +200,6 @@ const Registration = ({ classes, onSignUp }: RegistrationProps) => {
                 variant='outlined'
                 margin='normal'
                 size='small'
-                required
                 fullWidth
                 name='confirmPassword'
                 label={<FormattedMessage id='input.password.confirm' />}

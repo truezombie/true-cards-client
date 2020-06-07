@@ -1,6 +1,6 @@
 import React from 'react';
-import { WithStyles } from '@material-ui/core/styles';
 
+import { WithStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
 
