@@ -1,23 +1,28 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import FolderIcon from '@material-ui/icons/Folder';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
 import { WithStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+
+import Menu from '../Menu';
+
+import { MenuItemProps } from '../../types/menu';
+
 import styles from '../CardSets/styles';
 
 interface CardSetProps extends WithStyles<typeof styles> {
   name: string;
   link: string;
-  onEdit: () => void;
-  onDelete: () => void;
+  dropDownMenuItems: MenuItemProps[];
 }
 
-const CardSet = ({ classes, name, link, onEdit, onDelete }: CardSetProps) => {
+const CardSet = ({ classes, name, link, dropDownMenuItems }: CardSetProps) => {
   return (
     <Paper className={classes.cardSet}>
       <Avatar className={classes.cardSetIco}>
@@ -37,12 +42,18 @@ const CardSet = ({ classes, name, link, onEdit, onDelete }: CardSetProps) => {
         </Link>
       </div>
       <div className={classes.cardButtonsWrap}>
-        <IconButton onClick={onEdit} aria-label='edit'>
-          <EditIcon fontSize='inherit' />
+        <IconButton aria-label='play' onClick={() => {}}>
+          <PlayCircleFilledIcon color='primary' />
         </IconButton>
-        <IconButton onClick={onDelete} aria-label='delete'>
-          <DeleteIcon fontSize='inherit' />
-        </IconButton>
+        <Menu items={dropDownMenuItems}>
+          <IconButton
+            aria-label='more'
+            aria-controls='simple-menu'
+            aria-haspopup='true'
+          >
+            <MoreVertIcon />
+          </IconButton>
+        </Menu>
       </div>
     </Paper>
   );

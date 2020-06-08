@@ -2,6 +2,8 @@ import React, { useMemo, useState, useCallback } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import * as Yup from 'yup';
 
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { WithStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
@@ -15,7 +17,7 @@ import FullBlockMessage from '../FullBlockMessage';
 
 import APP from '../../constants/app';
 import ROUTES from '../../constants/router';
-import { CardSetsType } from '../../types';
+import { CardSetsType } from '../../types/app';
 import styles from './styles';
 
 type ModalDeleteCardSet = {
@@ -138,6 +140,40 @@ const CardSets = ({
     ) : null;
   }, [isLoading, listCardSets]);
 
+  const getDropDownMenuItems = useCallback(
+    (item) => {
+      return [
+        {
+          id: 'edit',
+          text: <FormattedMessage id='btn.edit' />,
+          icon: <EditIcon />,
+          onClick: () => {
+            setOpenManageCardSet({
+              show: true,
+              edit: true,
+              create: false,
+              id: item.id,
+              name: item.name,
+            });
+          },
+        },
+        {
+          id: 'delete',
+          text: <FormattedMessage id='btn.delete' />,
+          icon: <DeleteIcon />,
+          onClick: () => {
+            setDeleteCardSet({
+              show: true,
+              id: item.id,
+              name: item.name,
+            });
+          },
+        },
+      ];
+    },
+    [listCardSets]
+  );
+
   return (
     <Container className={classes.container} maxWidth='md'>
       <PageMainHeader
@@ -161,22 +197,7 @@ const CardSets = ({
               key={item.id}
               name={item.name}
               link={ROUTES.cards.replace(':id', item.id)}
-              onEdit={() => {
-                setOpenManageCardSet({
-                  show: true,
-                  edit: true,
-                  create: false,
-                  id: item.id,
-                  name: item.name,
-                });
-              }}
-              onDelete={() => {
-                setDeleteCardSet({
-                  show: true,
-                  id: item.id,
-                  name: item.name,
-                });
-              }}
+              dropDownMenuItems={getDropDownMenuItems(item)}
             />
           ))}
         </div>

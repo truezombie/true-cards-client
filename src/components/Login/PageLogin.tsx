@@ -66,12 +66,12 @@ const Login = ({ classes, onSignIn }: LoginProps) => {
         <Grid container alignItems='center'>
           <Grid item xs>
             <Typography component='h1' variant='h6'>
-              <FormattedMessage id='sign.in' />
+              <FormattedMessage id='btn.sign.in' />
             </Typography>
           </Grid>
           <Grid item>
             <Link href={ROUTES.registration} variant='body2'>
-              <FormattedMessage id='sign.up' />
+              <FormattedMessage id='btn.sign.up' />
             </Link>
           </Grid>
         </Grid>
@@ -139,7 +139,7 @@ const Login = ({ classes, onSignIn }: LoginProps) => {
                 className={classes.submit}
                 disabled={isSubmitting}
               >
-                <FormattedMessage id='sign.in' />
+                <FormattedMessage id='btn.sign.in' />
               </Button>
             </form>
           )}

@@ -95,12 +95,12 @@ const Registration = ({ classes, onSignUp }: RegistrationProps) => {
         <Grid container alignItems='center'>
           <Grid item xs>
             <Typography component='h1' variant='h6'>
-              <FormattedMessage id='sign.up' />
+              <FormattedMessage id='btn.sign.up' />
             </Typography>
           </Grid>
           <Grid item>
             <Link href={ROUTES.login} variant='body2'>
-              <FormattedMessage id='sign.in' />
+              <FormattedMessage id='btn.sign.in' />
             </Link>
           </Grid>
         </Grid>
@@ -222,7 +222,7 @@ const Registration = ({ classes, onSignUp }: RegistrationProps) => {
                 className={classes.submit}
                 disabled={isSubmitting}
               >
-                <FormattedMessage id='sign.up' />
+                <FormattedMessage id='btn.sign.up' />
               </Button>
             </form>
           )}

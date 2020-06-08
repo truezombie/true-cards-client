@@ -1,5 +1,9 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
+
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 import {
   useQuery,
   useMutation,
@@ -17,7 +21,7 @@ import {
   DELETE_CARD_QUERY,
 } from './queries';
 import ROUTES from '../../constants/router';
-import { CardsType, CardSetsType } from '../../types';
+import { CardsType, CardSetsType } from '../../types/app';
 import { AppToolBar } from '../../components';
 import PageCardSets from '../../components/CardSets';
 import PageCards from '../../components/Cards';
@@ -78,7 +82,16 @@ const MainPage = () => {
 
   return (
     <>
-      <AppToolBar onLogOut={onLogOut} />
+      <AppToolBar
+        userMenuItems={[
+          {
+            id: 'logOut',
+            text: <FormattedMessage id='btn.log.out' />,
+            icon: <ExitToAppIcon />,
+            onClick: onLogOut,
+          },
+        ]}
+      />
 
       <Route exact path={ROUTES.main}>
         <PageCardSets

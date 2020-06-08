@@ -24,7 +24,7 @@ import Table from '../Table';
 
 import ROUTES from '../../constants/router';
 import APP from '../../constants/app';
-import { CardsType, CardType } from '../../types';
+import { CardsType, CardType } from '../../types/app';
 import styles from './styles';
 import DialogConfirm from '../DialogConfirm';
 

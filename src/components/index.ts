@@ -9,7 +9,7 @@ import CardSet from './CardSet';
 import DialogConfirm from './DialogConfirm';
 import DialogForm from './DialogForm';
 import PageMainHeader from './PageMainHeader';
-// Big components
+import Menu from './Menu';
 import Login from './Login';
 import Registration from './Registration';
 import AppToolBar from './AppToolBar';
@@ -30,6 +30,7 @@ export {
   DialogConfirm,
   PageMainHeader,
   DialogForm,
+  Menu,
   Login,
   Registration,
   AppToolBar,
