@@ -2,6 +2,11 @@ export type CardSetsType = {
   cardSets: {
     id: string;
     name: string;
+    cardsMax: number;
+    cardsAll: number;
+    cardsLearned: number;
+    cardsForgotten: number;
+    cardsNew: number;
   }[];
 };
 

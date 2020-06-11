@@ -22,11 +22,12 @@ import DialogForm from '../DialogForm';
 import { Loader } from '../Loader';
 import Table from '../Table';
 
+import { CardsType, CardType } from '../../types/app';
+import { ACTION_CELL_ID } from '../Table/constants';
+import DialogConfirm from '../DialogConfirm';
 import ROUTES from '../../constants/router';
 import APP from '../../constants/app';
-import { CardsType, CardType } from '../../types/app';
 import styles from './styles';
-import DialogConfirm from '../DialogConfirm';
 
 type manageCard = {
   show: boolean;
@@ -169,9 +170,9 @@ const Cards = ({
         accessor: '',
       },
       {
-        id: 'actions',
+        id: ACTION_CELL_ID,
         Header: '',
-        width: 35,
+        width: 120,
         accessor: 'uuid',
         Cell: manageCell,
       },

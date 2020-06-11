@@ -196,7 +196,13 @@ const CardSets = ({
             <CardSet
               key={item.id}
               name={item.name}
-              link={ROUTES.cards.replace(':id', item.id)}
+              cardsMax={item.cardsMax}
+              cardsAll={item.cardsAll}
+              cardsLearned={item.cardsLearned}
+              cardsForgotten={item.cardsForgotten}
+              cardsNew={item.cardsNew}
+              linkFolder={ROUTES.cards.replace(':id', item.id)}
+              linkPlay={ROUTES.startLearning.replace(':id', item.id)}
               dropDownMenuItems={getDropDownMenuItems(item)}
             />
           ))}

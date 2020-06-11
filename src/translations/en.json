@@ -19,8 +19,8 @@
   "btn.add": "Add",
   "btn.close": "Close",
   "btn.delete": "Delete",
-  "btn.new.card.set": "Create new card set",
-  "btn.new.card": "Create new card",
+  "btn.new.card.set": "New card set",
+  "btn.new.card": "New card",
   "btn.log.out": "Log out",
   "btn.edit": "Edit",
   "btn.sign.in": "Sign in",
@@ -47,5 +47,9 @@
   "modal.manage.input.front.description": "Front description",
   "modal.manage.input.back": "Back",
   "modal.manage.input.back.description": "Back description",
-  "modal.manage.input.with.back.side": "With back side"
+  "modal.manage.input.with.back.side": "With back side",
+  "card.set.dashboard.all.cards": "All cards",
+  "card.set.dashboard.new.cards": "New cards",
+  "card.set.dashboard.forgotten.cards": "Forgotten cards",
+  "card.set.dashboard.learned.cards": "Learned cards"
 }

@@ -10,12 +10,14 @@ import DialogConfirm from './DialogConfirm';
 import DialogForm from './DialogForm';
 import PageMainHeader from './PageMainHeader';
 import Menu from './Menu';
+
 import Login from './Login';
 import Registration from './Registration';
 import AppToolBar from './AppToolBar';
 import CardSets from './CardSets';
 import Cards from './Cards';
 import FullBlockMessage from './FullBlockMessage';
+import PreStart from './PreStart';
 
 export {
   Loader,
@@ -37,4 +39,5 @@ export {
   CardSets,
   Cards,
   FullBlockMessage,
+  PreStart,
 };

@@ -16,8 +16,23 @@ export default (theme: Theme): StyleRules =>
         marginLeft: theme.spacing(1),
       },
     },
+    indicatorWrappers: {
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    indicator: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginLeft: theme.spacing(2),
+      marginRight: theme.spacing(2),
+      cursor: 'default',
+    },
     cardSetLink: {
       textDecoration: 'none',
+      display: 'block',
+      width: '100%',
       color: theme.palette.text.primary,
       '&:hover': {
         color: theme.palette.primary.dark,
@@ -32,12 +47,16 @@ export default (theme: Theme): StyleRules =>
     cardSetIco: {
       marginRight: theme.spacing(2),
     },
+    cardSetWrap: {
+      padding: theme.spacing(2),
+      marginBottom: theme.spacing(2),
+    },
+    cardSetDivider: {
+      margin: `${theme.spacing(1.5)}px 0`,
+    },
     cardSet: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      padding: theme.spacing(2),
-      backgroundColor: theme.palette.common.white,
-      marginBottom: theme.spacing(2),
     },
   });

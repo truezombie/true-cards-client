@@ -9,6 +9,7 @@ import MUITableRow from '@material-ui/core/TableRow';
 import MUITableCell from '@material-ui/core/TableCell';
 import { WithStyles } from '@material-ui/core/styles';
 
+import { ACTION_CELL_ID } from './constants';
 import styles from '../PageMainHeader/styles';
 
 type Data = object;
@@ -32,17 +33,14 @@ const Table: FC<TableProps> = ({ columns, data }: TableProps) => {
 
   return (
     <Paper>
-      <MUITable {...getTableProps()} size='small'>
+      <MUITable {...getTableProps()}>
         <MUITableHead>
           {headerGroups.map((headerGroup) => (
             // eslint-disable-next-line react/jsx-key
             <MUITableRow {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
                 // eslint-disable-next-line react/jsx-key
-                <MUITableCell
-                  style={{ width: `${column.width}px` }}
-                  {...column.getHeaderProps()}
-                >
+                <MUITableCell {...column.getHeaderProps()}>
                   {column.render('Header')}
                 </MUITableCell>
               ))}
@@ -56,10 +54,19 @@ const Table: FC<TableProps> = ({ columns, data }: TableProps) => {
               // eslint-disable-next-line react/jsx-key
               <MUITableRow hover {...row.getRowProps()}>
                 {row.cells.map((cell) => {
+                  const isActionCell = cell.column.id === ACTION_CELL_ID;
+
                   return (
                     // eslint-disable-next-line react/jsx-key
                     <MUITableCell
-                      style={{ width: `${cell.column.width}px` }}
+                      style={{
+                        width: isActionCell
+                          ? `${cell.column.width}px`
+                          : undefined,
+                        paddingTop: isActionCell ? 0 : undefined,
+                        paddingBottom: isActionCell ? 0 : undefined,
+                        textAlign: isActionCell ? 'right' : undefined,
+                      }}
                       {...cell.getCellProps()}
                     >
                       {cell.value ? cell.render('Cell') : '-'}

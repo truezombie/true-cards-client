@@ -23,8 +23,10 @@ import {
 import ROUTES from '../../constants/router';
 import { CardsType, CardSetsType } from '../../types/app';
 import { AppToolBar } from '../../components';
+
 import PageCardSets from '../../components/CardSets';
 import PageCards from '../../components/Cards';
+import PagePreStart from '../../components/PreStart';
 
 const MainPage = () => {
   const client = useApolloClient();
@@ -112,6 +114,9 @@ const MainPage = () => {
           calledCardSetWithCards={calledCardSetWithCards}
           getCardSetWithCards={getCardSetWithCards}
         />
+      </Route>
+      <Route exact path={ROUTES.startLearning}>
+        <PagePreStart />
       </Route>
     </>
   );
