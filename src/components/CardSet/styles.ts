@@ -47,16 +47,20 @@ export default (theme: Theme): StyleRules =>
     cardSetIco: {
       marginRight: theme.spacing(2),
     },
-    cardSetWrap: {
+    card: {
       padding: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-    },
-    cardSetDivider: {
-      margin: `${theme.spacing(1.5)}px 0`,
-    },
-    cardSet: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
+    },
+    cardWrapper: {
+      overflow: 'hidden',
+      marginBottom: `${theme.spacing(1.5)}px`,
+    },
+    barColorBg: {
+      backgroundColor: theme.palette.grey['400'],
+    },
+    barColorBufferBg: {
+      backgroundColor: theme.palette.grey['50'],
     },
   });

@@ -4,9 +4,6 @@ export type CardSetsType = {
     name: string;
     cardsMax: number;
     cardsAll: number;
-    cardsLearned: number;
-    cardsForgotten: number;
-    cardsNew: number;
   }[];
 };
 
@@ -17,6 +14,11 @@ export type CardType = {
   back?: string;
   backDescription?: string;
   hasBackSide?: boolean;
+  timeAdded: number;
+  timeLastSuccess: number;
+  timeLastFailed: number;
+  timesFailed: number;
+  timesSuccess: number;
 };
 
 export type CardsType = {
@@ -25,4 +27,10 @@ export type CardsType = {
     name: string;
     cards: CardType[];
   };
+};
+
+export type CardsInfoType = {
+  new: number;
+  forgotten: number;
+  learned: number;
 };

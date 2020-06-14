@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import * as Yup from 'yup';
 
@@ -37,6 +37,7 @@ type ModalManageCardSet = {
 interface CardSetsProps extends WithStyles<typeof styles> {
   data?: CardSetsType;
   isLoading: boolean;
+  getCardSets: () => void;
   onCreateCardSet: (data: { variables: { name: string } }) => void;
   onDeleteCardSet: (data: { variables: { cardSetId: string } }) => void;
   onUpdateCardSet: (data: {
@@ -62,6 +63,7 @@ const CardSets = ({
   data,
   classes,
   isLoading,
+  getCardSets,
   onUpdateCardSet,
   onCreateCardSet,
   onDeleteCardSet,
@@ -81,6 +83,10 @@ const CardSets = ({
       onDeleteCardSet({ variables: { cardSetId: deleteCardSet.id } });
     }
   }, [deleteCardSet.id]);
+
+  useEffect(() => {
+    getCardSets();
+  }, []);
 
   const createNewCardSetValidationSchema = Yup.object().shape({
     name: Yup.string()
@@ -198,9 +204,6 @@ const CardSets = ({
               name={item.name}
               cardsMax={item.cardsMax}
               cardsAll={item.cardsAll}
-              cardsLearned={item.cardsLearned}
-              cardsForgotten={item.cardsForgotten}
-              cardsNew={item.cardsNew}
               linkFolder={ROUTES.cards.replace(':id', item.id)}
               linkPlay={ROUTES.startLearning.replace(':id', item.id)}
               dropDownMenuItems={getDropDownMenuItems(item)}

@@ -1,11 +1,10 @@
-import React, { useMemo } from 'react';
-import { FormattedMessage } from 'react-intl';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
-import Divider from '@material-ui/core/Divider';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import FolderIcon from '@material-ui/icons/Folder';
 import { WithStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -25,9 +24,6 @@ interface CardSetProps extends WithStyles<typeof styles> {
   linkPlay: string;
   cardsMax: number;
   cardsAll: number;
-  cardsLearned: number;
-  cardsForgotten: number;
-  cardsNew: number;
   dropDownMenuItems: MenuItemProps[];
 }
 
@@ -39,47 +35,14 @@ const CardSet = ({
   linkPlay,
   cardsMax,
   cardsAll,
-  cardsLearned,
-  cardsForgotten,
-  cardsNew,
 }: CardSetProps) => {
-  const cardsInfo = useMemo<
-    {
-      id: string;
-      text: string | JSX.Element;
-      value: number | string;
-    }[]
-  >(() => {
-    return [
-      {
-        id: 'allCards',
-        text: <FormattedMessage id='card.set.dashboard.all.cards' />,
-        value: `${cardsAll} / ${cardsMax}`,
-      },
-      {
-        id: 'learnedCards',
-        text: <FormattedMessage id='card.set.dashboard.new.cards' />,
-        value: cardsLearned,
-      },
-      {
-        id: 'forgottenCards',
-        text: <FormattedMessage id='card.set.dashboard.forgotten.cards' />,
-        value: cardsForgotten,
-      },
-      {
-        id: 'newCards',
-        text: <FormattedMessage id='card.set.dashboard.learned.cards' />,
-        value: cardsNew,
-      },
-    ];
-  }, [cardsMax, cardsAll, cardsLearned, cardsForgotten, cardsNew]);
-
   return (
-    <Paper className={classes.cardSetWrap}>
-      <div className={classes.cardSet}>
+    <Paper className={classes.cardWrapper}>
+      <div className={classes.card}>
         <Avatar className={classes.cardSetIco}>
           <FolderIcon />
         </Avatar>
+
         <div className={classes.cardTitleWrap}>
           <Link className={classes.cardSetLink} to={linkFolder}>
             <Typography
@@ -95,7 +58,7 @@ const CardSet = ({
         </div>
 
         <div className={classes.cardButtonsWrap}>
-          <Tooltip disableFocusListener title='Start to lern new cards'>
+          <Tooltip disableFocusListener title='Start to study cards'>
             <Link to={linkPlay}>
               <IconButton aria-label='play'>
                 <PlayCircleFilledIcon color='primary' />
@@ -113,28 +76,17 @@ const CardSet = ({
           </Menu>
         </div>
       </div>
-
-      <Divider className={classes.cardSetDivider} />
-
-      <div className={classes.indicatorWrappers}>
-        {cardsInfo.map((item) => {
-          return (
-            <div key={item.id} className={classes.indicator}>
-              <Typography color='primary' variant='button' display='block'>
-                {item.value}
-              </Typography>
-              <Typography
-                color='textPrimary'
-                variant='caption'
-                display='block'
-                align='center'
-              >
-                {item.text}
-              </Typography>
-            </div>
-          );
-        })}
-      </div>
+      <Tooltip title={`${cardsAll}/${cardsMax}`} aria-label='cards-in-folder'>
+        <LinearProgress
+          classes={{
+            bar: classes.barColorBg,
+            colorPrimary: classes.barColorBufferBg,
+          }}
+          color='primary'
+          variant='determinate'
+          value={cardsAll}
+        />
+      </Tooltip>
     </Paper>
   );
 };

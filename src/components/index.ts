@@ -17,7 +17,7 @@ import AppToolBar from './AppToolBar';
 import CardSets from './CardSets';
 import Cards from './Cards';
 import FullBlockMessage from './FullBlockMessage';
-import PreStart from './PreStart';
+import PreLearning from './PreLearning';
 
 export {
   Loader,
@@ -39,5 +39,5 @@ export {
   CardSets,
   Cards,
   FullBlockMessage,
-  PreStart,
+  PreLearning,
 };

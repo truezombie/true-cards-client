@@ -7,9 +7,6 @@ export const LIST_CARD_SETS_QUERY = gql`
       name
       cardsMax
       cardsAll
-      cardsLearned
-      cardsForgotten
-      cardsNew
     }
   }
 `;
@@ -44,6 +41,11 @@ export const LIST_CARD_SET_WITH_CARDS_QUERY = gql`
         back
         backDescription
         hasBackSide
+        timeAdded
+        timeLastSuccess
+        timeLastFailed
+        timesFailed
+        timesSuccess
       }
     }
   }

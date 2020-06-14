@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import {
-  useQuery,
   useMutation,
   useApolloClient,
   useLazyQuery,
@@ -26,17 +25,21 @@ import { AppToolBar } from '../../components';
 
 import PageCardSets from '../../components/CardSets';
 import PageCards from '../../components/Cards';
-import PagePreStart from '../../components/PreStart';
+import PagePreLearning from '../../components/PreLearning';
 
 const MainPage = () => {
   const client = useApolloClient();
 
-  const {
-    data: dataCardSets,
-    loading: loadingCardSets,
-    refetch: refetchCardSets,
-  } = useQuery<CardSetsType>(LIST_CARD_SETS_QUERY, {
+  const [
+    getCardSets,
+    {
+      loading: loadingCardSets,
+      refetch: refetchCardSets,
+      data: dataCardSetsCards,
+    },
+  ] = useLazyQuery<CardSetsType>(LIST_CARD_SETS_QUERY, {
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'no-cache',
   });
 
   const [
@@ -49,6 +52,7 @@ const MainPage = () => {
     },
   ] = useLazyQuery<CardsType>(LIST_CARD_SET_WITH_CARDS_QUERY, {
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'no-cache',
   });
 
   const [onCreateCardSet] = useMutation(CREATE_CARD_SET_QUERY, {
@@ -94,14 +98,14 @@ const MainPage = () => {
           },
         ]}
       />
-
       <Route exact path={ROUTES.main}>
         <PageCardSets
-          data={dataCardSets}
+          data={dataCardSetsCards}
           isLoading={loadingCardSets}
           onUpdateCardSet={onUpdateCardSet}
           onCreateCardSet={onCreateCardSet}
           onDeleteCardSet={onDeleteCardSet}
+          getCardSets={getCardSets}
         />
       </Route>
       <Route exact path={ROUTES.cards}>
@@ -116,7 +120,11 @@ const MainPage = () => {
         />
       </Route>
       <Route exact path={ROUTES.startLearning}>
-        <PagePreStart />
+        <PagePreLearning
+          data={dataCardSetWithCards}
+          isLoading={loadingCardSetWithCards}
+          getPreLearningData={getCardSetWithCards}
+        />
       </Route>
     </>
   );

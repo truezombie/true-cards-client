@@ -47,9 +47,5 @@
   "modal.manage.input.front.description": "Front description",
   "modal.manage.input.back": "Back",
   "modal.manage.input.back.description": "Back description",
-  "modal.manage.input.with.back.side": "With back side",
-  "card.set.dashboard.all.cards": "All cards",
-  "card.set.dashboard.new.cards": "New cards",
-  "card.set.dashboard.forgotten.cards": "Forgotten cards",
-  "card.set.dashboard.learned.cards": "Learned cards"
+  "modal.manage.input.with.back.side": "With back side"
 }

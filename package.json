@@ -90,6 +90,7 @@
     "apollo-link-http": "^1.5.17",
     "classnames": "^2.2.6",
     "core-js": "^3.6.5",
+    "dayjs": "^1.8.28",
     "enzyme": "^3.11.0",
     "formik": "^2.1.4",
     "graphql": "^15.0.0",
