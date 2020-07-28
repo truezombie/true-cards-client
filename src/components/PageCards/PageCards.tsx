@@ -47,7 +47,7 @@ type deleteCard = {
   front: string;
 };
 
-interface CardsPrps extends WithStyles<typeof styles> {
+interface PageCardsProps extends WithStyles<typeof styles> {
   isLoading: boolean;
   calledCardSetWithCards: boolean;
   getCardSetWithCards: (data: { variables: { cardSetId: string } }) => void;
@@ -96,7 +96,7 @@ const initialStateManageModal: manageCard = {
   hasBackSide: false,
 };
 
-const Cards = ({
+const PageCards = ({
   classes,
   getCardSetWithCards,
   calledCardSetWithCards,
@@ -105,7 +105,7 @@ const Cards = ({
   onCreateCard,
   onDeleteCard,
   onUpdateCard,
-}: CardsPrps) => {
+}: PageCardsProps) => {
   const intl = useIntl();
   const urlParams = useParams<{ id: string }>();
   const [deleteCard, setDeleteCard] = useState<deleteCard>(
@@ -265,6 +265,8 @@ const Cards = ({
                 create: true,
               });
             }}
+            currentValue={data.cardSetWithCards.cards.length}
+            maxValue={data.cardSetWithCards.cardsMax}
             link={ROUTES.main}
             msgAddBtn={<FormattedMessage id='btn.new.card' />}
             msgTitle={data.cardSetWithCards.name}
@@ -457,4 +459,4 @@ const Cards = ({
   );
 };
 
-export default Cards;
+export default PageCards;

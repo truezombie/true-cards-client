@@ -1,6 +1,6 @@
 import { withStyles } from '@material-ui/styles';
 
-import Cards from './Cards';
+import PageCards from './PageCards';
 import styles from './styles';
 
-export default withStyles(styles)(Cards);
+export default withStyles(styles)(PageCards);

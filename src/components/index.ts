@@ -10,14 +10,17 @@ import DialogConfirm from './DialogConfirm';
 import DialogForm from './DialogForm';
 import PageMainHeader from './PageMainHeader';
 import Menu from './Menu';
-
-import Login from './Login';
-import Registration from './Registration';
-import AppToolBar from './AppToolBar';
-import CardSets from './CardSets';
-import Cards from './Cards';
 import FullBlockMessage from './FullBlockMessage';
-import PreLearning from './PreLearning';
+import AppToolBar from './AppToolBar';
+import StartLearning from './StartLearning';
+import Learning from './Learning';
+
+import PageLogin from './PageLogin';
+import PageCards from './PageCards';
+import PageLearning from './PageLearning';
+import PageCardSets from './PageCardSets';
+import PageRegistration from './PageRegistration';
+import PageStartLearning from './PageStartLearning';
 
 export {
   Loader,
@@ -33,11 +36,14 @@ export {
   PageMainHeader,
   DialogForm,
   Menu,
-  Login,
-  Registration,
-  AppToolBar,
-  CardSets,
-  Cards,
   FullBlockMessage,
-  PreLearning,
+  AppToolBar,
+  StartLearning,
+  Learning,
+  PageLearning,
+  PageRegistration,
+  PageLogin,
+  PageCardSets,
+  PageCards,
+  PageStartLearning,
 };

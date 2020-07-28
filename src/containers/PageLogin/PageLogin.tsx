@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useMutation, useQuery, useApolloClient } from '@apollo/react-hooks';
-import { Login } from '../../components';
+import { PageLogin } from '../../components';
 import ROUTES from '../../constants/router';
 import { IS_LOGGED_IN_QUERY, GET_TOKENS_QUERY } from './queries';
 
-const PageLogin = () => {
+const Login = () => {
   const { data: localState } = useQuery(IS_LOGGED_IN_QUERY);
   const [mutate, { data: dataTokens }] = useMutation(GET_TOKENS_QUERY);
   const client = useApolloClient();
@@ -27,8 +27,8 @@ const PageLogin = () => {
       }}
     />
   ) : (
-    <Login onSignIn={mutate} />
+    <PageLogin onSignIn={mutate} />
   );
 };
 
-export default PageLogin;
+export default Login;

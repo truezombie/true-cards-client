@@ -34,7 +34,7 @@ type ModalManageCardSet = {
   name: string;
 };
 
-interface CardSetsProps extends WithStyles<typeof styles> {
+interface PageCardSetsProps extends WithStyles<typeof styles> {
   data?: CardSetsType;
   isLoading: boolean;
   getCardSets: () => void;
@@ -59,7 +59,7 @@ const modalInitialStateManageCardSet: ModalManageCardSet = {
   name: '',
 };
 
-const CardSets = ({
+const PageCardSets = ({
   data,
   classes,
   isLoading,
@@ -67,7 +67,7 @@ const CardSets = ({
   onUpdateCardSet,
   onCreateCardSet,
   onDeleteCardSet,
-}: CardSetsProps) => {
+}: PageCardSetsProps) => {
   const intl = useIntl();
   const [deleteCardSet, setDeleteCardSet] = useState<ModalDeleteCardSet>(
     modalInitialStateDeleteCardSet
@@ -276,4 +276,4 @@ const CardSets = ({
   );
 };
 
-export default CardSets;
+export default PageCardSets;

@@ -3,11 +3,6 @@ import { StyleRules } from '@material-ui/styles/withStyles';
 
 export default (theme: Theme): StyleRules =>
   createStyles({
-    container: {
-      flexGrow: 1,
-      display: 'flex',
-      flexDirection: 'column',
-    },
     title: {
       textTransform: 'uppercase',
       textDecoration: 'none',
@@ -34,5 +29,11 @@ export default (theme: Theme): StyleRules =>
     gridColumn: {
       marginBottom: theme.spacing(1.5),
       textAlign: 'center',
+    },
+    titleAmountOfCards: {
+      marginTop: theme.spacing(1.5),
+    },
+    inputCardsPerSession: {
+      marginBottom: theme.spacing(3),
     },
   });

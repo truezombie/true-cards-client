@@ -34,6 +34,7 @@ export const LIST_CARD_SET_WITH_CARDS_QUERY = gql`
     cardSetWithCards(cardSetId: $cardSetId) {
       id
       name
+      cardsMax
       cards {
         uuid
         front
@@ -43,8 +44,6 @@ export const LIST_CARD_SET_WITH_CARDS_QUERY = gql`
         hasBackSide
         timeAdded
         timeLastSuccess
-        timeLastFailed
-        timesFailed
         timesSuccess
       }
     }
@@ -100,5 +99,33 @@ export const UPDATE_CARD_QUERY = gql`
 export const DELETE_CARD_QUERY = gql`
   mutation($cardUuid: String!, $cardSetId: String!) {
     deleteCard(cardUuid: $cardUuid, cardSetId: $cardSetId)
+  }
+`;
+
+export const IS_LOGGED_IN = gql`
+  query IsUserLoggedIn {
+    isLoggedIn @client
+  }
+`;
+
+export const START_LEARNING_SESSION = gql`
+  mutation($numberOfCards: Int!, $cardSetId: String!, $sessionType: String!) {
+    startLearningSession(
+      numberOfCards: $numberOfCards
+      cardSetId: $cardSetId
+      sessionType: $sessionType
+    )
+  }
+`;
+
+export const GET_CURRENT_LEARNING_CARD = gql`
+  query($cardSetId: String!) {
+    getCurrentLearningCard(cardSetId: $cardSetId) {
+      front
+      frontDescription
+      back
+      backDescription
+      hasBackSide
+    }
   }
 `;

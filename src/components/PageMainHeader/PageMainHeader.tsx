@@ -17,6 +17,8 @@ interface PageMainHeaderProps extends WithStyles<typeof styles> {
   msgAddBtn: JSX.Element | string;
   msgTitle: JSX.Element | string;
   link?: string;
+  currentValue?: number;
+  maxValue?: number;
 }
 
 const PageMainHeader = ({
@@ -26,6 +28,8 @@ const PageMainHeader = ({
   link,
   msgTitle,
   msgAddBtn,
+  currentValue,
+  maxValue,
 }: PageMainHeaderProps) => {
   return (
     <div className={classes.headerWrapper}>
@@ -44,6 +48,13 @@ const PageMainHeader = ({
             </Typography>
           )}
         </div>
+
+        {currentValue === 0 || (currentValue && maxValue) ? (
+          <Typography variant='button' display='block'>
+            {`${currentValue} / ${maxValue}`}
+          </Typography>
+        ) : null}
+
         <div className={classes.headerBtn}>
           <Button
             onClick={onAdd}

@@ -11,4 +11,8 @@ export default (theme: Theme): StyleRules =>
       flexGrow: 1,
       textAlign: 'center',
     },
+    link: {
+      textDecoration: 'none',
+      color: theme.palette.common.white,
+    },
   });

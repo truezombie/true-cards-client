@@ -16,7 +16,7 @@ import Menu from '../Menu';
 
 import { MenuItemProps } from '../../types/menu';
 
-import styles from '../CardSets/styles';
+import styles from './styles';
 
 interface CardSetProps extends WithStyles<typeof styles> {
   name: string;

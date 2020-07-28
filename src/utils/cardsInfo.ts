@@ -4,6 +4,23 @@ import { CardType, CardsInfoType } from '../types/app';
 // 1 its one day
 export const SEED_OF_OBLIVION = 1; // TODO: need to be on the server it's temporary solution
 
+export const isLearnedCard = (card: CardType): boolean => {
+  return dayjs(new Date()).isAfter(
+    dayjs(card.timeLastSuccess).add(
+      SEED_OF_OBLIVION * card.timeLastSuccess,
+      'day'
+    )
+  );
+};
+
+export const isForgottenCard = (card: CardType) => {
+  return !isLearnedCard(card);
+};
+
+export const isNewCard = (card: CardType) => {
+  return card.timesSuccess === 0;
+};
+
 export const getCardsInfo = (cards: CardType[]): CardsInfoType => {
   let res = {
     new: 0,
@@ -12,25 +29,17 @@ export const getCardsInfo = (cards: CardType[]): CardsInfoType => {
   };
 
   cards.forEach((item) => {
-    const isNewCard = item.timesFailed === 0 && item.timesSuccess === 0;
-    const isForgottenCard = dayjs(new Date()).isAfter(
-      dayjs(item.timeLastSuccess).add(
-        SEED_OF_OBLIVION * item.timeLastSuccess,
-        'day'
-      )
-    );
-
-    if (isNewCard) {
+    if (isNewCard(item)) {
       res = {
         ...res,
         new: res.new + 1,
       };
-    } else if (isForgottenCard) {
+    } else if (isForgottenCard(item)) {
       res = {
         ...res,
         forgotten: res.forgotten + 1,
       };
-    } else if (!isForgottenCard) {
+    } else if (isLearnedCard(item)) {
       res = {
         ...res,
         learned: res.forgotten + 1,

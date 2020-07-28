@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
+import { IS_LOGGED_IN } from './queries';
 
 import { Loader, AppWrapper, PrivateRoute } from '../../components';
 import ROUTES from '../../constants/router';
@@ -25,12 +25,6 @@ const messages = {
   ru: messagesRu,
   ua: messagesUa,
 };
-
-const IS_LOGGED_IN = gql`
-  query IsUserLoggedIn {
-    isLoggedIn @client
-  }
-`;
 
 function IsLoggedIn(): boolean {
   const { data } = useQuery(IS_LOGGED_IN);

@@ -18,14 +18,18 @@ import {
   CREATE_CARD_QUERY,
   UPDATE_CARD_QUERY,
   DELETE_CARD_QUERY,
+  START_LEARNING_SESSION,
+  GET_CURRENT_LEARNING_CARD,
 } from './queries';
 import ROUTES from '../../constants/router';
 import { CardsType, CardSetsType } from '../../types/app';
-import { AppToolBar } from '../../components';
-
-import PageCardSets from '../../components/CardSets';
-import PageCards from '../../components/Cards';
-import PagePreLearning from '../../components/PreLearning';
+import {
+  AppToolBar,
+  PageStartLearning,
+  PageCards,
+  PageCardSets,
+  PageLearning,
+} from '../../components';
 
 const MainPage = () => {
   const client = useApolloClient();
@@ -79,6 +83,16 @@ const MainPage = () => {
     onCompleted: () => refetchCardSetWithCards(),
   });
 
+  const [
+    onStartLearningSession,
+    { loading: learningSessionIsLoading, data: learningSessionData },
+  ] = useMutation(START_LEARNING_SESSION);
+
+  const [
+    getCurrentLoadingCard,
+    { loading: currentLearningCardIsLoading, data: currentLearningCardData },
+  ] = useLazyQuery(GET_CURRENT_LEARNING_CARD);
+
   const onLogOut = () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('refreshToken');
@@ -120,10 +134,20 @@ const MainPage = () => {
         />
       </Route>
       <Route exact path={ROUTES.startLearning}>
-        <PagePreLearning
-          data={dataCardSetWithCards}
-          isLoading={loadingCardSetWithCards}
+        <PageStartLearning
+          preLearningData={dataCardSetWithCards}
+          preLearningDataIsLoading={loadingCardSetWithCards}
+          learningSessionData={learningSessionData}
+          learningSessionIsLoading={learningSessionIsLoading}
           getPreLearningData={getCardSetWithCards}
+          onStartLearningSession={onStartLearningSession}
+        />
+      </Route>
+      <Route exact path={ROUTES.learning}>
+        <PageLearning
+          getCurrentLoadingCard={getCurrentLoadingCard}
+          currentLearningCardData={currentLearningCardData}
+          currentLearningCardIsLoading={currentLearningCardIsLoading}
         />
       </Route>
     </>

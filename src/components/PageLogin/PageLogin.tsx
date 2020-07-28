@@ -15,11 +15,11 @@ import APP from '../../constants/app';
 import { AppWrapperPrimaryPages } from '../index';
 import styles from './styles';
 
-interface LoginProps extends WithStyles<typeof styles> {
+interface PageLoginProps extends WithStyles<typeof styles> {
   onSignIn: (data: { variables: { email: string; password: string } }) => void;
 }
 
-const Login = ({ classes, onSignIn }: LoginProps) => {
+const PageLogin = ({ classes, onSignIn }: PageLoginProps) => {
   const intl = useIntl();
 
   const LoginValidationSchema = Yup.object().shape({
@@ -154,4 +154,4 @@ const Login = ({ classes, onSignIn }: LoginProps) => {
   );
 };
 
-export default Login;
+export default PageLogin;

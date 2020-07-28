@@ -4,7 +4,8 @@ const ROUTES = {
   registration: '/registration',
   forgotPassword: '/forgot-password',
   cards: '/cards/:id',
-  startLearning: '/start/:id',
+  startLearning: '/start-learning/:id',
+  learning: '/learning/:id',
 };
 
 export default ROUTES;

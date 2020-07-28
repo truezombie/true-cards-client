@@ -2,8 +2,8 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { Link } from 'react-router-dom';
 
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -15,7 +15,7 @@ import ROUTES from '../../constants/router';
 import { AppWrapperPrimaryPages } from '../index';
 import styles from './styles';
 
-interface RegistrationProps extends WithStyles<typeof styles> {
+interface PageRegistrationProps extends WithStyles<typeof styles> {
   onSignUp: (data: {
     variables: {
       email: string;
@@ -26,7 +26,7 @@ interface RegistrationProps extends WithStyles<typeof styles> {
   }) => void;
 }
 
-const Registration = ({ classes, onSignUp }: RegistrationProps) => {
+const PageRegistration = ({ classes, onSignUp }: PageRegistrationProps) => {
   const intl = useIntl();
 
   const LoginValidationSchema = Yup.object().shape({
@@ -99,9 +99,11 @@ const Registration = ({ classes, onSignUp }: RegistrationProps) => {
             </Typography>
           </Grid>
           <Grid item>
-            <Link href={ROUTES.login} variant='body2'>
-              <FormattedMessage id='btn.sign.in' />
-            </Link>
+            <Typography align='center' variant='body2'>
+              <Link to={ROUTES.login}>
+                <FormattedMessage id='btn.sign.in' />
+              </Link>
+            </Typography>
           </Grid>
         </Grid>
         <Formik
@@ -227,8 +229,8 @@ const Registration = ({ classes, onSignUp }: RegistrationProps) => {
             </form>
           )}
         </Formik>
-        <Typography align='center'>
-          <Link href={ROUTES.forgotPassword} variant='body2'>
+        <Typography align='center' variant='body2'>
+          <Link to={ROUTES.forgotPassword}>
             <FormattedMessage id='page.login.link.forgot.password' />
           </Link>
         </Typography>
@@ -237,4 +239,4 @@ const Registration = ({ classes, onSignUp }: RegistrationProps) => {
   );
 };
 
-export default Registration;
+export default PageRegistration;

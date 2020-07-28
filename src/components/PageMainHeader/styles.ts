@@ -30,5 +30,6 @@ export default (theme: Theme): StyleRules =>
     },
     headerBtn: {
       flexShrink: 0,
+      marginLeft: theme.spacing(3),
     },
   });
