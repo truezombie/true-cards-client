@@ -21,14 +21,22 @@ import { CurrentLearningCard } from '../../types/app';
 import styles from './styles';
 
 interface LearningProps extends WithStyles<typeof styles> {
+  setNextLearningCard: (data: {
+    variables: { cardSetId: string; konwCurrentCard: boolean };
+  }) => void;
   currentLearningCardData?: CurrentLearningCard;
   currentLearningCardIsLoading: boolean;
+  cardSetId: string;
+  nextLearningCardIsLoading: boolean;
 }
 
 const Learning = ({
   classes,
+  cardSetId,
+  setNextLearningCard,
   currentLearningCardIsLoading,
   currentLearningCardData,
+  nextLearningCardIsLoading,
 }: LearningProps) => {
   const [isRotated, setRotated] = useState<boolean>(false);
   const { front = '', frontDescription, back, backDescription, hasBackSide } =
@@ -42,20 +50,24 @@ const Learning = ({
 
   const onClickKnow = () => {
     setRotated(false);
+    setNextLearningCard({ variables: { konwCurrentCard: true, cardSetId } });
   };
 
-  const onClickSkip = () => {
+  const onClickForgot = () => {
     setRotated(false);
+    setNextLearningCard({ variables: { konwCurrentCard: false, cardSetId } });
   };
 
   const loader = useMemo(() => {
-    return currentLearningCardIsLoading ? <Loader /> : null;
+    return currentLearningCardIsLoading || nextLearningCardIsLoading ? (
+      <Loader />
+    ) : null;
   }, [currentLearningCardIsLoading]);
 
   return (
     <Container maxWidth='sm' className={classes.container}>
       {loader}
-      {currentLearningCardData ? (
+      {currentLearningCardData && !loader ? (
         <>
           <Tooltip title={`${3}/${5}`}>
             <LinearProgress
@@ -144,7 +156,7 @@ const Learning = ({
                 variant='contained'
                 color='primary'
                 startIcon={<ThumbDownAltIcon />}
-                onClick={onClickSkip}
+                onClick={onClickForgot}
               >
                 I dont know
               </Button>

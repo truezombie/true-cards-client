@@ -20,6 +20,7 @@ import {
   DELETE_CARD_QUERY,
   START_LEARNING_SESSION,
   GET_CURRENT_LEARNING_CARD,
+  SET_NEXT_LEARNING_CARD,
 } from './queries';
 import ROUTES from '../../constants/router';
 import { CardsType, CardSetsType } from '../../types/app';
@@ -90,8 +91,22 @@ const MainPage = () => {
 
   const [
     getCurrentLoadingCard,
-    { loading: currentLearningCardIsLoading, data: currentLearningCardData },
-  ] = useLazyQuery(GET_CURRENT_LEARNING_CARD);
+    {
+      loading: currentLearningCardIsLoading,
+      data: currentLearningCardData,
+      refetch: refetchCurrentLearningCardData,
+    },
+  ] = useLazyQuery(GET_CURRENT_LEARNING_CARD, {
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'no-cache',
+  });
+
+  const [
+    setNextLearningCard,
+    { loading: nextLearningCardIsLoading },
+  ] = useMutation(SET_NEXT_LEARNING_CARD, {
+    onCompleted: () => refetchCurrentLearningCardData(),
+  });
 
   const onLogOut = () => {
     localStorage.removeItem('authToken');
@@ -145,9 +160,11 @@ const MainPage = () => {
       </Route>
       <Route exact path={ROUTES.learning}>
         <PageLearning
+          setNextLearningCard={setNextLearningCard}
           getCurrentLoadingCard={getCurrentLoadingCard}
           currentLearningCardData={currentLearningCardData}
           currentLearningCardIsLoading={currentLearningCardIsLoading}
+          nextLearningCardIsLoading={nextLearningCardIsLoading}
         />
       </Route>
     </>

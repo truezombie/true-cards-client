@@ -129,3 +129,12 @@ export const GET_CURRENT_LEARNING_CARD = gql`
     }
   }
 `;
+
+export const SET_NEXT_LEARNING_CARD = gql`
+  mutation($konwCurrentCard: Boolean!, $cardSetId: String!) {
+    setNextLearningCard(
+      konwCurrentCard: $konwCurrentCard
+      cardSetId: $cardSetId
+    )
+  }
+`;
