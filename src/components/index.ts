@@ -15,6 +15,7 @@ import AppToolBar from './AppToolBar';
 import StartLearning from './StartLearning';
 import Learning from './Learning';
 
+import PageDone from './PageDone';
 import PageLogin from './PageLogin';
 import PageCards from './PageCards';
 import PageLearning from './PageLearning';
@@ -40,6 +41,7 @@ export {
   AppToolBar,
   StartLearning,
   Learning,
+  PageDone,
   PageLearning,
   PageRegistration,
   PageLogin,

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import cx from 'classnames';
 
 import Grid from '@material-ui/core/Grid';
@@ -22,7 +22,7 @@ import styles from './styles';
 
 interface LearningProps extends WithStyles<typeof styles> {
   setNextLearningCard: (data: {
-    variables: { cardSetId: string; konwCurrentCard: boolean };
+    variables: { cardSetId: string; knowCurrentCard: boolean };
   }) => void;
   currentLearningCardData?: CurrentLearningCard;
   currentLearningCardIsLoading: boolean;
@@ -39,6 +39,10 @@ const Learning = ({
   nextLearningCardIsLoading,
 }: LearningProps) => {
   const [isRotated, setRotated] = useState<boolean>(false);
+  const [isDisabledNewCardButtons, setDisabledNewCardButtons] = useState<
+    boolean
+  >(false);
+
   const { front = '', frontDescription, back, backDescription, hasBackSide } =
     (currentLearningCardData &&
       currentLearningCardData.getCurrentLearningCard) ||
@@ -50,12 +54,14 @@ const Learning = ({
 
   const onClickKnow = () => {
     setRotated(false);
-    setNextLearningCard({ variables: { konwCurrentCard: true, cardSetId } });
+    setDisabledNewCardButtons(true);
+    setNextLearningCard({ variables: { knowCurrentCard: true, cardSetId } });
   };
 
   const onClickForgot = () => {
     setRotated(false);
-    setNextLearningCard({ variables: { konwCurrentCard: false, cardSetId } });
+    setDisabledNewCardButtons(true);
+    setNextLearningCard({ variables: { knowCurrentCard: false, cardSetId } });
   };
 
   const loader = useMemo(() => {
@@ -64,10 +70,13 @@ const Learning = ({
     ) : null;
   }, [currentLearningCardIsLoading]);
 
+  useEffect(() => {
+    setDisabledNewCardButtons(false);
+  }, [currentLearningCardData]);
+
   return (
     <Container maxWidth='sm' className={classes.container}>
-      {loader}
-      {currentLearningCardData && !loader ? (
+      {currentLearningCardData ? (
         <>
           <Tooltip title={`${3}/${5}`}>
             <LinearProgress
@@ -87,26 +96,28 @@ const Learning = ({
                 classes.cardFrontSide
               )}
             >
-              <CardContent className={classes.cardBody}>
-                <div>
-                  <Typography
-                    className={classes.cardInformation}
-                    variant='h6'
-                    component='p'
-                    align='center'
-                  >
-                    {front}
-                  </Typography>
-                  <Typography
-                    className={classes.cardDescription}
-                    variant='body2'
-                    component='p'
-                    align='center'
-                  >
-                    {frontDescription}
-                  </Typography>
-                </div>
-              </CardContent>
+              {loader || (
+                <CardContent className={classes.cardBody}>
+                  <div>
+                    <Typography
+                      className={classes.cardInformation}
+                      variant='h6'
+                      component='p'
+                      align='center'
+                    >
+                      {front}
+                    </Typography>
+                    <Typography
+                      className={classes.cardDescription}
+                      variant='body2'
+                      component='p'
+                      align='center'
+                    >
+                      {frontDescription}
+                    </Typography>
+                  </div>
+                </CardContent>
+              )}
             </Card>
             <Card
               className={cx(
@@ -117,24 +128,26 @@ const Learning = ({
                 classes.cardBackSide
               )}
             >
-              <CardContent className={classes.cardBody}>
-                <Typography
-                  className={classes.cardInformation}
-                  variant='h6'
-                  component='p'
-                  align='center'
-                >
-                  {back}
-                </Typography>
-                <Typography
-                  className={classes.cardDescription}
-                  variant='body2'
-                  component='p'
-                  align='center'
-                >
-                  {backDescription}
-                </Typography>
-              </CardContent>
+              {loader || (
+                <CardContent className={classes.cardBody}>
+                  <Typography
+                    className={classes.cardInformation}
+                    variant='h6'
+                    component='p'
+                    align='center'
+                  >
+                    {back}
+                  </Typography>
+                  <Typography
+                    className={classes.cardDescription}
+                    variant='body2'
+                    component='p'
+                    align='center'
+                  >
+                    {backDescription}
+                  </Typography>
+                </CardContent>
+              )}
             </Card>
           </div>
 
@@ -155,6 +168,7 @@ const Learning = ({
                 fullWidth
                 variant='contained'
                 color='primary'
+                disabled={isDisabledNewCardButtons || !!loader}
                 startIcon={<ThumbDownAltIcon />}
                 onClick={onClickForgot}
               >
@@ -166,6 +180,7 @@ const Learning = ({
                 fullWidth
                 variant='contained'
                 color='primary'
+                disabled={isDisabledNewCardButtons || !!loader}
                 endIcon={<ThumbUpAltIcon />}
                 onClick={onClickKnow}
               >

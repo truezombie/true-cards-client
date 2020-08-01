@@ -118,23 +118,14 @@ export const START_LEARNING_SESSION = gql`
   }
 `;
 
-export const GET_CURRENT_LEARNING_CARD = gql`
-  query($cardSetId: String!) {
-    getCurrentLearningCard(cardSetId: $cardSetId) {
-      front
-      frontDescription
-      back
-      backDescription
-      hasBackSide
-    }
+export const RESET_LEARNING_SESSION = gql`
+  mutation($cardSetId: String!) {
+    resetLearningSession(cardSetId: $cardSetId)
   }
 `;
 
-export const SET_NEXT_LEARNING_CARD = gql`
-  mutation($konwCurrentCard: Boolean!, $cardSetId: String!) {
-    setNextLearningCard(
-      konwCurrentCard: $konwCurrentCard
-      cardSetId: $cardSetId
-    )
+export const IS_EXIST_LEARNING_SESSION = gql`
+  query($cardSetId: String!) {
+    isExistLearningSession(cardSetId: $cardSetId)
   }
 `;

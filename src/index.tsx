@@ -8,7 +8,7 @@ import { createHttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { ApolloLink, Observable } from 'apollo-link';
 import { resolvers, typeDefs } from './resolvers';
-import { ERROR_CODES } from './utils/errorMessages';
+import { ERROR_CODES } from './utils/errors';
 
 import App from './containers/App';
 

@@ -18,9 +18,7 @@ import {
   CREATE_CARD_QUERY,
   UPDATE_CARD_QUERY,
   DELETE_CARD_QUERY,
-  START_LEARNING_SESSION,
-  GET_CURRENT_LEARNING_CARD,
-  SET_NEXT_LEARNING_CARD,
+  RESET_LEARNING_SESSION,
 } from './queries';
 import ROUTES from '../../constants/router';
 import { CardsType, CardSetsType } from '../../types/app';
@@ -30,6 +28,7 @@ import {
   PageCards,
   PageCardSets,
   PageLearning,
+  PageDone,
 } from '../../components';
 
 const MainPage = () => {
@@ -84,29 +83,7 @@ const MainPage = () => {
     onCompleted: () => refetchCardSetWithCards(),
   });
 
-  const [
-    onStartLearningSession,
-    { loading: learningSessionIsLoading, data: learningSessionData },
-  ] = useMutation(START_LEARNING_SESSION);
-
-  const [
-    getCurrentLoadingCard,
-    {
-      loading: currentLearningCardIsLoading,
-      data: currentLearningCardData,
-      refetch: refetchCurrentLearningCardData,
-    },
-  ] = useLazyQuery(GET_CURRENT_LEARNING_CARD, {
-    notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'no-cache',
-  });
-
-  const [
-    setNextLearningCard,
-    { loading: nextLearningCardIsLoading },
-  ] = useMutation(SET_NEXT_LEARNING_CARD, {
-    onCompleted: () => refetchCurrentLearningCardData(),
-  });
+  const [onResetCurrentSession] = useMutation(RESET_LEARNING_SESSION);
 
   const onLogOut = () => {
     localStorage.removeItem('authToken');
@@ -151,21 +128,15 @@ const MainPage = () => {
       <Route exact path={ROUTES.startLearning}>
         <PageStartLearning
           preLearningData={dataCardSetWithCards}
-          preLearningDataIsLoading={loadingCardSetWithCards}
-          learningSessionData={learningSessionData}
-          learningSessionIsLoading={learningSessionIsLoading}
           getPreLearningData={getCardSetWithCards}
-          onStartLearningSession={onStartLearningSession}
+          preLearningDataIsLoading={loadingCardSetWithCards}
         />
       </Route>
       <Route exact path={ROUTES.learning}>
-        <PageLearning
-          setNextLearningCard={setNextLearningCard}
-          getCurrentLoadingCard={getCurrentLoadingCard}
-          currentLearningCardData={currentLearningCardData}
-          currentLearningCardIsLoading={currentLearningCardIsLoading}
-          nextLearningCardIsLoading={nextLearningCardIsLoading}
-        />
+        <PageLearning />
+      </Route>
+      <Route exact path={ROUTES.learningDone}>
+        <PageDone onResetCurrentSession={onResetCurrentSession} />
       </Route>
     </>
   );

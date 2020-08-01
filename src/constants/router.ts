@@ -6,6 +6,7 @@ const ROUTES = {
   cards: '/cards/:id',
   startLearning: '/start-learning/:id',
   learning: '/learning/:id',
+  learningDone: '/done/:id',
 };
 
 export default ROUTES;

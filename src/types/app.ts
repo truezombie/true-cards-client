@@ -43,3 +43,8 @@ export type CurrentLearningCard = {
     hasBackSide: boolean;
   };
 };
+
+export type HasErrorObject = {
+  message: string | null;
+  hasError: boolean;
+};
