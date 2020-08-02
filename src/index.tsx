@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
+import { SnackbarProvider, useSnackbar } from 'notistack';
 
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
@@ -8,11 +9,9 @@ import { createHttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { ApolloLink, Observable } from 'apollo-link';
 import { resolvers, typeDefs } from './resolvers';
-import { ERROR_CODES } from './utils/errors';
+import { ERROR_CODES, getErrorMessage } from './utils/errors';
 
 import App from './containers/App';
-
-// const ErrorContext = React.createContext([]);
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000/graphql',
@@ -24,7 +23,7 @@ const httpLink = createHttpLink({
 });
 
 const ApolloComponent = () => {
-  // const { handleUpdateError } = useContext(ErrorContext);
+  const { enqueueSnackbar } = useSnackbar();
 
   const errorLink = onError(
     // eslint-disable-next-line consistent-return
@@ -33,11 +32,6 @@ const ApolloComponent = () => {
         const { cache } = operation.getContext();
         const oldHeaders = operation.getContext().headers;
         const errorCode = graphQLErrors[0]?.message;
-        // const errorMessage = getErrorMessage(errorCode);
-
-        // if (errorMessage) {
-        //   handleUpdateError([errorMessage]);
-        // }
 
         if (errorCode === ERROR_CODES.ERROR_TOKEN_AUTH_IS_NOT_VALID) {
           const refreshToken = localStorage.getItem('refreshToken');
@@ -104,6 +98,14 @@ const ApolloComponent = () => {
         if (networkError) {
           console.log(`[Network error]: ${networkError}`); // eslint-disable-line
         }
+
+        graphQLErrors.forEach((error) => {
+          const errorMessage = getErrorMessage(error.message);
+
+          if (errorMessage) {
+            enqueueSnackbar(errorMessage);
+          }
+        });
       }
     }
   );
@@ -131,28 +133,9 @@ const ApolloComponent = () => {
   );
 };
 
-// const ErrorProvider = ({ children }: { children: JSX.Element }) => {
-//   const [errors, setError] = useState<string[]>([]);
-//
-//   const handleUpdateError = (err: string[]) => {
-//     setError([...err]);
-//   };
-//
-//   const ctx = { handleUpdateError };
-//
-//   return (
-//     <ErrorContext.Provider value={ctx}>
-//       {errors.map((message) => (
-//         <SnackBar key={message} message={message} />
-//       ))}
-//       {children}
-//     </ErrorContext.Provider>
-//   );
-// };
-
 ReactDOM.render(
-  // <ErrorProvider>
-  <ApolloComponent />,
-  // </ErrorProvider>,
+  <SnackbarProvider maxSnack={5}>
+    <ApolloComponent />
+  </SnackbarProvider>,
   document.getElementById('root')
 );

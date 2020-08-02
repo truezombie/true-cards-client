@@ -14,6 +14,7 @@ import FullBlockMessage from './FullBlockMessage';
 import AppToolBar from './AppToolBar';
 import StartLearning from './StartLearning';
 import Learning from './Learning';
+import CardSide from './CardSide';
 
 import PageDone from './PageDone';
 import PageLogin from './PageLogin';
@@ -39,6 +40,7 @@ export {
   Menu,
   FullBlockMessage,
   AppToolBar,
+  CardSide,
   StartLearning,
   Learning,
   PageDone,

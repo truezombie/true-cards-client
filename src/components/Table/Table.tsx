@@ -19,7 +19,7 @@ interface TableProps extends WithStyles<typeof styles> {
   data: Data[];
 }
 
-const Table: FC<TableProps> = ({ columns, data }: TableProps) => {
+const Table: FC<TableProps> = ({ columns, data, classes }: TableProps) => {
   const {
     getTableProps,
     headerGroups,
@@ -59,6 +59,7 @@ const Table: FC<TableProps> = ({ columns, data }: TableProps) => {
                   return (
                     // eslint-disable-next-line react/jsx-key
                     <MUITableCell
+                      className={classes.cell}
                       style={{
                         width: isActionCell
                           ? `${cell.column.width}px`

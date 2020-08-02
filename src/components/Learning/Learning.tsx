@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import cx from 'classnames';
+import { FormattedMessage } from 'react-intl';
 
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
@@ -7,14 +8,13 @@ import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import Container from '@material-ui/core/Container';
 import { WithStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
-import CardContent from '@material-ui/core/CardContent';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 
 import { Loader } from '../Loader';
+import CardSide from '../CardSide';
 
 import { CurrentLearningCard } from '../../types/app';
 
@@ -76,6 +76,7 @@ const Learning = ({
 
   return (
     <Container maxWidth='sm' className={classes.container}>
+      {!currentLearningCardData && !currentLearningCardData && loader}
       {currentLearningCardData ? (
         <>
           <Tooltip title={`${3}/${5}`}>
@@ -97,26 +98,7 @@ const Learning = ({
               )}
             >
               {loader || (
-                <CardContent className={classes.cardBody}>
-                  <div>
-                    <Typography
-                      className={classes.cardInformation}
-                      variant='h6'
-                      component='p'
-                      align='center'
-                    >
-                      {front}
-                    </Typography>
-                    <Typography
-                      className={classes.cardDescription}
-                      variant='body2'
-                      component='p'
-                      align='center'
-                    >
-                      {frontDescription}
-                    </Typography>
-                  </div>
-                </CardContent>
+                <CardSide message={front} description={frontDescription} />
               )}
             </Card>
             <Card
@@ -129,24 +111,7 @@ const Learning = ({
               )}
             >
               {loader || (
-                <CardContent className={classes.cardBody}>
-                  <Typography
-                    className={classes.cardInformation}
-                    variant='h6'
-                    component='p'
-                    align='center'
-                  >
-                    {back}
-                  </Typography>
-                  <Typography
-                    className={classes.cardDescription}
-                    variant='body2'
-                    component='p'
-                    align='center'
-                  >
-                    {backDescription}
-                  </Typography>
-                </CardContent>
+                <CardSide message={back} description={backDescription} />
               )}
             </Card>
           </div>
@@ -160,7 +125,7 @@ const Learning = ({
                 color='primary'
                 startIcon={<AutorenewIcon />}
               >
-                Rotate card
+                <FormattedMessage id='rotate.card' />
               </Button>
             </Grid>
             <Grid item xs={6}>
@@ -172,7 +137,7 @@ const Learning = ({
                 startIcon={<ThumbDownAltIcon />}
                 onClick={onClickForgot}
               >
-                I dont know
+                <FormattedMessage id='btn.dont.know' />
               </Button>
             </Grid>
             <Grid item xs={6}>
@@ -184,7 +149,7 @@ const Learning = ({
                 endIcon={<ThumbUpAltIcon />}
                 onClick={onClickKnow}
               >
-                I know
+                <FormattedMessage id='btn.know' />
               </Button>
             </Grid>
           </Grid>

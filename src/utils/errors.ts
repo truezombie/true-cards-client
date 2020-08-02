@@ -8,8 +8,11 @@ export enum ERROR_CODES {
   ERROR_TOKEN_REFRESH_IS_NOT_VALID = 'ERROR_TOKEN_REFRESH_IS_NOT_VALID',
   ERROR_USER_EXIST = 'ERROR_USER_EXIST',
   ERROR_USER_NOT_EXIST = 'ERROR_USER_NOT_EXIST',
-  // CARDS ERRORS
+  // CARDS SETS ERRORS
   ERROR_CARD_SET_EXIST = 'ERROR_CARD_SET_EXIST',
+  ERROR_EXCEEDED_LIMIT_CARDS_SETS = 'ERROR_EXCEEDED_LIMIT_CARDS_SETS',
+  // CARDS
+  ERROR_EXCEEDED_LIMIT_CARDS_IN_CARD_SET = 'ERROR_EXCEEDED_LIMIT_CARDS_IN_CARD_SET',
   // LEARNING ERRORS
   ERROR_OUT_OF_CARDS = 'ERROR_OUT_OF_CARDS',
   ERROR_CARD_IS_NOT_EXIST = 'CARD_IS_NOT_EXIST',
@@ -17,12 +20,19 @@ export enum ERROR_CODES {
 
 export type getErrorMessageType = (errorCode: string) => string | null;
 
+// TODO: translations
 export const getErrorMessage: getErrorMessageType = (errorCode) => {
   switch (errorCode) {
     case ERROR_CODES.ERROR_USER_NOT_EXIST:
-      return 'user not exit';
+      return 'This user is not already exist';
     case ERROR_CODES.ERROR_USER_EXIST:
-      return 'user exit';
+      return 'This user is already exists';
+    case ERROR_CODES.ERROR_CARD_SET_EXIST:
+      return 'Such a set of cards already exists';
+    case ERROR_CODES.ERROR_EXCEEDED_LIMIT_CARDS_SETS:
+      return 'You cannot add more cards sets';
+    case ERROR_CODES.ERROR_EXCEEDED_LIMIT_CARDS_IN_CARD_SET:
+      return 'You cannot add more cards to this cards set';
     default:
       return null;
   }

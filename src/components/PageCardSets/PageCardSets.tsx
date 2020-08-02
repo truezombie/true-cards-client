@@ -202,8 +202,6 @@ const PageCardSets = ({
             <CardSet
               key={item.id}
               name={item.name}
-              cardsMax={item.cardsMax}
-              cardsAll={item.cardsAll}
               linkFolder={ROUTES.cards.replace(':id', item.id)}
               linkPlay={ROUTES.startLearning.replace(':id', item.id)}
               dropDownMenuItems={getDropDownMenuItems(item)}

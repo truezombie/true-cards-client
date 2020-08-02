@@ -5,7 +5,6 @@ export const LIST_CARD_SETS_QUERY = gql`
     cardSets {
       id
       name
-      cardsMax
       cardsAll
     }
   }

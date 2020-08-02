@@ -21,13 +21,6 @@ export default (theme: Theme): StyleRules =>
       backfaceVisibility: 'hidden',
       transition: '.8s',
     },
-    cardBody: {
-      flexGrow: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
     cardsWrapper: {
       position: 'relative',
       height: '320px',
@@ -44,12 +37,5 @@ export default (theme: Theme): StyleRules =>
     },
     buttonsGrid: {
       marginTop: theme.spacing(1.5),
-    },
-    cardInformation: {
-      marginBottom: theme.spacing(0.5),
-      wordBreak: 'break-all',
-    },
-    cardDescription: {
-      wordBreak: 'break-all',
     },
   });

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import FolderIcon from '@material-ui/icons/Folder';
 import { WithStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -22,8 +21,6 @@ interface CardSetProps extends WithStyles<typeof styles> {
   name: string;
   linkFolder: string;
   linkPlay: string;
-  cardsMax: number;
-  cardsAll: number;
   dropDownMenuItems: MenuItemProps[];
 }
 
@@ -33,8 +30,6 @@ const CardSet = ({
   dropDownMenuItems,
   linkFolder,
   linkPlay,
-  cardsMax,
-  cardsAll,
 }: CardSetProps) => {
   return (
     <Paper className={classes.cardWrapper}>
@@ -76,17 +71,6 @@ const CardSet = ({
           </Menu>
         </div>
       </div>
-      <Tooltip title={`${cardsAll}/${cardsMax}`} aria-label='cards-in-folder'>
-        <LinearProgress
-          classes={{
-            bar: classes.barColorBg,
-            colorPrimary: classes.barColorBufferBg,
-          }}
-          color='primary'
-          variant='determinate'
-          value={cardsAll}
-        />
-      </Tooltip>
     </Paper>
   );
 };

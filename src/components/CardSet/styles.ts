@@ -57,10 +57,4 @@ export default (theme: Theme): StyleRules =>
       overflow: 'hidden',
       marginBottom: `${theme.spacing(1.5)}px`,
     },
-    barColorBg: {
-      backgroundColor: theme.palette.grey['400'],
-    },
-    barColorBufferBg: {
-      backgroundColor: theme.palette.grey['50'],
-    },
   });
