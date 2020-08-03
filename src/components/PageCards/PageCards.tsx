@@ -19,6 +19,7 @@ import Card from '@material-ui/core/Card';
 import FullBlockMessage from '../FullBlockMessage';
 import PageMainHeader from '../PageMainHeader';
 import DialogForm from '../DialogForm';
+import CardStatus from '../CardStatus';
 import { Loader } from '../Loader';
 import Table from '../Table';
 
@@ -152,6 +153,14 @@ const PageCards = ({
     );
   };
 
+  const statusCell = ({
+    cell: {
+      row: { original },
+    },
+  }: CellProps<CardType>) => {
+    return <CardStatus card={original} />;
+  };
+
   const columns = React.useMemo(
     () => [
       {
@@ -167,7 +176,8 @@ const PageCards = ({
       {
         id: 'status',
         Header: <FormattedMessage id='table.cards.title.status' />,
-        accessor: '',
+        accessor: 'uuid',
+        Cell: statusCell,
       },
       {
         id: ACTION_CELL_ID,

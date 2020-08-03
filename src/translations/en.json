@@ -55,5 +55,9 @@
   "modal.manage.input.front.description": "Front description",
   "modal.manage.input.back": "Back",
   "modal.manage.input.back.description": "Back description",
-  "modal.manage.input.with.back.side": "With back side"
+  "modal.manage.input.with.back.side": "With back side",
+  "card.status.forgot": "You forgot",
+  "card.status.new": "New",
+  "card.status.learned": "You know",
+  "card.status.not.found": "Card status not found"
 }

@@ -5,10 +5,13 @@ import { CardType, CardsInfoType } from '../types/app';
 export const SEED_OF_OBLIVION = 1; // TODO: need to be on the server it's temporary solution
 
 export const isLearnedCard = (card: CardType): boolean => {
-  return dayjs(new Date()).isAfter(
-    dayjs(card.timeLastSuccess).add(
-      SEED_OF_OBLIVION * card.timeLastSuccess,
-      'day'
+  return (
+    card.timeLastSuccess !== 0 &&
+    dayjs(new Date()).isAfter(
+      dayjs(card.timeLastSuccess).add(
+        SEED_OF_OBLIVION * card.timeLastSuccess,
+        'day'
+      )
     )
   );
 };

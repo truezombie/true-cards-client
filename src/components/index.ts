@@ -15,6 +15,7 @@ import AppToolBar from './AppToolBar';
 import StartLearning from './StartLearning';
 import Learning from './Learning';
 import CardSide from './CardSide';
+import CardStatus from './CardStatus';
 
 import PageDone from './PageDone';
 import PageLogin from './PageLogin';
@@ -43,6 +44,7 @@ export {
   CardSide,
   StartLearning,
   Learning,
+  CardStatus,
   PageDone,
   PageLearning,
   PageRegistration,
