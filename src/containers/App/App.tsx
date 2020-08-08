@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
-import { IS_LOGGED_IN } from './queries';
+import { IS_LOGGED_IN } from '../PageMain/queries';
 
 import { Loader, AppWrapper, PrivateRoute } from '../../components';
 import ROUTES from '../../constants/router';

@@ -11,6 +11,7 @@ import FullBlockMessage from '../FullBlockMessage';
 import { Loader } from '../Loader';
 import ROUTES from '../../constants/router';
 import { CardsType } from '../../types/app';
+import { hasError, ERROR_CODES } from '../../utils/errors';
 
 import { START_LEARNING_SESSION } from './queries';
 
@@ -32,7 +33,11 @@ const PageStartLearning = ({
 
   const [
     onStartLearningSession,
-    { loading: learningSessionIsLoading, data: learningSessionData },
+    {
+      loading: learningSessionIsLoading,
+      data: learningSessionData,
+      error: learningSessionError,
+    },
   ] = useMutation(START_LEARNING_SESSION);
 
   useEffect(() => {
@@ -49,12 +54,19 @@ const PageStartLearning = ({
     ) : null;
   }, [preLearningDataIsLoading, preLearningData]);
 
+  const learningSessionAlreadyExist = useMemo(() => {
+    return hasError(
+      learningSessionError?.graphQLErrors,
+      ERROR_CODES.ERROR_LEARNING_SESSION_IS_NOT_EXIST
+    );
+  }, [learningSessionError]);
+
   return (
     <Container maxWidth='md' className={classes.container}>
       {loader}
       {noData}
-      {learningSessionData ? (
-        <Redirect to={`${ROUTES.learning.replace(':id', urlParams.id)}`} />
+      {learningSessionData && !learningSessionAlreadyExist.hasError ? (
+        <Redirect to={ROUTES.learning} />
       ) : null}
       {preLearningData ? (
         <StartLearning

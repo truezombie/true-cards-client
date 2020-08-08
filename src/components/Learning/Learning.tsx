@@ -22,17 +22,15 @@ import styles from './styles';
 
 interface LearningProps extends WithStyles<typeof styles> {
   setNextLearningCard: (data: {
-    variables: { cardSetId: string; knowCurrentCard: boolean };
+    variables: { knowCurrentCard: boolean };
   }) => void;
   currentLearningCardData?: CurrentLearningCard;
   currentLearningCardIsLoading: boolean;
-  cardSetId: string;
   nextLearningCardIsLoading: boolean;
 }
 
 const Learning = ({
   classes,
-  cardSetId,
   setNextLearningCard,
   currentLearningCardIsLoading,
   currentLearningCardData,
@@ -55,13 +53,13 @@ const Learning = ({
   const onClickKnow = () => {
     setRotated(false);
     setDisabledNewCardButtons(true);
-    setNextLearningCard({ variables: { knowCurrentCard: true, cardSetId } });
+    setNextLearningCard({ variables: { knowCurrentCard: true } });
   };
 
   const onClickForgot = () => {
     setRotated(false);
     setDisabledNewCardButtons(true);
-    setNextLearningCard({ variables: { knowCurrentCard: false, cardSetId } });
+    setNextLearningCard({ variables: { knowCurrentCard: false } });
   };
 
   const loader = useMemo(() => {

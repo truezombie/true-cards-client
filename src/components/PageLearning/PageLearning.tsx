@@ -1,15 +1,18 @@
 import React, { useEffect, useMemo } from 'react';
-import { useParams, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 
 import ROUTES from '../../constants/router';
 import Learning from '../Learning';
-import { GET_CURRENT_LEARNING_CARD, SET_NEXT_LEARNING_CARD } from './queries';
+import LearningDone from '../LearningDone';
+import {
+  GET_CURRENT_LEARNING_CARD,
+  SET_NEXT_LEARNING_CARD,
+  RESET_LEARNING_SESSION,
+} from './queries';
 import { hasError, ERROR_CODES } from '../../utils/errors';
 
 const PageLearning = () => {
-  const urlParams = useParams<{ id: string }>();
-
   const [
     getCurrentLoadingCard,
     {
@@ -23,6 +26,8 @@ const PageLearning = () => {
     fetchPolicy: 'no-cache',
   });
 
+  const [onResetCurrentSession] = useLazyQuery(RESET_LEARNING_SESSION);
+
   const [
     setNextLearningCard,
     { loading: nextLearningCardIsLoading },
@@ -31,7 +36,7 @@ const PageLearning = () => {
   });
 
   useEffect(() => {
-    getCurrentLoadingCard({ variables: { cardSetId: urlParams.id } });
+    getCurrentLoadingCard();
   }, []);
 
   const learningSessionError = useMemo(() => {
@@ -41,13 +46,20 @@ const PageLearning = () => {
     );
   }, [currentLearningCardError]);
 
+  const learningIsNotExist = useMemo(() => {
+    return hasError(
+      currentLearningCardError?.graphQLErrors,
+      ERROR_CODES.ERROR_LEARNING_SESSION_IS_NOT_EXIST
+    );
+  }, [currentLearningCardError]);
+
   return (
     <>
+      {learningIsNotExist.hasError ? <Redirect to={ROUTES.main} /> : null}
       {learningSessionError.hasError ? (
-        <Redirect to={`${ROUTES.learningDone.replace(':id', urlParams.id)}`} />
+        <LearningDone onResetCurrentSession={onResetCurrentSession} />
       ) : (
         <Learning
-          cardSetId={urlParams.id}
           setNextLearningCard={setNextLearningCard}
           currentLearningCardData={currentLearningCardData}
           currentLearningCardIsLoading={currentLearningCardIsLoading}

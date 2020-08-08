@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const GET_CURRENT_LEARNING_CARD = gql`
-  query($cardSetId: String!) {
-    getCurrentLearningCard(cardSetId: $cardSetId) {
+  {
+    getCurrentLearningCard {
       front
       frontDescription
       back
@@ -13,10 +13,13 @@ export const GET_CURRENT_LEARNING_CARD = gql`
 `;
 
 export const SET_NEXT_LEARNING_CARD = gql`
-  mutation($knowCurrentCard: Boolean!, $cardSetId: String!) {
-    setNextLearningCard(
-      knowCurrentCard: $knowCurrentCard
-      cardSetId: $cardSetId
-    )
+  mutation($knowCurrentCard: Boolean!) {
+    setNextLearningCard(knowCurrentCard: $knowCurrentCard)
+  }
+`;
+
+export const RESET_LEARNING_SESSION = gql`
+  {
+    resetLearningSession
   }
 `;

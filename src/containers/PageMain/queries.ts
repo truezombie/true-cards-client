@@ -107,24 +107,8 @@ export const IS_LOGGED_IN = gql`
   }
 `;
 
-export const START_LEARNING_SESSION = gql`
-  mutation($numberOfCards: Int!, $cardSetId: String!, $sessionType: String!) {
-    startLearningSession(
-      numberOfCards: $numberOfCards
-      cardSetId: $cardSetId
-      sessionType: $sessionType
-    )
-  }
-`;
-
-export const RESET_LEARNING_SESSION = gql`
-  mutation($cardSetId: String!) {
-    resetLearningSession(cardSetId: $cardSetId)
-  }
-`;
-
-export const IS_EXIST_LEARNING_SESSION = gql`
-  query($cardSetId: String!) {
-    isExistLearningSession(cardSetId: $cardSetId)
+export const IS_EXIST_LEARNING_SESSION_QUERY = gql`
+  {
+    isExistLearningSession
   }
 `;

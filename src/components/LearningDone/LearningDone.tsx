@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import Container from '@material-ui/core/Container';
 import { WithStyles } from '@material-ui/core/styles';
@@ -10,15 +10,16 @@ import ROUTES from '../../constants/router';
 
 import styles from './styles';
 
-interface PageDoneProps extends WithStyles<typeof styles> {
-  onResetCurrentSession: (data: { variables: { cardSetId: string } }) => void;
+interface LearningDoneProps extends WithStyles<typeof styles> {
+  onResetCurrentSession: () => void;
 }
 
-const PageDone = ({ classes, onResetCurrentSession }: PageDoneProps) => {
-  const urlParams = useParams<{ id: string }>();
-
+const LearningDone = ({
+  classes,
+  onResetCurrentSession,
+}: LearningDoneProps) => {
   useEffect(() => {
-    onResetCurrentSession({ variables: { cardSetId: urlParams.id } });
+    onResetCurrentSession();
   }, []);
 
   return (
@@ -38,4 +39,4 @@ const PageDone = ({ classes, onResetCurrentSession }: PageDoneProps) => {
   );
 };
 
-export default PageDone;
+export default LearningDone;

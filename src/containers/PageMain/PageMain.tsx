@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route } from 'react-router-dom';
+import React, { useEffect, useMemo } from 'react';
+import { Route, useLocation } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -10,6 +10,7 @@ import {
   useLazyQuery,
 } from '@apollo/react-hooks';
 import {
+  IS_EXIST_LEARNING_SESSION_QUERY,
   LIST_CARD_SETS_QUERY,
   LIST_CARD_SET_WITH_CARDS_QUERY,
   CREATE_CARD_SET_QUERY,
@@ -18,7 +19,6 @@ import {
   CREATE_CARD_QUERY,
   UPDATE_CARD_QUERY,
   DELETE_CARD_QUERY,
-  RESET_LEARNING_SESSION,
 } from './queries';
 import ROUTES from '../../constants/router';
 import { CardsType, CardSetsType } from '../../types/app';
@@ -28,10 +28,10 @@ import {
   PageCards,
   PageCardSets,
   PageLearning,
-  PageDone,
 } from '../../components';
 
 const MainPage = () => {
+  const location = useLocation<{ pathname: String }>();
   const client = useApolloClient();
 
   const [
@@ -83,7 +83,15 @@ const MainPage = () => {
     onCompleted: () => refetchCardSetWithCards(),
   });
 
-  const [onResetCurrentSession] = useMutation(RESET_LEARNING_SESSION);
+  const [
+    getStatusLearningSession,
+    {
+      data: statusLearningSessionData,
+      loading: statusLearningSessionIsLoading,
+    },
+  ] = useLazyQuery(IS_EXIST_LEARNING_SESSION_QUERY, {
+    fetchPolicy: 'no-cache',
+  });
 
   const onLogOut = () => {
     localStorage.removeItem('authToken');
@@ -91,6 +99,28 @@ const MainPage = () => {
 
     client.writeData({ data: { isLoggedIn: false } });
   };
+
+  useEffect(() => {
+    getStatusLearningSession();
+  }, [location.pathname]);
+
+  const hasActiveLearningSession = useMemo(() => {
+    return (
+      statusLearningSessionData?.isExistLearningSession &&
+      !statusLearningSessionIsLoading &&
+      location.pathname !== ROUTES.learning
+    );
+  }, [
+    statusLearningSessionData?.isExistLearningSession,
+    statusLearningSessionIsLoading,
+    location.pathname,
+  ]);
+
+  const activeSessionAlert = useMemo(() => {
+    return hasActiveLearningSession ? (
+      <h1>У вас есть активная сессия</h1>
+    ) : null;
+  }, [hasActiveLearningSession]);
 
   return (
     <>
@@ -104,40 +134,42 @@ const MainPage = () => {
           },
         ]}
       />
-      <Route exact path={ROUTES.main}>
-        <PageCardSets
-          data={dataCardSetsCards}
-          isLoading={loadingCardSets}
-          onUpdateCardSet={onUpdateCardSet}
-          onCreateCardSet={onCreateCardSet}
-          onDeleteCardSet={onDeleteCardSet}
-          getCardSets={getCardSets}
-        />
-      </Route>
-      <Route exact path={ROUTES.cards}>
-        <PageCards
-          data={dataCardSetWithCards}
-          isLoading={loadingCardSetWithCards}
-          onCreateCard={onCreateCard}
-          onUpdateCard={onUpdateCard}
-          onDeleteCard={onDeleteCard}
-          calledCardSetWithCards={calledCardSetWithCards}
-          getCardSetWithCards={getCardSetWithCards}
-        />
-      </Route>
-      <Route exact path={ROUTES.startLearning}>
-        <PageStartLearning
-          preLearningData={dataCardSetWithCards}
-          getPreLearningData={getCardSetWithCards}
-          preLearningDataIsLoading={loadingCardSetWithCards}
-        />
-      </Route>
-      <Route exact path={ROUTES.learning}>
-        <PageLearning />
-      </Route>
-      <Route exact path={ROUTES.learningDone}>
-        <PageDone onResetCurrentSession={onResetCurrentSession} />
-      </Route>
+      {activeSessionAlert}
+      {!activeSessionAlert ? (
+        <>
+          <Route exact path={ROUTES.main}>
+            <PageCardSets
+              data={dataCardSetsCards}
+              isLoading={loadingCardSets}
+              onUpdateCardSet={onUpdateCardSet}
+              onCreateCardSet={onCreateCardSet}
+              onDeleteCardSet={onDeleteCardSet}
+              getCardSets={getCardSets}
+            />
+          </Route>
+          <Route exact path={ROUTES.cards}>
+            <PageCards
+              data={dataCardSetWithCards}
+              isLoading={loadingCardSetWithCards}
+              onCreateCard={onCreateCard}
+              onUpdateCard={onUpdateCard}
+              onDeleteCard={onDeleteCard}
+              calledCardSetWithCards={calledCardSetWithCards}
+              getCardSetWithCards={getCardSetWithCards}
+            />
+          </Route>
+          <Route exact path={ROUTES.startLearning}>
+            <PageStartLearning
+              preLearningData={dataCardSetWithCards}
+              getPreLearningData={getCardSetWithCards}
+              preLearningDataIsLoading={loadingCardSetWithCards}
+            />
+          </Route>
+          <Route exact path={ROUTES.learning}>
+            <PageLearning />
+          </Route>
+        </>
+      ) : null}
     </>
   );
 };

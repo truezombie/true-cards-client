@@ -14,10 +14,10 @@ import FullBlockMessage from './FullBlockMessage';
 import AppToolBar from './AppToolBar';
 import StartLearning from './StartLearning';
 import Learning from './Learning';
+import LearningDone from './LearningDone';
 import CardSide from './CardSide';
 import CardStatus from './CardStatus';
 
-import PageDone from './PageDone';
 import PageLogin from './PageLogin';
 import PageCards from './PageCards';
 import PageLearning from './PageLearning';
@@ -45,7 +45,7 @@ export {
   StartLearning,
   Learning,
   CardStatus,
-  PageDone,
+  LearningDone,
   PageLearning,
   PageRegistration,
   PageLogin,
