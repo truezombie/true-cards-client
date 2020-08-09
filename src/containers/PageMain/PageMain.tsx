@@ -28,6 +28,7 @@ import {
   PageCards,
   PageCardSets,
   PageLearning,
+  PageMessage,
 } from '../../components';
 
 const MainPage = () => {
@@ -118,7 +119,13 @@ const MainPage = () => {
 
   const activeSessionAlert = useMemo(() => {
     return hasActiveLearningSession ? (
-      <h1>У вас есть активная сессия</h1>
+      <PageMessage
+        link={ROUTES.learning}
+        message={<FormattedMessage id='active.learning.session.message' />}
+        btnMessage={
+          <FormattedMessage id='active.learning.session.btn.message' />
+        }
+      />
     ) : null;
   }, [hasActiveLearningSession]);
 

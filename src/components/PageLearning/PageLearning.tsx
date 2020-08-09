@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { Redirect } from 'react-router-dom';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 
@@ -57,7 +58,14 @@ const PageLearning = () => {
     <>
       {learningIsNotExist.hasError ? <Redirect to={ROUTES.main} /> : null}
       {learningSessionError.hasError ? (
-        <LearningDone onResetCurrentSession={onResetCurrentSession} />
+        <LearningDone
+          onResetCurrentSession={onResetCurrentSession}
+          link={ROUTES.main}
+          message={<FormattedMessage id='learning.session.done.message' />}
+          btnMessage={
+            <FormattedMessage id='learning.session.done.btn.message' />
+          }
+        />
       ) : (
         <Learning
           setNextLearningCard={setNextLearningCard}

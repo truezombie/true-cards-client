@@ -59,5 +59,9 @@
   "card.status.forgot": "You forgot",
   "card.status.new": "New",
   "card.status.learned": "You know",
-  "card.status.not.found": "Card status not found"
+  "card.status.not.found": "Card status not found",
+  "active.learning.session.message": "You have an active learning session",
+  "active.learning.session.btn.message": "Go to the current learning session",
+  "learning.session.done.message": "Well done!",
+  "learning.session.done.btn.message": "Go to card sets page"
 }
