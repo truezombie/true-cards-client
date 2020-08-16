@@ -11,8 +11,9 @@ module.exports = (env = {}) => {
     devtool: isProd ? 'none' : 'inline-source-map',
 
     output: {
-      path: path.resolve(__dirname, 'dist'),
-      filename: isProd ? '[name].[contenthash].js' : '[name].js',
+      path: path.resolve(__dirname, './dist'),
+      filename: isProd ? '[name].[contenthash].js' : '[name].bundle.js',
+      publicPath: '/',
     },
 
     resolve: {
@@ -46,8 +47,9 @@ module.exports = (env = {}) => {
     ],
 
     devServer: {
-      open: true,
+      host: '0.0.0.0',
       port: 3000,
+      historyApiFallback: true,
     },
   };
 };
