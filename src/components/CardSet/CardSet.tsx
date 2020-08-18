@@ -32,7 +32,7 @@ const CardSet = ({
   linkPlay,
 }: CardSetProps) => {
   return (
-    <Paper className={classes.cardWrapper}>
+    <Paper className={classes.cardWrapper} elevation={0} variant='outlined'>
       <div className={classes.card}>
         <Avatar className={classes.cardSetIco}>
           <FolderIcon />
@@ -56,7 +56,7 @@ const CardSet = ({
           <Tooltip disableFocusListener title='Start to study cards'>
             <Link to={linkPlay}>
               <IconButton aria-label='play'>
-                <PlayCircleFilledIcon color='primary' />
+                <PlayCircleFilledIcon color='secondary' />
               </IconButton>
             </Link>
           </Tooltip>

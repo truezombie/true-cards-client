@@ -8,6 +8,8 @@ export const GET_CURRENT_LEARNING_CARD = gql`
       back
       backDescription
       hasBackSide
+      index
+      from
     }
   }
 `;

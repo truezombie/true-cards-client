@@ -151,6 +151,7 @@ const StartLearning = ({
         onClick={onClickLearningNewAndForgot}
         variant='contained'
         color='primary'
+        disableElevation
       >
         <FormattedMessage id='btn.learn.forgotten.and.new' />
       </Button>

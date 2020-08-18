@@ -15,4 +15,17 @@ export default (theme: Theme): StyleRules =>
       textDecoration: 'none',
       color: theme.palette.common.white,
     },
+    menuWrapperIsLoading: {
+      display: 'flex',
+      alignItems: 'center',
+      overflow: 'hidden',
+    },
+    menuWrapper: {
+      minWidth: '250px',
+      height: '100%',
+    },
+    userListItem: {
+      textAlign: 'center',
+      padding: `${theme.spacing(3)}px 0`,
+    },
   });

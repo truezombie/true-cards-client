@@ -1,2 +1,2 @@
-export const LOADER_SIZE = 20;
-export const LOADER_THICKNESS = 4;
+export const LOADER_SIZE = 30;
+export const LOADER_THICKNESS = 5;

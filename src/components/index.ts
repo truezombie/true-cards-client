@@ -21,10 +21,10 @@ import PageMessage from './PageMessage';
 
 import PageLogin from './PageLogin';
 import PageCards from './PageCards';
-import PageLearning from './PageLearning';
 import PageCardSets from './PageCardSets';
 import PageRegistration from './PageRegistration';
-import PageStartLearning from './PageStartLearning';
+import PageSettings from './PageSettings';
+import PageContacts from './PageContacts';
 
 export {
   Loader,
@@ -48,10 +48,10 @@ export {
   CardStatus,
   LearningDone,
   PageMessage,
-  PageLearning,
   PageRegistration,
   PageLogin,
   PageCardSets,
   PageCards,
-  PageStartLearning,
+  PageSettings,
+  PageContacts,
 };

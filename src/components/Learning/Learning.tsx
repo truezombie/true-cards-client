@@ -77,11 +77,17 @@ const Learning = ({
       {!currentLearningCardData && !currentLearningCardData && loader}
       {currentLearningCardData ? (
         <>
-          <Tooltip title={`${3}/${5}`}>
+          <Tooltip
+            title={`${currentLearningCardData.getCurrentLearningCard.index}/${currentLearningCardData.getCurrentLearningCard.from}`}
+          >
             <LinearProgress
               className={classes.progress}
               variant='determinate'
-              value={50}
+              value={
+                ((currentLearningCardData.getCurrentLearningCard.index + 1) *
+                  100) /
+                currentLearningCardData.getCurrentLearningCard.from
+              }
             />
           </Tooltip>
 

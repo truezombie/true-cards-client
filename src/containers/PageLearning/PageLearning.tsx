@@ -4,8 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 
 import ROUTES from '../../constants/router';
-import Learning from '../Learning';
-import LearningDone from '../LearningDone';
+import { Learning, LearningDone } from '../../components';
 import {
   GET_CURRENT_LEARNING_CARD,
   SET_NEXT_LEARNING_CARD,

@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import {
+  useQuery,
   useMutation,
   useApolloClient,
   useLazyQuery,
@@ -19,21 +20,27 @@ import {
   CREATE_CARD_QUERY,
   UPDATE_CARD_QUERY,
   DELETE_CARD_QUERY,
+  GET_ME_QUERY,
 } from './queries';
 import ROUTES from '../../constants/router';
-import { CardsType, CardSetsType } from '../../types/app';
+import CONTACTS from '../../constants/contacts';
+import { CardsType, CardSetsType, ContactListItem } from '../../types/app';
 import {
   AppToolBar,
-  PageStartLearning,
   PageCards,
   PageCardSets,
-  PageLearning,
   PageMessage,
+  PageSettings,
+  PageContacts,
 } from '../../components';
+
+import PageLearning from '../PageLearning';
+import PageStartLearning from '../PageStartLearning';
 
 const MainPage = () => {
   const location = useLocation<{ pathname: String }>();
   const client = useApolloClient();
+  const { data: user, loading: meIsLoading } = useQuery(GET_ME_QUERY);
 
   const [
     getCardSets,
@@ -129,9 +136,29 @@ const MainPage = () => {
     ) : null;
   }, [hasActiveLearningSession]);
 
+  const contactsList = useMemo<ContactListItem[]>(() => {
+    return [
+      {
+        id: 1,
+        labelName: <FormattedMessage id='contacts.list.label.email' />,
+        label: CONTACTS.email,
+        link: `mailto:${CONTACTS.email}`,
+      },
+      {
+        id: 2,
+        labelName: <FormattedMessage id='contacts.list.label.skype' />,
+        label: CONTACTS.skype,
+        link: `skype:${CONTACTS.skype}`,
+      },
+    ];
+  }, [CONTACTS.skype, CONTACTS.email]);
+
   return (
     <>
       <AppToolBar
+        meFirstName={user?.me?.firstName}
+        meLastName={user?.me?.lastName}
+        meIsLoading={meIsLoading}
         userMenuItems={[
           {
             id: 'logOut',
@@ -174,6 +201,12 @@ const MainPage = () => {
           </Route>
           <Route exact path={ROUTES.learning}>
             <PageLearning />
+          </Route>
+          <Route exact path={ROUTES.settings}>
+            <PageSettings />
+          </Route>
+          <Route exact path={ROUTES.contacts}>
+            <PageContacts contactsList={contactsList} />
           </Route>
         </>
       ) : null}
