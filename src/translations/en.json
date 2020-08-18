@@ -65,5 +65,6 @@
   "learning.session.done.message": "Well done!",
   "learning.session.done.btn.message": "Go to card sets page",
   "contacts.list.label.email": "Email",
-  "contacts.list.label.skype": "Skype"
+  "contacts.list.label.skype": "Skype",
+  "contacts.page.title": "Contacts"
 }

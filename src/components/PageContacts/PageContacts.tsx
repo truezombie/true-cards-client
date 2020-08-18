@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import { WithStyles } from '@material-ui/core/styles';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -22,7 +23,7 @@ const PageContacts = ({ classes, contactsList }: PageContactsProps) => {
   return (
     <Container maxWidth='sm' className={classes.container}>
       <Typography variant='h5' gutterBottom>
-        Contacts
+        <FormattedMessage id='contacts.page.title ' />
       </Typography>
       <Paper elevation={0} variant='outlined'>
         <List>
