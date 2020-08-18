@@ -23,7 +23,7 @@ const PageContacts = ({ classes, contactsList }: PageContactsProps) => {
   return (
     <Container maxWidth='sm' className={classes.container}>
       <Typography variant='h5' gutterBottom>
-        <FormattedMessage id='contacts.page.title ' />
+        <FormattedMessage id='contacts.page.title' />
       </Typography>
       <Paper elevation={0} variant='outlined'>
         <List>

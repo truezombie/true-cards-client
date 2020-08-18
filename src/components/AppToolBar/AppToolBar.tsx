@@ -18,6 +18,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MailIcon from '@material-ui/icons/Mail';
 import SettingsIcon from '@material-ui/icons/Settings';
+import FolderIcon from '@material-ui/icons/Folder';
 
 import Menu from '../Menu';
 import { Loader } from '../Loader';
@@ -56,6 +57,11 @@ const AppToolBar = ({
   };
 
   const menuItems: MenuItems[] = [
+    {
+      text: 'Card sets',
+      link: ROUTES.main,
+      icon: <FolderIcon />,
+    },
     {
       text: 'Settings',
       link: ROUTES.settings,
