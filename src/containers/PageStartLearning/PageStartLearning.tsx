@@ -6,9 +6,7 @@ import { useMutation } from '@apollo/react-hooks';
 import Container from '@material-ui/core/Container';
 import { WithStyles } from '@material-ui/core/styles';
 
-import StartLearning from '../StartLearning';
-import FullBlockMessage from '../FullBlockMessage';
-import { Loader } from '../Loader';
+import { StartLearning, FullBlockMessage, Loader } from '../../components';
 import ROUTES from '../../constants/router';
 import { CardsType } from '../../types/app';
 import { hasError, ERROR_CODES } from '../../utils/errors';

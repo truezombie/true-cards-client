@@ -42,7 +42,7 @@ const CardSet = ({
   }, [cardSetHasCards]);
 
   return (
-    <Paper className={classes.cardWrapper}>
+    <Paper className={classes.cardWrapper} elevation={0} variant='outlined'>
       <div className={classes.card}>
         <Avatar className={classes.cardSetIco}>
           <FolderIcon />

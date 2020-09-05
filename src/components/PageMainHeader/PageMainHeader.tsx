@@ -61,6 +61,7 @@ const PageMainHeader = ({
             variant='contained'
             color='secondary'
             startIcon={<AddIcon />}
+            disableElevation
           >
             {msgAddBtn}
           </Button>

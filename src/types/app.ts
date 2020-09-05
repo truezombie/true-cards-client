@@ -41,10 +41,19 @@ export type CurrentLearningCard = {
     back: string;
     backDescription: string;
     hasBackSide: boolean;
+    index: number;
+    from: number;
   };
 };
 
 export type HasErrorObject = {
   message: string | null;
   hasError: boolean;
+};
+
+export type ContactListItem = {
+  id: number;
+  label: string;
+  link: string;
+  labelName: string | JSX.Element;
 };

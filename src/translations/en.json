@@ -63,5 +63,8 @@
   "active.learning.session.message": "You have an active learning session",
   "active.learning.session.btn.message": "Go to the current learning session",
   "learning.session.done.message": "Well done!",
-  "learning.session.done.btn.message": "Go to card sets page"
+  "learning.session.done.btn.message": "Go to card sets page",
+  "contacts.list.label.email": "Email",
+  "contacts.list.label.skype": "Skype",
+  "contacts.page.title": "Contacts"
 }
