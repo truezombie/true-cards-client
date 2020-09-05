@@ -13,8 +13,10 @@ import { ERROR_CODES, getErrorMessage } from './utils/errors';
 
 import App from './containers/App';
 
+const BACKEND_URL = 'http://3.122.59.81:3000/graphql';
+
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: BACKEND_URL,
   headers: {
     authorization: localStorage.getItem('authToken'),
     'client-name': 'True cards [web]',
@@ -37,7 +39,7 @@ const ApolloComponent = () => {
           const refreshToken = localStorage.getItem('refreshToken');
 
           return new Observable((observer) => {
-            fetch('http://localhost:4000/graphql', {
+            fetch(BACKEND_URL, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({

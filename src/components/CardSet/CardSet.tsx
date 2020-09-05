@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import Paper from '@material-ui/core/Paper';
@@ -21,6 +21,7 @@ interface CardSetProps extends WithStyles<typeof styles> {
   name: string;
   linkFolder: string;
   linkPlay: string;
+  cardsAll: number;
   dropDownMenuItems: MenuItemProps[];
 }
 
@@ -30,7 +31,16 @@ const CardSet = ({
   dropDownMenuItems,
   linkFolder,
   linkPlay,
+  cardsAll,
 }: CardSetProps) => {
+  const cardSetHasCards = useMemo(() => {
+    return cardsAll !== 0;
+  }, [cardsAll]);
+
+  const startLearningButtonColor = useMemo(() => {
+    return cardSetHasCards ? 'primary' : 'default';
+  }, [cardSetHasCards]);
+
   return (
     <Paper className={classes.cardWrapper} elevation={0} variant='outlined'>
       <div className={classes.card}>
@@ -54,11 +64,14 @@ const CardSet = ({
 
         <div className={classes.cardButtonsWrap}>
           <Tooltip disableFocusListener title='Start to study cards'>
-            <Link to={linkPlay}>
-              <IconButton aria-label='play'>
-                <PlayCircleFilledIcon color='secondary' />
-              </IconButton>
-            </Link>
+            <IconButton
+              disabled={!cardSetHasCards}
+              component={Link}
+              to={linkPlay}
+              aria-label='play'
+            >
+              <PlayCircleFilledIcon color={startLearningButtonColor} />
+            </IconButton>
           </Tooltip>
           <Menu items={dropDownMenuItems}>
             <IconButton

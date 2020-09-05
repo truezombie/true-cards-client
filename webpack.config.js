@@ -48,7 +48,7 @@ module.exports = (env = {}) => {
 
     devServer: {
       host: '0.0.0.0',
-      port: 3000,
+      port: 5000,
       historyApiFallback: true,
     },
   };
