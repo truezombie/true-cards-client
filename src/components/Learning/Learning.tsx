@@ -24,7 +24,7 @@ interface LearningProps extends WithStyles<typeof styles> {
   setNextLearningCard: (data: {
     variables: { knowCurrentCard: boolean };
   }) => void;
-  currentLearningCardData?: CurrentLearningCard;
+  currentLearningCardData?: CurrentLearningCard | null;
   currentLearningCardIsLoading: boolean;
   nextLearningCardIsLoading: boolean;
 }
@@ -161,6 +161,10 @@ const Learning = ({
       ) : null}
     </Container>
   );
+};
+
+Learning.defaultProps = {
+  currentLearningCardData: null,
 };
 
 export default Learning;

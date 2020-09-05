@@ -68,9 +68,10 @@ const CardSet = ({
               disabled={!cardSetHasCards}
               component={Link}
               to={linkPlay}
+              color={startLearningButtonColor}
               aria-label='play'
             >
-              <PlayCircleFilledIcon color={startLearningButtonColor} />
+              <PlayCircleFilledIcon />
             </IconButton>
           </Tooltip>
           <Menu items={dropDownMenuItems}>

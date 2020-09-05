@@ -15,6 +15,7 @@
   "input.error.min.length": "Min field length {value} characters",
   "input.error.max.length": "Max filed length {value} characters",
   "input.error.spaces": "This field cannot include leading and trailing spaces",
+  "input.error.uuid": "Uuid is not valid",
   "input.words.per.session": "I want to learn cards per session",
   "btn.save": "Save",
   "btn.add": "Add",
@@ -31,6 +32,8 @@
   "btn.learn.forgotten": "Learn forgotten cards",
   "btn.learn.learned": "Repeat learned cards",
   "btn.know": "I know",
+  "btn.set.new.password": "Set new password",
+  "btn.send.verify.key": "Send verify key",
   "btn.dont.know": "I don't know",
   "rotate.card": "Rotate card",
   "checkbox.remember.me": "Remember me",
@@ -66,5 +69,9 @@
   "learning.session.done.btn.message": "Go to card sets page",
   "contacts.list.label.email": "Email",
   "contacts.list.label.skype": "Skype",
-  "contacts.page.title": "Contacts"
+  "contacts.page.title": "Contacts",
+  "redirect.to.main.page.message": "You will redirect to main page",
+  "stepper.step.email.check": "Email check",
+  "stepper.step.reset.password": "Reset password",
+  "reset.password.email.message": "The confirmation key was sent to the email: {value}"
 }

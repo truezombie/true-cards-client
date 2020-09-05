@@ -36,4 +36,9 @@ const CardSide = ({ classes, message, description }: CardSideProps) => {
   );
 };
 
+CardSide.defaultProps = {
+  message: '',
+  description: '',
+};
+
 export default CardSide;

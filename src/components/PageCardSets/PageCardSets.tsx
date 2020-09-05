@@ -147,7 +147,7 @@ const PageCardSets = ({
   }, [isLoading, listCardSets]);
 
   const getDropDownMenuItems = useCallback(
-    item => {
+    (item) => {
       return [
         {
           id: 'edit',
@@ -198,7 +198,7 @@ const PageCardSets = ({
       {noData}
       {listCardSets.length ? (
         <div className={classes.body}>
-          {listCardSets.map(item => (
+          {listCardSets.map((item) => (
             <CardSet
               key={item.id}
               name={item.name}
@@ -273,6 +273,10 @@ const PageCardSets = ({
       />
     </Container>
   );
+};
+
+PageCardSets.defaultProps = {
+  data: null,
 };
 
 export default PageCardSets;

@@ -18,6 +18,8 @@ export enum ERROR_CODES {
   ERROR_LEARNING_SESSION_ALREADY_EXIST = 'ERROR_LEARNING_SESSION_ALREADY_EXIST',
   ERROR_OUT_OF_CARDS = 'ERROR_OUT_OF_CARDS',
   ERROR_CARD_IS_NOT_EXIST = 'CARD_IS_NOT_EXIST',
+  // RESET PASSWORD
+  CONFIRMATION_KEY_IS_NOT_CORRECT = 'CONFIRMATION_KEY_IS_NOT_CORRECT',
 }
 
 export type getErrorMessageType = (errorCode: string) => string | null;
@@ -26,7 +28,7 @@ export type getErrorMessageType = (errorCode: string) => string | null;
 export const getErrorMessage: getErrorMessageType = (errorCode) => {
   switch (errorCode) {
     case ERROR_CODES.ERROR_USER_NOT_EXIST:
-      return 'This user is not already exist or password is not correct.';
+      return 'This user is not found.';
     case ERROR_CODES.ERROR_USER_EXIST:
       return 'This user is already exists.';
     case ERROR_CODES.ERROR_CARD_SET_EXIST:
@@ -39,6 +41,8 @@ export const getErrorMessage: getErrorMessageType = (errorCode) => {
       return 'Learning session is not exist. You were redirected to the main page.';
     case ERROR_CODES.ERROR_LEARNING_SESSION_ALREADY_EXIST:
       return 'Learning session is is already exist.';
+    case ERROR_CODES.CONFIRMATION_KEY_IS_NOT_CORRECT:
+      return 'Confirmation key is not correct refresh current page and try again.';
     default:
       return null;
   }

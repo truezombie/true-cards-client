@@ -153,4 +153,9 @@ const AppToolBar = ({
   );
 };
 
+AppToolBar.defaultProps = {
+  meFirstName: '',
+  meLastName: '',
+};
+
 export default AppToolBar;

@@ -43,4 +43,9 @@ const Logo = ({
   );
 };
 
+Logo.defaultProps = {
+  showCaption: false,
+  textCaption: '',
+};
+
 export default Logo;

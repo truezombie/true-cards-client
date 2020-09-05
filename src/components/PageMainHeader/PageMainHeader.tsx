@@ -16,7 +16,7 @@ interface PageMainHeaderProps extends WithStyles<typeof styles> {
   isLoading: boolean;
   msgAddBtn: JSX.Element | string;
   msgTitle: JSX.Element | string;
-  link?: string;
+  link?: string | null;
   currentValue?: number;
   maxValue?: number;
 }
@@ -70,6 +70,12 @@ const PageMainHeader = ({
       <LoaderLinear show={isLoading} />
     </div>
   );
+};
+
+PageMainHeader.defaultProps = {
+  link: null,
+  currentValue: 0,
+  maxValue: 0,
 };
 
 export default PageMainHeader;

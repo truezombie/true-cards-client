@@ -78,4 +78,8 @@ const PageStartLearning = ({
   );
 };
 
+PageStartLearning.defaultProps = {
+  preLearningData: null,
+};
+
 export default PageStartLearning;

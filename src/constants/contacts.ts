@@ -1,5 +1,5 @@
 export enum contacts {
-  email = 'oleshka.ovcharenko@gmail.com',
+  email = 'o.truezombie@gmail.com',
   skype = 'oleg.enzo',
 }
 

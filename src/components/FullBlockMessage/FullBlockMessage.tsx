@@ -9,7 +9,7 @@ type FullBlockMessageProps = {
   link?: {
     href: string;
     text: string | JSX.Element;
-  };
+  } | null;
 };
 
 const FullBlockMessage = ({ message, link }: FullBlockMessageProps) => {
@@ -32,6 +32,10 @@ const FullBlockMessage = ({ message, link }: FullBlockMessageProps) => {
       ) : null}
     </Box>
   );
+};
+
+FullBlockMessage.defaultProps = {
+  link: null,
 };
 
 export default FullBlockMessage;

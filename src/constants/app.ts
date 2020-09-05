@@ -1,7 +1,7 @@
 const APP = {
   name: 'true-cards',
   link: 'http://true-cards.com',
-  minEnteredCharacters: 1,
+  minEnteredCharacters: 3,
   maxEnteredCharacters: 256,
 };
 

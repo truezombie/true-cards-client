@@ -32,7 +32,7 @@ const Table: FC<TableProps> = ({ columns, data, classes }: TableProps) => {
   });
 
   return (
-    <Paper>
+    <Paper elevation={0} variant='outlined'>
       <MUITable {...getTableProps()}>
         <MUITableHead>
           {headerGroups.map((headerGroup) => (
@@ -52,7 +52,11 @@ const Table: FC<TableProps> = ({ columns, data, classes }: TableProps) => {
             prepareRow(row);
             return (
               // eslint-disable-next-line react/jsx-key
-              <MUITableRow hover {...row.getRowProps()}>
+              <MUITableRow
+                hover
+                {...row.getRowProps()}
+                className={classes.bodyRow}
+              >
                 {row.cells.map((cell) => {
                   const isActionCell = cell.column.id === ACTION_CELL_ID;
 

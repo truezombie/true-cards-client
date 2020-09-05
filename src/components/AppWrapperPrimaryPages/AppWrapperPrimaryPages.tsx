@@ -20,7 +20,7 @@ const AppWrapperPrimaryPages = ({
   <Container className={classes.container} component='main' maxWidth='xs'>
     <div className={classes.paperWrapper}>
       <Logo />
-      <Paper elevation={2} className={classes.paper}>
+      <Paper elevation={0} variant='outlined' className={classes.paper}>
         {children}
       </Paper>
     </div>

@@ -49,6 +49,7 @@ type deleteCard = {
 };
 
 interface PageCardsProps extends WithStyles<typeof styles> {
+  data?: CardsType;
   isLoading: boolean;
   calledCardSetWithCards: boolean;
   getCardSetWithCards: (data: { variables: { cardSetId: string } }) => void;
@@ -76,7 +77,6 @@ interface PageCardsProps extends WithStyles<typeof styles> {
   onDeleteCard: (data: {
     variables: { cardUuid: string; cardSetId: string };
   }) => void;
-  data?: CardsType;
 }
 
 const initialStateDeleteModal: deleteCard = {
@@ -467,6 +467,10 @@ const PageCards = ({
       ) : null}
     </>
   );
+};
+
+PageCards.defaultProps = {
+  data: null,
 };
 
 export default PageCards;

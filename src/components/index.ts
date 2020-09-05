@@ -17,14 +17,15 @@ import Learning from './Learning';
 import LearningDone from './LearningDone';
 import CardSide from './CardSide';
 import CardStatus from './CardStatus';
-import PageMessage from './PageMessage';
 
+import PageMessage from './PageMessage';
 import PageLogin from './PageLogin';
 import PageCards from './PageCards';
 import PageCardSets from './PageCardSets';
 import PageRegistration from './PageRegistration';
 import PageSettings from './PageSettings';
 import PageContacts from './PageContacts';
+import PageForgotPassword from './PageForgotPassword';
 
 export {
   Loader,
@@ -54,4 +55,5 @@ export {
   PageCards,
   PageSettings,
   PageContacts,
+  PageForgotPassword,
 };

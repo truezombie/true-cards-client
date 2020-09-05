@@ -9,4 +9,9 @@ export default (): StyleRules =>
       maxWidth: '100px',
       textOverflow: 'ellipsis',
     },
+    bodyRow: {
+      '&:last-child td': {
+        border: 'none',
+      },
+    },
   });
