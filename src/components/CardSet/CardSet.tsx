@@ -32,7 +32,7 @@ const CardSet = ({
   linkFolder,
   linkPlay,
   cardsAll,
-}: CardSetProps) => {
+}: CardSetProps): JSX.Element => {
   const cardSetHasCards = useMemo(() => {
     return cardsAll !== 0;
   }, [cardsAll]);

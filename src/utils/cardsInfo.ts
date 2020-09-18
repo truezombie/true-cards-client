@@ -16,11 +16,11 @@ export const isLearnedCard = (card: CardType): boolean => {
   );
 };
 
-export const isForgottenCard = (card: CardType) => {
+export const isForgottenCard = (card: CardType): boolean => {
   return !isLearnedCard(card);
 };
 
-export const isNewCard = (card: CardType) => {
+export const isNewCard = (card: CardType): boolean => {
   return card.timesSuccess === 0;
 };
 

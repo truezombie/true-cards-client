@@ -7,7 +7,7 @@ interface AppWrapperProps extends WithStyles<typeof styles> {
   children: React.ReactChild;
 }
 
-const AppWrapper = ({ classes, children }: AppWrapperProps) => {
+const AppWrapper = ({ classes, children }: AppWrapperProps): JSX.Element => {
   return <div className={classes.wrapper}>{children}</div>;
 };
 

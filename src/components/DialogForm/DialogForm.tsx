@@ -26,7 +26,7 @@ const DialogForm = ({
   msgSubmit,
   msgTitle,
   children,
-}: DialogConfirmProps) => {
+}: DialogConfirmProps): JSX.Element => {
   return (
     <Dialog
       maxWidth='xs'

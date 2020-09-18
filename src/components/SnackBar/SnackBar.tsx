@@ -3,11 +3,11 @@ import Snackbar, { SnackbarProps } from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
-interface SimpleSnackbarProps extends SnackbarProps {}
+type SimpleSnackbarProps = SnackbarProps;
 
 const HIDE_DURATION = 6000;
 
-const SimpleSnackbar = ({ message }: SimpleSnackbarProps) => {
+const SimpleSnackbar = ({ message }: SimpleSnackbarProps): JSX.Element => {
   const [open, setOpen] = React.useState(true);
 
   const handleClose = (

@@ -19,7 +19,7 @@ export default (theme: Theme): StyleRules =>
       height: '100%',
       width: '100%',
       backfaceVisibility: 'hidden',
-      transition: '.8s',
+      transition: '.5s',
     },
     cardsWrapper: {
       position: 'relative',

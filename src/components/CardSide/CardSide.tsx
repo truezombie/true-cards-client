@@ -11,7 +11,11 @@ interface CardSideProps extends WithStyles<typeof styles> {
   description?: string;
 }
 
-const CardSide = ({ classes, message, description }: CardSideProps) => {
+const CardSide = ({
+  classes,
+  message,
+  description,
+}: CardSideProps): JSX.Element => {
   return (
     <CardContent className={classes.cardBody}>
       <div>

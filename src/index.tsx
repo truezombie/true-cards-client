@@ -13,7 +13,7 @@ import { ERROR_CODES, getErrorMessage } from './utils/errors';
 
 import App from './containers/App';
 
-const BACKEND_URL = 'http://3.122.59.81:3000/graphql';
+const BACKEND_URL = 'http://localhost:3000/graphql';
 
 const httpLink = createHttpLink({
   uri: BACKEND_URL,
@@ -28,7 +28,6 @@ const ApolloComponent = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const errorLink = onError(
-    // eslint-disable-next-line consistent-return
     ({ graphQLErrors, networkError, operation, forward }) => {
       if (graphQLErrors) {
         const { cache } = operation.getContext();

@@ -8,7 +8,7 @@ interface LoaderLinearProps extends WithStyles<typeof linearLoaderStyles> {
   show: boolean;
 }
 
-const LoaderLinear = ({ classes, show }: LoaderLinearProps) => {
+const LoaderLinear = ({ classes, show }: LoaderLinearProps): JSX.Element => {
   return (
     <Fade in={show}>
       <div className={classes.progressWrap}>

@@ -26,7 +26,7 @@ const PageStartLearning = ({
   preLearningData,
   preLearningDataIsLoading,
   getPreLearningData,
-}: PageStartLearningProps) => {
+}: PageStartLearningProps): JSX.Element => {
   const urlParams = useParams<{ id: string }>();
 
   const [

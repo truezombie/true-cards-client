@@ -67,7 +67,7 @@ const PageCardSets = ({
   onUpdateCardSet,
   onCreateCardSet,
   onDeleteCardSet,
-}: PageCardSetsProps) => {
+}: PageCardSetsProps): JSX.Element => {
   const intl = useIntl();
   const [deleteCardSet, setDeleteCardSet] = useState<ModalDeleteCardSet>(
     modalInitialStateDeleteCardSet

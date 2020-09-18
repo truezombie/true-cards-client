@@ -14,7 +14,7 @@ interface MenuProps extends WithStyles<typeof styles> {
   items: MenuItemProps[];
 }
 
-const Menu = ({ children, items, classes }: MenuProps) => {
+const Menu = ({ children, items, classes }: MenuProps): JSX.Element => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

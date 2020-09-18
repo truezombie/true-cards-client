@@ -19,7 +19,7 @@ const PageMessage = ({
   link,
   message,
   btnMessage,
-}: PageMessageProps) => {
+}: PageMessageProps): JSX.Element => {
   return (
     <Container maxWidth='sm' className={classes.container}>
       <Typography variant='h5' gutterBottom align='center'>

@@ -35,7 +35,7 @@ const Learning = ({
   currentLearningCardIsLoading,
   currentLearningCardData,
   nextLearningCardIsLoading,
-}: LearningProps) => {
+}: LearningProps): JSX.Element => {
   const [isRotated, setRotated] = useState<boolean>(false);
   const [isDisabledNewCardButtons, setDisabledNewCardButtons] = useState<
     boolean

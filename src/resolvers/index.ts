@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import { ApolloCache } from 'apollo-cache';
 import { Resolvers } from 'apollo-client';
 
 const typeDefs = gql`
@@ -9,17 +8,7 @@ const typeDefs = gql`
   }
 `;
 
-type ResolverFn = (
-  parent: any,
-  args: any,
-  { cache }: { cache: ApolloCache<any> }
-) => any;
-
-interface ResolverMap {
-  [field: string]: ResolverFn;
-}
-
-interface AppResolvers extends Resolvers {}
+type AppResolvers = Resolvers;
 
 const resolvers: AppResolvers = {};
 

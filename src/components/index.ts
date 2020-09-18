@@ -17,6 +17,7 @@ import Learning from './Learning';
 import LearningDone from './LearningDone';
 import CardSide from './CardSide';
 import CardStatus from './CardStatus';
+import CardLine from './CardLine';
 
 import PageMessage from './PageMessage';
 import PageLogin from './PageLogin';
@@ -26,6 +27,7 @@ import PageRegistration from './PageRegistration';
 import PageSettings from './PageSettings';
 import PageContacts from './PageContacts';
 import PageForgotPassword from './PageForgotPassword';
+import PageConfirmRegistration from './PageConfirmRegistration';
 
 export {
   Loader,
@@ -48,6 +50,7 @@ export {
   Learning,
   CardStatus,
   LearningDone,
+  CardLine,
   PageMessage,
   PageRegistration,
   PageLogin,
@@ -56,4 +59,5 @@ export {
   PageSettings,
   PageContacts,
   PageForgotPassword,
+  PageConfirmRegistration,
 };

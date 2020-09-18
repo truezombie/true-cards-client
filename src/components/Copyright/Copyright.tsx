@@ -5,7 +5,7 @@ import Link from '@material-ui/core/Link';
 
 import APP from '../../constants/app';
 
-const Copyright = () => {
+const Copyright = (): JSX.Element => {
   const currentYear = new Date().getFullYear();
   return (
     <Typography variant='body2' color='textSecondary' align='center'>

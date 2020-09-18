@@ -7,7 +7,7 @@ import { RESET_PASSWORD_QUERY, VERIFY_EMAIL_QUERY } from './queries';
 import { IS_LOGGED_IN_QUERY } from '../PageLogin/queries';
 import ROUTES from '../../constants/router';
 
-const ForgotPassword = () => {
+const ForgotPassword = (): JSX.Element => {
   const [activeStep, setActiveStep] = React.useState<number>(0);
   const { data: localState } = useQuery(IS_LOGGED_IN_QUERY);
   const [

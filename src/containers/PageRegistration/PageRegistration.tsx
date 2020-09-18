@@ -1,36 +1,26 @@
-import React, { useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
-import { useMutation, useApolloClient, useQuery } from '@apollo/react-hooks';
+import React, { useMemo } from 'react';
+import { useMutation } from '@apollo/react-hooks';
 
-import { QUERY_TOKENS } from './queries';
-import ROUTES from '../../constants/router';
-import { IS_LOGGED_IN_QUERY } from '../PageLogin/queries';
+import { QUERY_SET_PREREGISTRATION_EMAIL } from './queries';
 
 import { PageRegistration } from '../../components';
 
-const Registration = () => {
-  const { data: localState } = useQuery(IS_LOGGED_IN_QUERY);
-  const [onSignUp, { data: dataTokens }] = useMutation(QUERY_TOKENS);
-  const client = useApolloClient();
+const Registration = (): JSX.Element => {
+  const [
+    onSetPreRegistrationEmail,
+    { data: preRegistrationData, loading: preRegistrationDataIsLoading },
+  ] = useMutation(QUERY_SET_PREREGISTRATION_EMAIL);
 
-  useEffect(() => {
-    if (dataTokens) {
-      localStorage.setItem('authToken', dataTokens.signUp.authToken);
-      localStorage.setItem('refreshToken', dataTokens.signUp.refreshToken);
+  const isEmailWasSend = useMemo(() => {
+    return preRegistrationData?.setPreRegistrationEmail === 'OK';
+  }, [preRegistrationData]);
 
-      client.writeData({ data: { isLoggedIn: true } });
-    }
-  }, [dataTokens]);
-
-  return localState.isLoggedIn ? (
-    <Redirect
-      to={{
-        pathname: ROUTES.main,
-        state: { from: ROUTES.login },
-      }}
+  return (
+    <PageRegistration
+      isLoading={preRegistrationDataIsLoading}
+      isEmailWasSend={isEmailWasSend}
+      onSetPreRegistrationEmail={onSetPreRegistrationEmail}
     />
-  ) : (
-    <PageRegistration onSignUp={onSignUp} />
   );
 };
 

@@ -12,7 +12,10 @@ type FullBlockMessageProps = {
   } | null;
 };
 
-const FullBlockMessage = ({ message, link }: FullBlockMessageProps) => {
+const FullBlockMessage = ({
+  message,
+  link,
+}: FullBlockMessageProps): JSX.Element => {
   return (
     <Box
       minHeight={200}

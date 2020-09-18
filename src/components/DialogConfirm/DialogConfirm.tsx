@@ -29,7 +29,7 @@ const DialogConfirm = ({
   msgBody,
   classes,
   msgTitle,
-}: DialogConfirmProps) => {
+}: DialogConfirmProps): JSX.Element => {
   const onAgree = () => {
     handleAgree();
     handleClose();

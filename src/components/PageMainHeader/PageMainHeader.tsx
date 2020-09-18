@@ -30,7 +30,7 @@ const PageMainHeader = ({
   msgAddBtn,
   currentValue,
   maxValue,
-}: PageMainHeaderProps) => {
+}: PageMainHeaderProps): JSX.Element => {
   return (
     <div className={classes.headerWrapper}>
       <div className={classes.header}>

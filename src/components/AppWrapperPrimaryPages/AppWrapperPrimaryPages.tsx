@@ -10,13 +10,13 @@ import Copyright from '../Copyright';
 import styles from './styles';
 
 interface AppWrapperPrimaryPagesProps extends WithStyles<typeof styles> {
-  children: React.ReactNode;
+  children: JSX.Element;
 }
 
 const AppWrapperPrimaryPages = ({
   classes,
   children,
-}: AppWrapperPrimaryPagesProps) => (
+}: AppWrapperPrimaryPagesProps): JSX.Element => (
   <Container className={classes.container} component='main' maxWidth='xs'>
     <div className={classes.paperWrapper}>
       <Logo />

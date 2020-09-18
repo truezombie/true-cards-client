@@ -7,7 +7,7 @@ interface PrivateRouteProps extends RouteProps {
   isLoggedIn: boolean;
 }
 
-const PrivateRoute = (props: PrivateRouteProps) => {
+const PrivateRoute = (props: PrivateRouteProps): JSX.Element => {
   const { children, isLoggedIn, ...rest } = props;
 
   return (

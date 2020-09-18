@@ -12,7 +12,7 @@ type CardStatusProps = {
   card: CardType;
 };
 
-const CardStatus = ({ card }: CardStatusProps) => {
+const CardStatus = ({ card }: CardStatusProps): JSX.Element => {
   if (isLearnedCard(card)) {
     return <FormattedMessage id='card.status.learned' />;
   }

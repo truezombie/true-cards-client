@@ -19,7 +19,10 @@ interface PageContactsProps extends WithStyles<typeof styles> {
   contactsList: ContactListItem[];
 }
 
-const PageContacts = ({ classes, contactsList }: PageContactsProps) => {
+const PageContacts = ({
+  classes,
+  contactsList,
+}: PageContactsProps): JSX.Element => {
   return (
     <Container maxWidth='sm' className={classes.container}>
       <Typography variant='h5' gutterBottom>

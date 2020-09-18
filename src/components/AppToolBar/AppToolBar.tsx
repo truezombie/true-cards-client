@@ -49,7 +49,7 @@ const AppToolBar = ({
   meIsLoading,
   meFirstName,
   meLastName,
-}: AppToolBarProps) => {
+}: AppToolBarProps): JSX.Element => {
   const [isOpenMenu, setOpenMenu] = React.useState<boolean>(false);
 
   const onToggleMenu = () => {

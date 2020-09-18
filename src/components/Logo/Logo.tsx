@@ -16,7 +16,7 @@ const Logo = ({
   classes,
   showCaption = true,
   textCaption = <FormattedMessage id='logo.description' />,
-}: LogoProps) => {
+}: LogoProps): JSX.Element => {
   return (
     <>
       <div className={classes.logoWrapper}>

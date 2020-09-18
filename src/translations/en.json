@@ -35,6 +35,7 @@
   "btn.set.new.password": "Set new password",
   "btn.send.verify.key": "Send verify key",
   "btn.dont.know": "I don't know",
+  "btn.send.email": "Send email",
   "rotate.card": "Rotate card",
   "checkbox.remember.me": "Remember me",
   "page.login.link.forgot.password": "Forgot password",
@@ -73,5 +74,7 @@
   "redirect.to.main.page.message": "You will redirect to main page",
   "stepper.step.email.check": "Email check",
   "stepper.step.reset.password": "Reset password",
-  "reset.password.email.message": "The confirmation key was sent to the email: {value}"
+  "reset.password.email.message": "The confirmation key was sent to the email: {value}",
+  "sign.up.email.message": "We have sent you an email. Go to the {value} and follow instructions",
+  "sign.up.wrong.link": "Something went wrong. Current link is not valid or you try to use old link. Go to the {link} and try again."
 }

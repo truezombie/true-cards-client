@@ -15,10 +15,13 @@ import messagesEn from '../../translations/en.json';
 import messagesRu from '../../translations/ru.json';
 import messagesUa from '../../translations/ua.json';
 
+const PageMain = lazy(() => import('../PageMain'));
 const PageLogin = lazy(() => import('../PageLogin'));
 const PageRegistration = lazy(() => import('../PageRegistration'));
 const PageForgotPassword = lazy(() => import('../PageForgotPassword'));
-const PageMain = lazy(() => import('../PageMain'));
+const PageConfirmRegistration = lazy(
+  () => import('../PageConfirmRegistration')
+);
 
 const messages = {
   en: messagesEn,
@@ -32,7 +35,7 @@ function IsLoggedIn(): boolean {
   return data.isLoggedIn;
 }
 
-const App = () => {
+const App = (): JSX.Element => {
   return (
     <IntlProvider locale='en' messages={messages.en}>
       <ThemeProvider theme={theme}>
@@ -44,8 +47,11 @@ const App = () => {
                 <Route path={ROUTES.login}>
                   <PageLogin />
                 </Route>
-                <Route path={ROUTES.registration}>
+                <Route path={ROUTES.registration} exact>
                   <PageRegistration />
+                </Route>
+                <Route path={ROUTES.registrationConfirm} exact>
+                  <PageConfirmRegistration />
                 </Route>
                 <Route path={ROUTES.forgotPassword}>
                   <PageForgotPassword />

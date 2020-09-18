@@ -37,8 +37,8 @@ import {
 import PageLearning from '../PageLearning';
 import PageStartLearning from '../PageStartLearning';
 
-const MainPage = () => {
-  const location = useLocation<{ pathname: String }>();
+const MainPage = (): JSX.Element => {
+  const location = useLocation<{ pathname: string }>();
   const client = useApolloClient();
   const { data: user, loading: meIsLoading } = useQuery(GET_ME_QUERY);
 

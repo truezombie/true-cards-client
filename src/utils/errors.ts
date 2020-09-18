@@ -19,7 +19,9 @@ export enum ERROR_CODES {
   ERROR_OUT_OF_CARDS = 'ERROR_OUT_OF_CARDS',
   ERROR_CARD_IS_NOT_EXIST = 'CARD_IS_NOT_EXIST',
   // RESET PASSWORD
-  CONFIRMATION_KEY_IS_NOT_CORRECT = 'CONFIRMATION_KEY_IS_NOT_CORRECT',
+  ERROR_CONFIRMATION_KEY_IS_NOT_CORRECT = 'ERROR_CONFIRMATION_KEY_IS_NOT_CORRECT',
+  // REGISTRATION
+  ERROR_PRE_REGISTERED_DATA_NOT_FOUND = 'ERROR_PRE_REGISTERED_DATA_NOT_FOUND',
 }
 
 export type getErrorMessageType = (errorCode: string) => string | null;
@@ -41,8 +43,10 @@ export const getErrorMessage: getErrorMessageType = (errorCode) => {
       return 'Learning session is not exist. You were redirected to the main page.';
     case ERROR_CODES.ERROR_LEARNING_SESSION_ALREADY_EXIST:
       return 'Learning session is is already exist.';
-    case ERROR_CODES.CONFIRMATION_KEY_IS_NOT_CORRECT:
+    case ERROR_CODES.ERROR_CONFIRMATION_KEY_IS_NOT_CORRECT:
       return 'Confirmation key is not correct refresh current page and try again.';
+    case ERROR_CODES.ERROR_PRE_REGISTERED_DATA_NOT_FOUND:
+      return 'Wrong link';
     default:
       return null;
   }

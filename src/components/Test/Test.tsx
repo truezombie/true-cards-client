@@ -4,7 +4,7 @@ interface TestProps {
   text: string;
 }
 
-const Test = ({ text }: TestProps) => {
+const Test = ({ text }: TestProps): JSX.Element => {
   return <p>{text}</p>;
 };
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { CellProps } from 'react-table';
 import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 
@@ -8,12 +7,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { WithStyles } from '@material-ui/core/styles';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
-import DeleteIcon from '@material-ui/icons/Delete';
 import Checkbox from '@material-ui/core/Checkbox';
-import EditIcon from '@material-ui/icons/Edit';
 import Card from '@material-ui/core/Card';
 
 import FullBlockMessage from '../FullBlockMessage';
@@ -21,10 +17,9 @@ import PageMainHeader from '../PageMainHeader';
 import DialogForm from '../DialogForm';
 import CardStatus from '../CardStatus';
 import { Loader } from '../Loader';
-import Table from '../Table';
+import CardLine from '../CardLine';
 
-import { CardsType, CardType } from '../../types/app';
-import { ACTION_CELL_ID } from '../Table/constants';
+import { CardsType } from '../../types/app';
 import DialogConfirm from '../DialogConfirm';
 import ROUTES from '../../constants/router';
 import APP from '../../constants/app';
@@ -106,88 +101,14 @@ const PageCards = ({
   onCreateCard,
   onDeleteCard,
   onUpdateCard,
-}: PageCardsProps) => {
+}: PageCardsProps): JSX.Element => {
   const intl = useIntl();
   const urlParams = useParams<{ id: string }>();
-  const [deleteCard, setDeleteCard] = useState<deleteCard>(
+  const [deleteCardModalData, setDeleteCardModalData] = useState<deleteCard>(
     initialStateDeleteModal
   );
-  const [manageCard, setOpenManageCard] = useState<manageCard>(
+  const [manageCardModalData, setManageCardModalData] = useState<manageCard>(
     initialStateManageModal
-  );
-
-  const manageCell = ({
-    value,
-    cell: {
-      row: { original },
-    },
-  }: CellProps<CardType>) => {
-    return (
-      <>
-        <IconButton
-          onClick={() => {
-            setOpenManageCard({
-              show: true,
-              edit: true,
-              create: false,
-              ...original,
-            });
-          }}
-          aria-label='edit'
-        >
-          <EditIcon fontSize='small' />
-        </IconButton>
-        <IconButton
-          onClick={() => {
-            setDeleteCard({
-              show: true,
-              uuid: value,
-              front: original.front,
-            });
-          }}
-          aria-label='delete'
-        >
-          <DeleteIcon fontSize='small' />
-        </IconButton>
-      </>
-    );
-  };
-
-  const statusCell = ({
-    cell: {
-      row: { original },
-    },
-  }: CellProps<CardType>) => {
-    return <CardStatus card={original} />;
-  };
-
-  const columns = React.useMemo(
-    () => [
-      {
-        id: 'front',
-        Header: <FormattedMessage id='table.cards.title.front' />,
-        accessor: 'front',
-      },
-      {
-        id: 'back',
-        Header: <FormattedMessage id='table.cards.title.back' />,
-        accessor: 'back',
-      },
-      {
-        id: 'status',
-        Header: <FormattedMessage id='table.cards.title.status' />,
-        accessor: 'uuid',
-        Cell: statusCell,
-      },
-      {
-        id: ACTION_CELL_ID,
-        Header: '',
-        width: 120,
-        accessor: 'uuid',
-        Cell: manageCell,
-      },
-    ],
-    []
   );
 
   const createCardValidationSchema = Yup.object().shape({
@@ -243,7 +164,7 @@ const PageCards = ({
     title: string | JSX.Element;
     submit: string | JSX.Element;
   } = useMemo(() => {
-    return manageCard.edit
+    return manageCardModalData.edit
       ? {
           title: <FormattedMessage id='card.modal.title.edit' />,
           submit: <FormattedMessage id='btn.save' />,
@@ -252,13 +173,44 @@ const PageCards = ({
           title: <FormattedMessage id='card.modal.title.add' />,
           submit: <FormattedMessage id='btn.add' />,
         };
-  }, [manageCard.edit, manageCard.create]);
+  }, [manageCardModalData.edit, manageCardModalData.create]);
 
   useEffect(() => {
     if (urlParams.id) {
       getCardSetWithCards({ variables: { cardSetId: urlParams.id } });
     }
   }, []);
+
+  const cards = useMemo(() => {
+    if (data?.cardSetWithCards?.cards.length) {
+      return data.cardSetWithCards.cards.map((card) => {
+        return (
+          <CardLine
+            key={card.uuid}
+            front={card.front}
+            back={card.back}
+            status={<CardStatus card={card} />}
+            onDelete={() => {
+              setDeleteCardModalData({
+                show: true,
+                uuid: card.uuid,
+                front: card.front,
+              });
+            }}
+            onEdit={() => {
+              setManageCardModalData({
+                show: true,
+                edit: true,
+                create: false,
+                ...card,
+              });
+            }}
+          />
+        );
+      });
+    }
+    return <FullBlockMessage message={<FormattedMessage id='no.data' />} />;
+  }, [data?.cardSetWithCards.cards]);
 
   return (
     <>
@@ -269,7 +221,7 @@ const PageCards = ({
           <PageMainHeader
             isLoading={isLoading && !!data.cardSetWithCards.cards.length}
             onAdd={() => {
-              setOpenManageCard({
+              setManageCardModalData({
                 ...initialStateManageModal,
                 show: true,
                 create: true,
@@ -282,22 +234,20 @@ const PageCards = ({
             msgTitle={data.cardSetWithCards.name}
           />
 
-          {data.cardSetWithCards.cards.length ? (
-            <Table columns={columns} data={data.cardSetWithCards.cards} />
-          ) : (
-            <FullBlockMessage message={<FormattedMessage id='no.data' />} />
-          )}
+          {cards}
 
           <DialogForm
-            isOpen={manageCard.show}
+            isOpen={manageCardModalData.show}
             validationSchema={createCardValidationSchema}
             msgTitle={messagesModalManageCard.title}
-            onClose={() => setOpenManageCard({ ...manageCard, show: false })}
+            onClose={() =>
+              setManageCardModalData({ ...manageCardModalData, show: false })
+            }
             onSubmit={(values, { setSubmitting }) => {
-              if (manageCard.edit) {
+              if (manageCardModalData.edit) {
                 onUpdateCard({
                   variables: {
-                    uuid: manageCard.uuid,
+                    uuid: manageCardModalData.uuid,
                     cardSetId: urlParams.id,
                     front: values.front,
                     frontDescription: values.frontDescription,
@@ -308,7 +258,7 @@ const PageCards = ({
                 });
               }
 
-              if (manageCard.create) {
+              if (manageCardModalData.create) {
                 onCreateCard({
                   variables: {
                     cardSetId: urlParams.id,
@@ -326,11 +276,11 @@ const PageCards = ({
             msgClose={<FormattedMessage id='btn.close' />}
             msgSubmit={messagesModalManageCard.submit}
             initialValues={{
-              back: manageCard.back,
-              front: manageCard.front,
-              hasBackSide: manageCard.hasBackSide,
-              backDescription: manageCard.backDescription,
-              frontDescription: manageCard.frontDescription,
+              back: manageCardModalData.back,
+              front: manageCardModalData.front,
+              hasBackSide: manageCardModalData.hasBackSide,
+              backDescription: manageCardModalData.backDescription,
+              frontDescription: manageCardModalData.frontDescription,
             }}
           >
             {({ errors, touched, values, handleBlur, handleChange }) => (
@@ -443,21 +393,23 @@ const PageCards = ({
           </DialogForm>
 
           <DialogConfirm
-            isOpen={deleteCard.show}
+            isOpen={deleteCardModalData.show}
             handleAgree={() => {
               onDeleteCard({
                 variables: {
-                  cardUuid: deleteCard.uuid,
+                  cardUuid: deleteCardModalData.uuid,
                   cardSetId: data.cardSetWithCards.id,
                 },
               });
             }}
-            handleClose={() => setDeleteCard({ ...deleteCard, show: false })}
+            handleClose={() =>
+              setDeleteCardModalData({ ...deleteCardModalData, show: false })
+            }
             msgTitle={<FormattedMessage id='card.modal.title.delete' />}
             msgBody={
               <FormattedMessage
                 id='card.modal.body.delete'
-                values={{ front: deleteCard.front }}
+                values={{ front: deleteCardModalData.front }}
               />
             }
             msgClose={<FormattedMessage id='btn.close' />}

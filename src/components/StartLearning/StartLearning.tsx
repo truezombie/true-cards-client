@@ -36,13 +36,13 @@ export interface StartLearningParams {
   }) => void;
 }
 
-interface StartLearningProps extends WithStyles<typeof styles> {}
+type StartLearningProps = WithStyles<typeof styles>;
 
 const StartLearning = ({
   classes,
   preLearningData,
   onStartLearningSession,
-}: StartLearningProps & StartLearningParams) => {
+}: StartLearningProps & StartLearningParams): JSX.Element | null => {
   const [wordsPerSession, setWordsPerSession] = useState<number>(
     WORDS_PER_LEARNING_SESSION[0]
   );

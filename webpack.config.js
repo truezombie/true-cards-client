@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = (env = {}) => {
   const { mode = 'development' } = env;
@@ -32,11 +33,19 @@ module.exports = (env = {}) => {
       ],
     },
 
-    optimization: {
-      splitChunks: {
-        chunks: 'all',
-      },
-    },
+    optimization: isProd
+      ? {
+          splitChunks: {
+            chunks: 'all',
+          },
+          minimize: true,
+          minimizer: [
+            new TerserPlugin({
+              include: /\/includes/,
+            }),
+          ],
+        }
+      : {},
 
     plugins: [
       new HtmlWebpackPlugin({

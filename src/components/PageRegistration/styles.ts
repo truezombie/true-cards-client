@@ -10,4 +10,7 @@ export default (theme: Theme): StyleRules =>
     submit: {
       margin: theme.spacing(2, 0),
     },
+    header: {
+      marginBottom: theme.spacing(1.5),
+    },
   });

@@ -5,9 +5,9 @@ import { WithStyles, withStyles } from '@material-ui/core/styles';
 import { loaderStyles } from './styles';
 import { LOADER_SIZE, LOADER_THICKNESS } from './constants';
 
-interface LoaderProps extends WithStyles<typeof loaderStyles> {}
+type LoaderProps = WithStyles<typeof loaderStyles>;
 
-const Loader = ({ classes }: LoaderProps) => {
+const Loader = ({ classes }: LoaderProps): JSX.Element => {
   return (
     <CircularProgress
       className={classes.root}

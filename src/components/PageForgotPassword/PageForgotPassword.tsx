@@ -34,7 +34,7 @@ const PageForgotPassword = ({
   onVerifyEmail,
   activeStep,
   isLoading,
-}: PageForgotPasswordProps) => {
+}: PageForgotPasswordProps): JSX.Element => {
   const [email, setEmail] = useState<string>('');
   const intl = useIntl();
 

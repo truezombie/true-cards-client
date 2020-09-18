@@ -5,9 +5,12 @@ import { PageLogin } from '../../components';
 import ROUTES from '../../constants/router';
 import { IS_LOGGED_IN_QUERY, GET_TOKENS_QUERY } from './queries';
 
-const Login = () => {
+const Login = (): JSX.Element => {
   const { data: localState } = useQuery(IS_LOGGED_IN_QUERY);
-  const [mutate, { data: dataTokens }] = useMutation(GET_TOKENS_QUERY);
+  const [
+    mutate,
+    { data: dataTokens, loading: dataTokensIsLoading },
+  ] = useMutation(GET_TOKENS_QUERY);
   const client = useApolloClient();
 
   useEffect(() => {
@@ -27,7 +30,7 @@ const Login = () => {
       }}
     />
   ) : (
-    <PageLogin onSignIn={mutate} />
+    <PageLogin isLoading={dataTokensIsLoading} onSignIn={mutate} />
   );
 };
 

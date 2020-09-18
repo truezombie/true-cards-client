@@ -12,14 +12,19 @@ import Grid from '@material-ui/core/Grid';
 
 import ROUTES from '../../constants/router';
 import APP from '../../constants/app';
-import { AppWrapperPrimaryPages } from '../index';
+import { AppWrapperPrimaryPages, LoaderLinear } from '../index';
 import styles from './styles';
 
 interface PageLoginProps extends WithStyles<typeof styles> {
+  isLoading: boolean;
   onSignIn: (data: { variables: { email: string; password: string } }) => void;
 }
 
-const PageLogin = ({ classes, onSignIn }: PageLoginProps) => {
+const PageLogin = ({
+  classes,
+  onSignIn,
+  isLoading,
+}: PageLoginProps): JSX.Element => {
   const intl = useIntl();
 
   const LoginValidationSchema = Yup.object().shape({
@@ -63,7 +68,7 @@ const PageLogin = ({ classes, onSignIn }: PageLoginProps) => {
   return (
     <AppWrapperPrimaryPages>
       <>
-        <Grid container alignItems='center'>
+        <Grid container alignItems='center' className={classes.header}>
           <Grid item xs>
             <Typography component='h1' variant='h6'>
               <FormattedMessage id='btn.sign.in' />
@@ -75,6 +80,7 @@ const PageLogin = ({ classes, onSignIn }: PageLoginProps) => {
             </Link>
           </Grid>
         </Grid>
+        <LoaderLinear show={isLoading} />
         <Formik
           initialValues={{
             email: '',

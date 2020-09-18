@@ -18,7 +18,7 @@ const LearningDone = ({
   link,
   btnMessage,
   message,
-}: LearningDoneProps) => {
+}: LearningDoneProps): JSX.Element => {
   useEffect(() => {
     onResetCurrentSession();
   }, []);

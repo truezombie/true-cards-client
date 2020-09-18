@@ -12,7 +12,7 @@ import {
 } from './queries';
 import { hasError, ERROR_CODES } from '../../utils/errors';
 
-const PageLearning = () => {
+const PageLearning = (): JSX.Element => {
   const [
     getCurrentLoadingCard,
     {

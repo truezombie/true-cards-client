@@ -12,9 +12,9 @@ import Divider from '@material-ui/core/Divider';
 
 import styles from './styles';
 
-interface PageMessageProps extends WithStyles<typeof styles> {}
+type PageMessageProps = WithStyles<typeof styles>;
 
-const PageMessage = ({ classes }: PageMessageProps) => {
+const PageMessage = ({ classes }: PageMessageProps): JSX.Element => {
   const [value, setValue] = useState(0);
 
   const onTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
