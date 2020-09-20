@@ -1,10 +1,12 @@
+export type CardSet = {
+  id: string;
+  name: string;
+  cardsMax: number;
+  cardsAll: number;
+};
+
 export type CardSetsType = {
-  cardSets: {
-    id: string;
-    name: string;
-    cardsMax: number;
-    cardsAll: number;
-  }[];
+  cardSets: CardSet[];
 };
 
 export type CardType = {

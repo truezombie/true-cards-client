@@ -17,8 +17,8 @@ interface PageMainHeaderProps extends WithStyles<typeof styles> {
   msgAddBtn: JSX.Element | string;
   msgTitle: JSX.Element | string;
   link?: string | null;
-  currentValue?: number;
-  maxValue?: number;
+  currentValue?: number | null;
+  maxValue?: number | null;
 }
 
 const PageMainHeader = ({
@@ -74,8 +74,8 @@ const PageMainHeader = ({
 
 PageMainHeader.defaultProps = {
   link: null,
-  currentValue: 0,
-  maxValue: 0,
+  currentValue: null,
+  maxValue: null,
 };
 
 export default PageMainHeader;

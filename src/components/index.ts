@@ -5,7 +5,6 @@ import Copyright from './Copyright';
 import Logo from './Logo';
 import PrivateRoute from './PrivateRoute';
 import SnackBar from './SnackBar';
-import CardSet from './CardSet';
 import DialogConfirm from './DialogConfirm';
 import DialogForm from './DialogForm';
 import PageMainHeader from './PageMainHeader';
@@ -17,7 +16,7 @@ import Learning from './Learning';
 import LearningDone from './LearningDone';
 import CardSide from './CardSide';
 import CardStatus from './CardStatus';
-import CardLine from './CardLine';
+import Table from './Table';
 
 import PageMessage from './PageMessage';
 import PageLogin from './PageLogin';
@@ -38,7 +37,6 @@ export {
   AppWrapperPrimaryPages,
   PrivateRoute,
   SnackBar,
-  CardSet,
   DialogConfirm,
   PageMainHeader,
   DialogForm,
@@ -50,7 +48,7 @@ export {
   Learning,
   CardStatus,
   LearningDone,
-  CardLine,
+  Table,
   PageMessage,
   PageRegistration,
   PageLogin,

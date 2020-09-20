@@ -76,5 +76,8 @@
   "stepper.step.reset.password": "Reset password",
   "reset.password.email.message": "The confirmation key was sent to the email: {value}",
   "sign.up.email.message": "We have sent you an email. Go to the {value} and follow instructions",
-  "sign.up.wrong.link": "Something went wrong. Current link is not valid or you try to use old link. Go to the {link} and try again."
+  "sign.up.wrong.link": "Something went wrong. Current link is not valid or you try to use old link. Go to the {link} and try again.",
+  "tooltip.start.to.study.card": "Start to study",
+  "tooltip.options": "Options",
+  "tooltip.go.to.cards": "Go to cards"
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { CellProps } from 'react-table';
 import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 
@@ -7,9 +8,12 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { WithStyles } from '@material-ui/core/styles';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Checkbox from '@material-ui/core/Checkbox';
+import EditIcon from '@material-ui/icons/Edit';
 import Card from '@material-ui/core/Card';
 
 import FullBlockMessage from '../FullBlockMessage';
@@ -17,9 +21,9 @@ import PageMainHeader from '../PageMainHeader';
 import DialogForm from '../DialogForm';
 import CardStatus from '../CardStatus';
 import { Loader } from '../Loader';
-import CardLine from '../CardLine';
+import Table from '../Table';
 
-import { CardsType } from '../../types/app';
+import { CardsType, CardType } from '../../types/app';
 import DialogConfirm from '../DialogConfirm';
 import ROUTES from '../../constants/router';
 import APP from '../../constants/app';
@@ -111,6 +115,95 @@ const PageCards = ({
     initialStateManageModal
   );
 
+  const editCell = ({
+    cell: {
+      row: { original },
+    },
+  }: CellProps<CardType>) => {
+    return (
+      <IconButton
+        onClick={() => {
+          setManageCardModalData({
+            show: true,
+            edit: true,
+            create: false,
+            ...original,
+          });
+        }}
+        aria-label='edit'
+      >
+        <EditIcon fontSize='small' />
+      </IconButton>
+    );
+  };
+
+  const deleteCell = ({
+    value,
+    cell: {
+      row: { original },
+    },
+  }: CellProps<CardType>) => {
+    return (
+      <IconButton
+        onClick={() => {
+          setDeleteCardModalData({
+            show: true,
+            uuid: value,
+            front: original.front,
+          });
+        }}
+        aria-label='delete'
+      >
+        <DeleteIcon fontSize='small' />
+      </IconButton>
+    );
+  };
+
+  const statusCell = ({
+    cell: {
+      row: { original },
+    },
+  }: CellProps<CardType>) => {
+    return <CardStatus card={original} />;
+  };
+
+  const columns = React.useMemo(
+    () => [
+      {
+        id: 'front',
+        Header: <FormattedMessage id='table.cards.title.front' />,
+        accessor: 'front',
+      },
+      {
+        id: 'back',
+        Header: <FormattedMessage id='table.cards.title.back' />,
+        accessor: 'back',
+      },
+      {
+        id: 'status',
+        Header: <FormattedMessage id='table.cards.title.status' />,
+        accessor: 'uuid',
+        width: 80,
+        Cell: statusCell,
+      },
+      {
+        id: 'edit',
+        Header: '',
+        accessor: 'uuid',
+        width: 60,
+        Cell: editCell,
+      },
+      {
+        id: 'delete',
+        Header: '',
+        accessor: 'uuid',
+        width: 60,
+        Cell: deleteCell,
+      },
+    ],
+    []
+  );
+
   const createCardValidationSchema = Yup.object().shape({
     front: Yup.string()
       .trim(
@@ -181,37 +274,6 @@ const PageCards = ({
     }
   }, []);
 
-  const cards = useMemo(() => {
-    if (data?.cardSetWithCards?.cards.length) {
-      return data.cardSetWithCards.cards.map((card) => {
-        return (
-          <CardLine
-            key={card.uuid}
-            front={card.front}
-            back={card.back}
-            status={<CardStatus card={card} />}
-            onDelete={() => {
-              setDeleteCardModalData({
-                show: true,
-                uuid: card.uuid,
-                front: card.front,
-              });
-            }}
-            onEdit={() => {
-              setManageCardModalData({
-                show: true,
-                edit: true,
-                create: false,
-                ...card,
-              });
-            }}
-          />
-        );
-      });
-    }
-    return <FullBlockMessage message={<FormattedMessage id='no.data' />} />;
-  }, [data?.cardSetWithCards.cards]);
-
   return (
     <>
       {loader}
@@ -234,7 +296,11 @@ const PageCards = ({
             msgTitle={data.cardSetWithCards.name}
           />
 
-          {cards}
+          {data.cardSetWithCards.cards.length ? (
+            <Table columns={columns} data={data.cardSetWithCards.cards} />
+          ) : (
+            <FullBlockMessage message={<FormattedMessage id='no.data' />} />
+          )}
 
           <DialogForm
             isOpen={manageCardModalData.show}

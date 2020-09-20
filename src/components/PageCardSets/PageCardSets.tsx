@@ -1,14 +1,22 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import * as Yup from 'yup';
+import { CellProps } from 'react-table';
+import { Link } from 'react-router-dom';
 
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { WithStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+import Typography from '@material-ui/core/Typography';
+import FolderIcon from '@material-ui/icons/Folder';
 
-import CardSet from '../CardSet';
+import Table from '../Table';
 import { Loader } from '../Loader';
 import DialogForm from '../DialogForm';
 import DialogConfirm from '../DialogConfirm';
@@ -17,8 +25,9 @@ import FullBlockMessage from '../FullBlockMessage';
 
 import APP from '../../constants/app';
 import ROUTES from '../../constants/router';
-import { CardSetsType } from '../../types/app';
+import { CardSetsType, CardSet } from '../../types/app';
 import styles from './styles';
+import Menu from '../Menu';
 
 type ModalDeleteCardSet = {
   show: boolean;
@@ -180,6 +189,125 @@ const PageCardSets = ({
     [listCardSets]
   );
 
+  const startLearningCell = ({
+    cell: {
+      row: { original },
+    },
+  }: CellProps<CardSet>) => {
+    const hasCards = original.cardsAll !== 0;
+    return (
+      <Tooltip
+        disableFocusListener
+        title={<FormattedMessage id='tooltip.start.to.study.card' />}
+      >
+        <IconButton
+          disabled={!hasCards}
+          component={Link}
+          to={ROUTES.startLearning.replace(':id', original.id)}
+          color={hasCards ? 'primary' : 'default'}
+          aria-label='play'
+        >
+          <PlayCircleFilledIcon fontSize='small' />
+        </IconButton>
+      </Tooltip>
+    );
+  };
+
+  const editAndDeleteCell = ({
+    cell: {
+      row: { original },
+    },
+  }: CellProps<CardSet>) => {
+    return (
+      <Menu items={getDropDownMenuItems(original)}>
+        <Tooltip
+          disableFocusListener
+          title={<FormattedMessage id='tooltip.options' />}
+        >
+          <IconButton
+            aria-label='more'
+            aria-controls='simple-menu'
+            aria-haspopup='true'
+          >
+            <MoreVertIcon fontSize='small' />
+          </IconButton>
+        </Tooltip>
+      </Menu>
+    );
+  };
+
+  const nameCell = ({
+    value,
+    cell: {
+      row: { original },
+    },
+  }: CellProps<CardSet>) => {
+    return (
+      <Link
+        className={classes.cardSetLink}
+        to={ROUTES.cards.replace(':id', original.id)}
+      >
+        <Typography component='span' title={value} gutterBottom>
+          {value}
+        </Typography>
+      </Link>
+    );
+  };
+
+  const folderIconCell = ({
+    cell: {
+      row: { original },
+    },
+  }: CellProps<CardSet>) => {
+    return (
+      <Tooltip
+        disableFocusListener
+        title={<FormattedMessage id='tooltip.go.to.cards' />}
+      >
+        <IconButton
+          component={Link}
+          to={ROUTES.cards.replace(':id', original.id)}
+          aria-label='cards'
+        >
+          <FolderIcon fontSize='small' color='primary' />
+        </IconButton>
+      </Tooltip>
+    );
+  };
+
+  const columns = React.useMemo(
+    () => [
+      {
+        id: 'iconFolder',
+        Header: '',
+        accessor: 'name',
+        Cell: folderIconCell,
+        width: 76,
+      },
+      {
+        id: 'name',
+        Header: 'Folder name',
+        accessor: 'name',
+        Cell: nameCell,
+      },
+      {
+        id: 'startLearn',
+        Header: '',
+        accessor: 'id',
+        Cell: startLearningCell,
+        width: 60,
+      },
+      {
+        id: 'deleteAndEdit',
+        Header: '',
+        accessor: 'id',
+        Cell: editAndDeleteCell,
+        width: 60,
+      },
+    ],
+    []
+  );
+
   return (
     <Container className={classes.container} maxWidth='md'>
       <PageMainHeader
@@ -197,18 +325,7 @@ const PageCardSets = ({
       {loader}
       {noData}
       {listCardSets.length ? (
-        <div className={classes.body}>
-          {listCardSets.map((item) => (
-            <CardSet
-              key={item.id}
-              name={item.name}
-              cardsAll={item.cardsAll}
-              linkFolder={ROUTES.cards.replace(':id', item.id)}
-              linkPlay={ROUTES.startLearning.replace(':id', item.id)}
-              dropDownMenuItems={getDropDownMenuItems(item)}
-            />
-          ))}
-        </div>
+        <Table columns={columns} data={listCardSets} />
       ) : null}
       <DialogForm
         isOpen={manageCardSet.show}
