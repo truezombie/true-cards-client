@@ -4,12 +4,12 @@ import { FormattedMessage } from 'react-intl';
 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks';
+import { useQuery, useLazyQuery } from '@apollo/client';
 import { IS_EXIST_LEARNING_SESSION_QUERY, GET_ME_QUERY } from './queries';
-import { SET_IS_LOGGED_IN_QUERY } from '../App/queries';
 import ROUTES from '../../constants/router';
 import CONTACTS from '../../constants/contacts';
 import { ContactListItem } from '../../types/app';
+import { isLoggedInVar } from '../../cache';
 import {
   AppToolBar,
   PageCards,
@@ -24,11 +24,7 @@ import PageSettings from '../PageSettings';
 
 const MainPage = (): JSX.Element => {
   const location = useLocation<{ pathname: string }>();
-  const [logOut] = useMutation(SET_IS_LOGGED_IN_QUERY, {
-    variables: {
-      isLoggedIn: false,
-    },
-  });
+
   const { data: user, loading: meIsLoading } = useQuery(GET_ME_QUERY);
 
   const [
@@ -45,7 +41,7 @@ const MainPage = (): JSX.Element => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('refreshToken');
 
-    logOut();
+    isLoggedInVar(false);
   };
 
   useEffect(() => {

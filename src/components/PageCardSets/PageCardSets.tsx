@@ -3,7 +3,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import * as Yup from 'yup';
 import { CellProps } from 'react-table';
 import { Link } from 'react-router-dom';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 
 import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';

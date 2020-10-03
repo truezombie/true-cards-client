@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/react-hooks';
-import { PageForgotPassword } from '../../components';
 
+import { useMutation, useQuery } from '@apollo/client';
+
+import { PageForgotPassword } from '../../components';
 import { RESET_PASSWORD_QUERY, VERIFY_EMAIL_QUERY } from './queries';
-import { IS_LOGGED_IN_QUERY, SET_IS_LOGGED_IN_QUERY } from '../App/queries';
+import { IS_LOGGED_IN_QUERY } from '../App/queries';
 import ROUTES from '../../constants/router';
+import { isLoggedInVar } from '../../cache';
 
 const ForgotPassword = (): JSX.Element => {
   const [activeStep, setActiveStep] = React.useState<number>(0);
@@ -18,11 +20,6 @@ const ForgotPassword = (): JSX.Element => {
     onVerifyEmail,
     { data: verifyEmailData, loading: verifyEmailDataIsLoading },
   ] = useMutation(VERIFY_EMAIL_QUERY);
-  const [setLoggedIn] = useMutation(SET_IS_LOGGED_IN_QUERY, {
-    variables: {
-      isLoggedIn: true,
-    },
-  });
 
   useEffect(() => {
     if (verifyEmailData?.setResetPasswordVerifyKey === 'OK') {
@@ -39,7 +36,7 @@ const ForgotPassword = (): JSX.Element => {
       );
 
       setActiveStep(activeStep + 1);
-      setLoggedIn();
+      isLoggedInVar();
     }
   }, [dataTokens]);
 

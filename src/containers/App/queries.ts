@@ -6,12 +6,6 @@ export const IS_LOGGED_IN_QUERY = gql`
   }
 `;
 
-export const SET_IS_LOGGED_IN_QUERY = gql`
-  mutation($isLoggedIn: Boolean!) {
-    setLoggedIn(isLoggedIn: $isLoggedIn) @client
-  }
-`;
-
 export const LIST_CARD_SET_WITH_CARDS_QUERY = gql`
   query($cardSetId: String!) {
     cardSetWithCards(cardSetId: $cardSetId) {

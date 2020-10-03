@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
 
 import { IS_LOGGED_IN_QUERY } from '../../containers/App/queries';

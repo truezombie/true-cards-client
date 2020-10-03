@@ -6,7 +6,6 @@ import { SnackbarProvider, useSnackbar } from 'notistack';
 import {
   Observable,
   ApolloClient,
-  InMemoryCache,
   NormalizedCacheObject,
   ApolloProvider,
   from,
@@ -14,6 +13,7 @@ import {
 } from '@apollo/client';
 import { resolvers, typeDefs } from './localState';
 import { ERROR_CODES, getErrorMessage } from './utils/errors';
+import { cache, isLoggedInVar } from './cache';
 import CONFIG from './utils/config';
 import App from './containers/App';
 
@@ -33,7 +33,7 @@ const ApolloComponent = () => {
     // eslint-disable-next-line consistent-return
     ({ graphQLErrors, networkError, operation, forward }) => {
       if (graphQLErrors) {
-        const { cache } = operation.getContext();
+        // const { cache } = operation.getContext();
         const oldHeaders = operation.getContext().headers;
         const errorCode = graphQLErrors[0]?.message;
 
@@ -84,11 +84,7 @@ const ApolloComponent = () => {
               .catch((e) => {
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('refreshToken');
-                cache.writeData({
-                  data: {
-                    isLoggedIn: !!localStorage.getItem('authToken'),
-                  },
-                });
+                isLoggedInVar(false);
                 observer.error(e);
               });
           });
@@ -120,7 +116,7 @@ const ApolloComponent = () => {
   });
 
   const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-    cache: new InMemoryCache(),
+    cache,
     link: from([errorLink, authLink.concat(httpLink)]),
     resolvers,
     typeDefs,

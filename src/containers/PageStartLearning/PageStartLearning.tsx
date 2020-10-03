@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useParams, Redirect } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 
 import Container from '@material-ui/core/Container';
 import { WithStyles } from '@material-ui/core/styles';

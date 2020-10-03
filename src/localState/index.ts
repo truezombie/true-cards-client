@@ -1,9 +1,6 @@
 import gql from 'graphql-tag';
 import { Resolvers } from '@apollo/client';
 
-import { isLoggedIn } from './queries';
-import { setLoggedIn } from './mutations';
-
 const typeDefs = gql`
   extend type Query {
     isLoggedIn: Boolean!
@@ -15,13 +12,7 @@ const typeDefs = gql`
   }
 `;
 
-const resolvers: Resolvers = {
-  Query: {
-    isLoggedIn,
-  },
-  Mutation: {
-    setLoggedIn,
-  },
-};
+// DO NOT UDE IT
+const resolvers: Resolvers = {};
 
 export { typeDefs, resolvers };

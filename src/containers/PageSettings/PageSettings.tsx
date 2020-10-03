@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 
 import { WithStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';

@@ -1,26 +1,21 @@
 import React, { useEffect, useMemo } from 'react';
 import { useParams, Redirect } from 'react-router-dom';
 
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 
 import {
   QUERY_CHECK_REGISTRATION_UUID,
   QUERY_CONFIRM_REGISTRATION,
 } from './queries';
 import ROUTES from '../../constants/router';
-import { IS_LOGGED_IN_QUERY, SET_IS_LOGGED_IN_QUERY } from '../App/queries';
+import { IS_LOGGED_IN_QUERY } from '../App/queries';
 
 import { PageConfirmRegistration } from '../../components';
 import { ERROR_CODES, hasError } from '../../utils/errors';
+import { isLoggedInVar } from '../../cache';
 
 const ConfirmRegistration = (): JSX.Element => {
   const { data: localState } = useQuery(IS_LOGGED_IN_QUERY);
-
-  const [setLoggedIn] = useMutation(SET_IS_LOGGED_IN_QUERY, {
-    variables: {
-      isLoggedIn: true,
-    },
-  });
 
   const [
     onCheckRegistrationUuid,
@@ -84,7 +79,7 @@ const ConfirmRegistration = (): JSX.Element => {
         confirmRegistrationData.signUp.refreshToken
       );
 
-      setLoggedIn();
+      isLoggedInVar(true);
     }
   }, [confirmRegistrationData]);
 

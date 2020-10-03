@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { CellProps } from 'react-table';
 import { useParams } from 'react-router-dom';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 import * as Yup from 'yup';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';

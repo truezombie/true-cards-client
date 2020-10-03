@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
 import { QUERY_SET_PREREGISTRATION_EMAIL } from './queries';
 
