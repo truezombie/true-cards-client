@@ -4,92 +4,32 @@ import { FormattedMessage } from 'react-intl';
 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-import {
-  useQuery,
-  useMutation,
-  useApolloClient,
-  useLazyQuery,
-} from '@apollo/react-hooks';
-import {
-  IS_EXIST_LEARNING_SESSION_QUERY,
-  LIST_CARD_SETS_QUERY,
-  LIST_CARD_SET_WITH_CARDS_QUERY,
-  CREATE_CARD_SET_QUERY,
-  UPDATE_CARD_SET_QUERY,
-  DELETE_CARD_SET_QUERY,
-  CREATE_CARD_QUERY,
-  UPDATE_CARD_QUERY,
-  DELETE_CARD_QUERY,
-  GET_ME_QUERY,
-} from './queries';
+import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks';
+import { IS_EXIST_LEARNING_SESSION_QUERY, GET_ME_QUERY } from './queries';
+import { SET_IS_LOGGED_IN_QUERY } from '../App/queries';
 import ROUTES from '../../constants/router';
 import CONTACTS from '../../constants/contacts';
-import { CardsType, CardSetsType, ContactListItem } from '../../types/app';
+import { ContactListItem } from '../../types/app';
 import {
   AppToolBar,
   PageCards,
   PageCardSets,
   PageMessage,
-  PageSettings,
   PageContacts,
 } from '../../components';
 
 import PageLearning from '../PageLearning';
 import PageStartLearning from '../PageStartLearning';
+import PageSettings from '../PageSettings';
 
 const MainPage = (): JSX.Element => {
   const location = useLocation<{ pathname: string }>();
-  const client = useApolloClient();
+  const [logOut] = useMutation(SET_IS_LOGGED_IN_QUERY, {
+    variables: {
+      isLoggedIn: false,
+    },
+  });
   const { data: user, loading: meIsLoading } = useQuery(GET_ME_QUERY);
-
-  const [
-    getCardSets,
-    {
-      loading: loadingCardSets,
-      refetch: refetchCardSets,
-      data: dataCardSetsCards,
-    },
-  ] = useLazyQuery<CardSetsType>(LIST_CARD_SETS_QUERY, {
-    notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'no-cache',
-  });
-
-  const [
-    getCardSetWithCards,
-    {
-      called: calledCardSetWithCards,
-      loading: loadingCardSetWithCards,
-      refetch: refetchCardSetWithCards,
-      data: dataCardSetWithCards,
-    },
-  ] = useLazyQuery<CardsType>(LIST_CARD_SET_WITH_CARDS_QUERY, {
-    notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'no-cache',
-  });
-
-  const [onCreateCardSet] = useMutation(CREATE_CARD_SET_QUERY, {
-    onCompleted: () => refetchCardSets(),
-  });
-
-  const [onUpdateCardSet] = useMutation(UPDATE_CARD_SET_QUERY, {
-    onCompleted: () => refetchCardSets(),
-  });
-
-  const [onDeleteCardSet] = useMutation(DELETE_CARD_SET_QUERY, {
-    onCompleted: () => refetchCardSets(),
-  });
-
-  const [onCreateCard] = useMutation(CREATE_CARD_QUERY, {
-    onCompleted: () => refetchCardSetWithCards(),
-  });
-
-  const [onUpdateCard] = useMutation(UPDATE_CARD_QUERY, {
-    onCompleted: () => refetchCardSetWithCards(),
-  });
-
-  const [onDeleteCard] = useMutation(DELETE_CARD_QUERY, {
-    onCompleted: () => refetchCardSetWithCards(),
-  });
 
   const [
     getStatusLearningSession,
@@ -105,7 +45,7 @@ const MainPage = (): JSX.Element => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('refreshToken');
 
-    client.writeData({ data: { isLoggedIn: false } });
+    logOut();
   };
 
   useEffect(() => {
@@ -172,32 +112,13 @@ const MainPage = (): JSX.Element => {
       {!activeSessionAlert ? (
         <>
           <Route exact path={ROUTES.main}>
-            <PageCardSets
-              data={dataCardSetsCards}
-              isLoading={loadingCardSets}
-              onUpdateCardSet={onUpdateCardSet}
-              onCreateCardSet={onCreateCardSet}
-              onDeleteCardSet={onDeleteCardSet}
-              getCardSets={getCardSets}
-            />
+            <PageCardSets />
           </Route>
           <Route exact path={ROUTES.cards}>
-            <PageCards
-              data={dataCardSetWithCards}
-              isLoading={loadingCardSetWithCards}
-              onCreateCard={onCreateCard}
-              onUpdateCard={onUpdateCard}
-              onDeleteCard={onDeleteCard}
-              calledCardSetWithCards={calledCardSetWithCards}
-              getCardSetWithCards={getCardSetWithCards}
-            />
+            <PageCards />
           </Route>
           <Route exact path={ROUTES.startLearning}>
-            <PageStartLearning
-              preLearningData={dataCardSetWithCards}
-              getPreLearningData={getCardSetWithCards}
-              preLearningDataIsLoading={loadingCardSetWithCards}
-            />
+            <PageStartLearning />
           </Route>
           <Route exact path={ROUTES.learning}>
             <PageLearning />

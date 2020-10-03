@@ -4,17 +4,24 @@ import { StyleRules } from '@material-ui/styles/withStyles';
 export default (theme: Theme): StyleRules =>
   createStyles({
     container: {
-      flexGrow: 1,
       display: 'flex',
-      flexDirection: 'column',
-    },
-    tabContainer: {
+      padding: 0,
       flexGrow: 1,
-      display: 'flex',
       flexDirection: 'column',
     },
     formContainer: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
       display: 'flex',
-      marginTop: theme.spacing(1),
+      flexDirection: 'column',
+    },
+    loaderWrapper: {
+      display: 'flex',
+      flexGrow: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    divider: {
+      margin: `${theme.spacing(2)}px 0`,
     },
   });

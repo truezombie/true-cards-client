@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useParams, Redirect } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import Container from '@material-ui/core/Container';
 import { WithStyles } from '@material-ui/core/styles';
@@ -11,23 +11,27 @@ import ROUTES from '../../constants/router';
 import { CardsType } from '../../types/app';
 import { hasError, ERROR_CODES } from '../../utils/errors';
 
+import { LIST_CARD_SET_WITH_CARDS_QUERY } from '../App/queries';
 import { START_LEARNING_SESSION } from './queries';
 
 import styles from './styles';
 
-interface PageStartLearningProps extends WithStyles<typeof styles> {
-  getPreLearningData: (data: { variables: { cardSetId: string } }) => void;
-  preLearningData?: CardsType;
-  preLearningDataIsLoading: boolean;
-}
+type PageStartLearningProps = WithStyles<typeof styles>;
 
 const PageStartLearning = ({
   classes,
-  preLearningData,
-  preLearningDataIsLoading,
-  getPreLearningData,
 }: PageStartLearningProps): JSX.Element => {
   const urlParams = useParams<{ id: string }>();
+
+  const { loading: preLearningDataIsLoading, data: preLearningData } = useQuery<
+    CardsType
+  >(LIST_CARD_SET_WITH_CARDS_QUERY, {
+    variables: {
+      cardSetId: urlParams.id,
+    },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'no-cache',
+  });
 
   const [
     onStartLearningSession,
@@ -37,10 +41,6 @@ const PageStartLearning = ({
       error: learningSessionError,
     },
   ] = useMutation(START_LEARNING_SESSION);
-
-  useEffect(() => {
-    getPreLearningData({ variables: { cardSetId: urlParams.id } });
-  }, []);
 
   const loader = useMemo(() => {
     return preLearningDataIsLoading ? <Loader /> : null;
@@ -76,10 +76,6 @@ const PageStartLearning = ({
       ) : null}
     </Container>
   );
-};
-
-PageStartLearning.defaultProps = {
-  preLearningData: null,
 };
 
 export default PageStartLearning;

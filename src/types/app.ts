@@ -1,3 +1,13 @@
+export type Me = {
+  me: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    forgettingIndex: string;
+  };
+};
+
 export type CardSet = {
   id: string;
   name: string;

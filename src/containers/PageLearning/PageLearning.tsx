@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Redirect } from 'react-router-dom';
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks';
 
 import ROUTES from '../../constants/router';
 import { Learning, LearningDone } from '../../components';
@@ -13,15 +13,12 @@ import {
 import { hasError, ERROR_CODES } from '../../utils/errors';
 
 const PageLearning = (): JSX.Element => {
-  const [
-    getCurrentLoadingCard,
-    {
-      loading: currentLearningCardIsLoading,
-      data: currentLearningCardData,
-      refetch: refetchCurrentLearningCardData,
-      error: currentLearningCardError,
-    },
-  ] = useLazyQuery(GET_CURRENT_LEARNING_CARD, {
+  const {
+    loading: currentLearningCardIsLoading,
+    data: currentLearningCardData,
+    refetch: refetchCurrentLearningCardData,
+    error: currentLearningCardError,
+  } = useQuery(GET_CURRENT_LEARNING_CARD, {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'no-cache',
   });
@@ -34,10 +31,6 @@ const PageLearning = (): JSX.Element => {
   ] = useMutation(SET_NEXT_LEARNING_CARD, {
     onCompleted: () => refetchCurrentLearningCardData(),
   });
-
-  useEffect(() => {
-    getCurrentLoadingCard();
-  }, []);
 
   const learningSessionError = useMemo(() => {
     return hasError(

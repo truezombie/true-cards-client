@@ -97,151 +97,153 @@ const PageConfirmRegistration = ({
         <Loader />
       ) : (
         <AppWrapperPrimaryPages>
-          {isWrongLink && !isLoading ? (
-            <Typography variant='body2' align='center'>
-              <FormattedMessage
-                id='sign.up.wrong.link'
-                values={{
-                  link: (
-                    <Link to={ROUTES.registration}>
-                      <FormattedMessage id='btn.sign.up' />
-                    </Link>
-                  ),
-                }}
-              />
-            </Typography>
-          ) : null}
-          {isCorrectLink ? (
-            <>
-              <Grid container alignItems='center' className={classes.header}>
-                <Grid item xs>
-                  <Typography component='h1' variant='h6'>
-                    Confirm registration
-                  </Typography>
-                </Grid>
-              </Grid>
-              <LoaderLinear show={confirmRegistrationIsLoading} />
-              <Formik
-                initialValues={{
-                  firstName: '',
-                  lastName: '',
-                  password: '',
-                  confirmPassword: '',
-                }}
-                validationSchema={LoginValidationSchema}
-                onSubmit={(
-                  { password, firstName, lastName },
-                  { setSubmitting }
-                ) => {
-                  onConfirmRegistration({
-                    variables: {
-                      linkUuid,
-                      password,
-                      firstName,
-                      lastName,
-                    },
-                  });
-
-                  setSubmitting(false);
-                }}
-              >
-                {({
-                  errors,
-                  touched,
-                  values,
-                  handleSubmit,
-                  handleBlur,
-                  handleChange,
-                  isSubmitting,
-                }) => (
-                  <form className={classes.form} onSubmit={handleSubmit}>
-                    <TextField
-                      variant='outlined'
-                      margin='normal'
-                      size='small'
-                      fullWidth
-                      id='firstName'
-                      label={<FormattedMessage id='input.first.name' />}
-                      name='firstName'
-                      autoComplete='firstName'
-                      autoFocus
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.firstName}
-                      error={Boolean(touched.firstName && errors.firstName)}
-                      helperText={touched.firstName && errors.firstName}
-                    />
-                    <TextField
-                      variant='outlined'
-                      margin='normal'
-                      size='small'
-                      fullWidth
-                      id='lastName'
-                      label={<FormattedMessage id='input.last.name' />}
-                      name='lastName'
-                      autoComplete='lastName'
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.lastName}
-                      error={Boolean(touched.lastName && errors.lastName)}
-                      helperText={touched.lastName && errors.lastName}
-                    />
-                    <TextField
-                      variant='outlined'
-                      margin='normal'
-                      size='small'
-                      fullWidth
-                      name='password'
-                      label={<FormattedMessage id='input.password' />}
-                      type='password'
-                      id='password'
-                      autoComplete='password'
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.password}
-                      error={Boolean(errors.password && touched.password)}
-                      helperText={touched.password && errors.password}
-                    />
-                    <TextField
-                      variant='outlined'
-                      margin='normal'
-                      size='small'
-                      fullWidth
-                      name='confirmPassword'
-                      label={<FormattedMessage id='input.password.confirm' />}
-                      type='password'
-                      id='confirmPassword'
-                      autoComplete='confirmPassword'
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.confirmPassword}
-                      error={Boolean(
-                        errors.confirmPassword && touched.confirmPassword
-                      )}
-                      helperText={
-                        touched.confirmPassword && errors.confirmPassword
-                      }
-                    />
-                    <Button
-                      type='submit'
-                      fullWidth
-                      variant='contained'
-                      color='primary'
-                      className={classes.submit}
-                      disabled={isSubmitting}
-                    >
-                      <FormattedMessage id='btn.sign.up' />
-                    </Button>
-                  </form>
-                )}
-              </Formik>
-              <Typography align='center' variant='body2'>
-                <Link to={ROUTES.registration}>
-                  <FormattedMessage id='page.registration.title' />
-                </Link>
+          <>
+            {isWrongLink && !isLoading ? (
+              <Typography variant='body2' align='center'>
+                <FormattedMessage
+                  id='sign.up.wrong.link'
+                  values={{
+                    link: (
+                      <Link to={ROUTES.registration}>
+                        <FormattedMessage id='btn.sign.up' />
+                      </Link>
+                    ),
+                  }}
+                />
               </Typography>
-            </>
-          ) : null}
+            ) : null}
+            {isCorrectLink ? (
+              <>
+                <Grid container alignItems='center' className={classes.header}>
+                  <Grid item xs>
+                    <Typography component='h1' variant='h6'>
+                      Confirm registration
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <LoaderLinear show={confirmRegistrationIsLoading} />
+                <Formik
+                  initialValues={{
+                    firstName: '',
+                    lastName: '',
+                    password: '',
+                    confirmPassword: '',
+                  }}
+                  validationSchema={LoginValidationSchema}
+                  onSubmit={(
+                    { password, firstName, lastName },
+                    { setSubmitting }
+                  ) => {
+                    onConfirmRegistration({
+                      variables: {
+                        linkUuid,
+                        password,
+                        firstName,
+                        lastName,
+                      },
+                    });
+
+                    setSubmitting(false);
+                  }}
+                >
+                  {({
+                    errors,
+                    touched,
+                    values,
+                    handleSubmit,
+                    handleBlur,
+                    handleChange,
+                    isSubmitting,
+                  }) => (
+                    <form className={classes.form} onSubmit={handleSubmit}>
+                      <TextField
+                        variant='outlined'
+                        margin='normal'
+                        size='small'
+                        fullWidth
+                        id='firstName'
+                        label={<FormattedMessage id='input.first.name' />}
+                        name='firstName'
+                        autoComplete='firstName'
+                        autoFocus
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.firstName}
+                        error={Boolean(touched.firstName && errors.firstName)}
+                        helperText={touched.firstName && errors.firstName}
+                      />
+                      <TextField
+                        variant='outlined'
+                        margin='normal'
+                        size='small'
+                        fullWidth
+                        id='lastName'
+                        label={<FormattedMessage id='input.last.name' />}
+                        name='lastName'
+                        autoComplete='lastName'
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.lastName}
+                        error={Boolean(touched.lastName && errors.lastName)}
+                        helperText={touched.lastName && errors.lastName}
+                      />
+                      <TextField
+                        variant='outlined'
+                        margin='normal'
+                        size='small'
+                        fullWidth
+                        name='password'
+                        label={<FormattedMessage id='input.password' />}
+                        type='password'
+                        id='password'
+                        autoComplete='password'
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.password}
+                        error={Boolean(errors.password && touched.password)}
+                        helperText={touched.password && errors.password}
+                      />
+                      <TextField
+                        variant='outlined'
+                        margin='normal'
+                        size='small'
+                        fullWidth
+                        name='confirmPassword'
+                        label={<FormattedMessage id='input.password.confirm' />}
+                        type='password'
+                        id='confirmPassword'
+                        autoComplete='confirmPassword'
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.confirmPassword}
+                        error={Boolean(
+                          errors.confirmPassword && touched.confirmPassword
+                        )}
+                        helperText={
+                          touched.confirmPassword && errors.confirmPassword
+                        }
+                      />
+                      <Button
+                        type='submit'
+                        fullWidth
+                        variant='contained'
+                        color='primary'
+                        className={classes.submit}
+                        disabled={isSubmitting}
+                      >
+                        <FormattedMessage id='btn.sign.up' />
+                      </Button>
+                    </form>
+                  )}
+                </Formik>
+                <Typography align='center' variant='body2'>
+                  <Link to={ROUTES.registration}>
+                    <FormattedMessage id='page.registration.title' />
+                  </Link>
+                </Typography>
+              </>
+            ) : null}
+          </>
         </AppWrapperPrimaryPages>
       )}
     </>

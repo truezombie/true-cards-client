@@ -16,6 +16,9 @@
   "input.error.max.length": "Max filed length {value} characters",
   "input.error.spaces": "This field cannot include leading and trailing spaces",
   "input.error.uuid": "Uuid is not valid",
+  "input.error.is.not.integer": "Value is not integer",
+  "input.error.min.days": "Minimum number of days {value}",
+  "input.error.max.days": "Maximum number of days {value}",
   "input.words.per.session": "I want to learn cards per session",
   "btn.save": "Save",
   "btn.add": "Add",
@@ -79,5 +82,7 @@
   "sign.up.wrong.link": "Something went wrong. Current link is not valid or you try to use old link. Go to the {link} and try again.",
   "tooltip.start.to.study.card": "Start to study",
   "tooltip.options": "Options",
-  "tooltip.go.to.cards": "Go to cards"
+  "tooltip.go.to.cards": "Go to cards",
+  "forgetting.factor.page.title": "This is the value that shows the speed of your forgetting",
+  "forgetting.factor.page.title.description": "For example. You added a card and start learning session from this card set. At the moment when the card was show you you click I KNOW. It means that next time this card will show you after days (from this input) * number of I KNOW clicks."
 }

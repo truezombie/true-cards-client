@@ -1,28 +1,34 @@
 import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import { useMutation, useQuery, useApolloClient } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { PageLogin } from '../../components';
 import ROUTES from '../../constants/router';
-import { IS_LOGGED_IN_QUERY, GET_TOKENS_QUERY } from './queries';
+import { GET_TOKENS_QUERY } from './queries';
+import { IS_LOGGED_IN_QUERY, SET_IS_LOGGED_IN_QUERY } from '../App/queries';
 
 const Login = (): JSX.Element => {
-  const { data: localState } = useQuery(IS_LOGGED_IN_QUERY);
+  const { data } = useQuery(IS_LOGGED_IN_QUERY);
   const [
-    mutate,
+    onSignIn,
     { data: dataTokens, loading: dataTokensIsLoading },
   ] = useMutation(GET_TOKENS_QUERY);
-  const client = useApolloClient();
+
+  const [setLoggedIn] = useMutation(SET_IS_LOGGED_IN_QUERY, {
+    variables: {
+      isLoggedIn: true,
+    },
+  });
 
   useEffect(() => {
     if (dataTokens) {
       localStorage.setItem('authToken', dataTokens.signIn.authToken);
       localStorage.setItem('refreshToken', dataTokens.signIn.refreshToken);
 
-      client.writeData({ data: { isLoggedIn: true } });
+      setLoggedIn();
     }
   }, [dataTokens]);
 
-  return localState.isLoggedIn ? (
+  return data?.isLoggedIn ? (
     <Redirect
       to={{
         pathname: ROUTES.main,
@@ -30,7 +36,7 @@ const Login = (): JSX.Element => {
       }}
     />
   ) : (
-    <PageLogin isLoading={dataTokensIsLoading} onSignIn={mutate} />
+    <PageLogin isLoading={dataTokensIsLoading} onSignIn={onSignIn} />
   );
 };
 

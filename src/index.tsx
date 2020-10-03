@@ -1,25 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ApolloProvider } from '@apollo/react-hooks';
+import { onError } from '@apollo/client/link/error';
+import { setContext } from '@apollo/client/link/context';
 import { SnackbarProvider, useSnackbar } from 'notistack';
-
-import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
-import { ApolloClient } from 'apollo-client';
-import { createHttpLink } from 'apollo-link-http';
-import { onError } from 'apollo-link-error';
-import { ApolloLink, Observable } from 'apollo-link';
-import { resolvers, typeDefs } from './resolvers';
+import {
+  Observable,
+  ApolloClient,
+  InMemoryCache,
+  NormalizedCacheObject,
+  ApolloProvider,
+  from,
+  createHttpLink,
+} from '@apollo/client';
+import { resolvers, typeDefs } from './localState';
 import { ERROR_CODES, getErrorMessage } from './utils/errors';
-
+import CONFIG from './utils/config';
 import App from './containers/App';
 
-const BACKEND_URL = 'http://3.122.59.81:3000/graphql';
-
 const httpLink = createHttpLink({
-  uri: BACKEND_URL,
+  uri: CONFIG.backendUrl,
   headers: {
-    authorization: localStorage.getItem('authToken'),
-    'client-name': 'True cards [web]',
+    'client-name': 'true-cards.com',
     'client-version': '1.0.0',
   },
 });
@@ -28,6 +29,8 @@ const ApolloComponent = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const errorLink = onError(
+    // TODO: need to refactor
+    // eslint-disable-next-line consistent-return
     ({ graphQLErrors, networkError, operation, forward }) => {
       if (graphQLErrors) {
         const { cache } = operation.getContext();
@@ -35,10 +38,10 @@ const ApolloComponent = () => {
         const errorCode = graphQLErrors[0]?.message;
 
         if (errorCode === ERROR_CODES.ERROR_TOKEN_AUTH_IS_NOT_VALID) {
-          const refreshToken = localStorage.getItem('refreshToken');
+          const oldRefreshToken = localStorage.getItem('refreshToken');
 
           return new Observable((observer) => {
-            fetch(BACKEND_URL, {
+            fetch(CONFIG.backendUrl, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -51,46 +54,41 @@ const ApolloComponent = () => {
                 }
               `,
                 variables: {
-                  token: refreshToken,
+                  token: oldRefreshToken,
                 },
               }),
             })
               .then((res) => res.json())
-              .then((res) => {
-                localStorage.setItem(
-                  'authToken',
-                  res.data.generateTokens.authToken
-                );
-                localStorage.setItem(
-                  'refreshToken',
-                  res.data.generateTokens.refreshToken
-                );
-
-                operation.setContext({
-                  headers: {
-                    ...oldHeaders,
-                    authorization: res.data.generateTokens.authToken,
+              .then(
+                ({
+                  data: {
+                    generateTokens: { authToken, refreshToken },
                   },
-                });
+                }) => {
+                  localStorage.setItem('authToken', authToken);
+                  localStorage.setItem('refreshToken', refreshToken);
+                  operation.setContext({
+                    headers: {
+                      ...oldHeaders,
+                      authorization: authToken,
+                    },
+                  });
 
-                const subscriber = {
-                  next: observer.next.bind(observer),
-                  error: observer.error.bind(observer),
-                  complete: observer.complete.bind(observer),
-                };
-
-                forward(operation).subscribe(subscriber);
-              })
+                  forward(operation).subscribe({
+                    next: observer.next.bind(observer),
+                    error: observer.error.bind(observer),
+                    complete: observer.complete.bind(observer),
+                  });
+                }
+              )
               .catch((e) => {
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('refreshToken');
-
                 cache.writeData({
                   data: {
                     isLoggedIn: !!localStorage.getItem('authToken'),
                   },
                 });
-
                 observer.error(e);
               });
           });
@@ -111,20 +109,21 @@ const ApolloComponent = () => {
     }
   );
 
-  const cache = new InMemoryCache();
-
-  const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-    cache,
-    link: ApolloLink.from([errorLink, httpLink]),
-    resolvers,
-    typeDefs,
+  const authLink = setContext((_, { headers }) => {
+    const token = localStorage.getItem('authToken');
+    return {
+      headers: {
+        ...headers,
+        authorization: token || '',
+      },
+    };
   });
 
-  cache.writeData({
-    data: {
-      errorMessage: '',
-      isLoggedIn: !!localStorage.getItem('authToken'),
-    },
+  const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+    cache: new InMemoryCache(),
+    link: from([errorLink, authLink.concat(httpLink)]),
+    resolvers,
+    typeDefs,
   });
 
   return (

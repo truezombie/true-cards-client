@@ -23,7 +23,6 @@ import PageLogin from './PageLogin';
 import PageCards from './PageCards';
 import PageCardSets from './PageCardSets';
 import PageRegistration from './PageRegistration';
-import PageSettings from './PageSettings';
 import PageContacts from './PageContacts';
 import PageForgotPassword from './PageForgotPassword';
 import PageConfirmRegistration from './PageConfirmRegistration';
@@ -54,7 +53,6 @@ export {
   PageLogin,
   PageCardSets,
   PageCards,
-  PageSettings,
   PageContacts,
   PageForgotPassword,
   PageConfirmRegistration,

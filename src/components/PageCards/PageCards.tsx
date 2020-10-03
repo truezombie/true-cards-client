@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { CellProps } from 'react-table';
 import { useParams } from 'react-router-dom';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import * as Yup from 'yup';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -10,9 +11,11 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Container from '@material-ui/core/Container';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Checkbox from '@material-ui/core/Checkbox';
+import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
 import Card from '@material-ui/core/Card';
 
@@ -23,10 +26,18 @@ import CardStatus from '../CardStatus';
 import { Loader } from '../Loader';
 import Table from '../Table';
 
+import { LIST_CARD_SET_WITH_CARDS_QUERY } from '../../containers/App/queries';
+import {
+  CREATE_CARD_QUERY,
+  UPDATE_CARD_QUERY,
+  DELETE_CARD_QUERY,
+} from './queries';
 import { CardsType, CardType } from '../../types/app';
 import DialogConfirm from '../DialogConfirm';
 import ROUTES from '../../constants/router';
 import APP from '../../constants/app';
+import Menu from '../Menu';
+
 import styles from './styles';
 
 type manageCard = {
@@ -47,36 +58,7 @@ type deleteCard = {
   front: string;
 };
 
-interface PageCardsProps extends WithStyles<typeof styles> {
-  data?: CardsType;
-  isLoading: boolean;
-  calledCardSetWithCards: boolean;
-  getCardSetWithCards: (data: { variables: { cardSetId: string } }) => void;
-  onCreateCard: (data: {
-    variables: {
-      cardSetId: string;
-      front: string;
-      frontDescription?: string;
-      back?: string;
-      backDescription?: string;
-      hasBackSide?: boolean;
-    };
-  }) => void;
-  onUpdateCard: (data: {
-    variables: {
-      cardSetId: string;
-      uuid: string;
-      front: string;
-      frontDescription?: string;
-      back?: string;
-      backDescription?: string;
-      hasBackSide?: boolean;
-    };
-  }) => void;
-  onDeleteCard: (data: {
-    variables: { cardUuid: string; cardSetId: string };
-  }) => void;
-}
+type PageCardsProps = WithStyles<typeof styles>;
 
 const initialStateDeleteModal: deleteCard = {
   show: false,
@@ -96,16 +78,7 @@ const initialStateManageModal: manageCard = {
   hasBackSide: false,
 };
 
-const PageCards = ({
-  classes,
-  getCardSetWithCards,
-  calledCardSetWithCards,
-  data,
-  isLoading,
-  onCreateCard,
-  onDeleteCard,
-  onUpdateCard,
-}: PageCardsProps): JSX.Element => {
+const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
   const intl = useIntl();
   const urlParams = useParams<{ id: string }>();
   const [deleteCardModalData, setDeleteCardModalData] = useState<deleteCard>(
@@ -115,49 +88,30 @@ const PageCards = ({
     initialStateManageModal
   );
 
-  const editCell = ({
-    cell: {
-      row: { original },
+  const {
+    called: calledCardSetWithCards,
+    refetch: refetchCardSetWithCards,
+    loading: isLoading,
+    data,
+  } = useQuery<CardsType>(LIST_CARD_SET_WITH_CARDS_QUERY, {
+    variables: {
+      cardSetId: urlParams.id,
     },
-  }: CellProps<CardType>) => {
-    return (
-      <IconButton
-        onClick={() => {
-          setManageCardModalData({
-            show: true,
-            edit: true,
-            create: false,
-            ...original,
-          });
-        }}
-        aria-label='edit'
-      >
-        <EditIcon fontSize='small' />
-      </IconButton>
-    );
-  };
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'no-cache',
+  });
 
-  const deleteCell = ({
-    value,
-    cell: {
-      row: { original },
-    },
-  }: CellProps<CardType>) => {
-    return (
-      <IconButton
-        onClick={() => {
-          setDeleteCardModalData({
-            show: true,
-            uuid: value,
-            front: original.front,
-          });
-        }}
-        aria-label='delete'
-      >
-        <DeleteIcon fontSize='small' />
-      </IconButton>
-    );
-  };
+  const [onCreateCard] = useMutation(CREATE_CARD_QUERY, {
+    onCompleted: () => refetchCardSetWithCards(),
+  });
+
+  const [onUpdateCard] = useMutation(UPDATE_CARD_QUERY, {
+    onCompleted: () => refetchCardSetWithCards(),
+  });
+
+  const [onDeleteCard] = useMutation(DELETE_CARD_QUERY, {
+    onCompleted: () => refetchCardSetWithCards(),
+  });
 
   const statusCell = ({
     cell: {
@@ -166,6 +120,58 @@ const PageCards = ({
   }: CellProps<CardType>) => {
     return <CardStatus card={original} />;
   };
+
+  const getDropDownMenuItems = useCallback((original, value) => {
+    return [
+      {
+        id: 'edit',
+        text: <FormattedMessage id='btn.edit' />,
+        icon: <EditIcon />,
+        onClick: () => {
+          setManageCardModalData({
+            show: true,
+            edit: true,
+            create: false,
+            ...original,
+          });
+        },
+      },
+      {
+        id: 'delete',
+        text: <FormattedMessage id='btn.delete' />,
+        icon: <DeleteIcon />,
+        onClick: () => {
+          setDeleteCardModalData({
+            show: true,
+            uuid: value,
+            front: original.front,
+          });
+        },
+      },
+    ];
+  }, []);
+
+  const editAndDeleteCell = ({
+    value,
+    cell: {
+      row: { original },
+    },
+  }: CellProps<CardType>) => (
+    <Menu items={getDropDownMenuItems(original, value)}>
+      <Tooltip
+        disableFocusListener
+        title={<FormattedMessage id='tooltip.options' />}
+      >
+        <IconButton
+          aria-label='more'
+          aria-controls='simple-menu'
+          aria-haspopup='true'
+        >
+          <MoreVertIcon fontSize='small' />
+        </IconButton>
+      </Tooltip>
+    </Menu>
+  );
 
   const columns = React.useMemo(
     () => [
@@ -187,18 +193,11 @@ const PageCards = ({
         Cell: statusCell,
       },
       {
-        id: 'edit',
+        id: 'actions',
         Header: '',
         accessor: 'uuid',
         width: 60,
-        Cell: editCell,
-      },
-      {
-        id: 'delete',
-        Header: '',
-        accessor: 'uuid',
-        width: 60,
-        Cell: deleteCell,
+        Cell: editAndDeleteCell,
       },
     ],
     []
@@ -267,12 +266,6 @@ const PageCards = ({
           submit: <FormattedMessage id='btn.add' />,
         };
   }, [manageCardModalData.edit, manageCardModalData.create]);
-
-  useEffect(() => {
-    if (urlParams.id) {
-      getCardSetWithCards({ variables: { cardSetId: urlParams.id } });
-    }
-  }, []);
 
   return (
     <>
@@ -485,10 +478,6 @@ const PageCards = ({
       ) : null}
     </>
   );
-};
-
-PageCards.defaultProps = {
-  data: null,
 };
 
 export default PageCards;

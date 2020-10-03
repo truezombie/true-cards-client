@@ -1,20 +1,22 @@
-import * as React from 'react';
+import React from 'react';
+import { useQuery } from '@apollo/react-hooks';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
+
+import { IS_LOGGED_IN_QUERY } from '../../containers/App/queries';
 
 import ROUTES from '../../constants/router';
 
-interface PrivateRouteProps extends RouteProps {
-  isLoggedIn: boolean;
-}
+// TODO: need move to containers
+const PrivateRoute = (props: RouteProps): JSX.Element => {
+  const { data } = useQuery(IS_LOGGED_IN_QUERY);
 
-const PrivateRoute = (props: PrivateRouteProps): JSX.Element => {
-  const { children, isLoggedIn, ...rest } = props;
+  const { children, ...rest } = props;
 
   return (
     <Route
       {...rest} // eslint-disable-line react/jsx-props-no-spreading
       render={() =>
-        isLoggedIn ? (
+        data?.isLoggedIn ? (
           children
         ) : (
           <Redirect

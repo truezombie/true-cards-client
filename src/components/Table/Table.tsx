@@ -1,5 +1,5 @@
-import React, { FC, useMemo } from 'react';
-import { useTable, Column } from 'react-table';
+import React, { useMemo, ReactElement, PropsWithChildren } from 'react';
+import { useTable, TableOptions } from 'react-table';
 
 import Paper from '@material-ui/core/Paper';
 import MUITable from '@material-ui/core/Table';
@@ -11,14 +11,17 @@ import { WithStyles } from '@material-ui/core/styles';
 
 import styles from '../PageMainHeader/styles';
 
-type Data = object;
+// eslint-disable-next-line @typescript-eslint/ban-types
+export interface TableProps<T extends object = {}>
+  extends TableOptions<T>,
+    WithStyles<typeof styles> {}
 
-interface TableProps extends WithStyles<typeof styles> {
-  columns: Column<Data>[];
-  data: Data[];
-}
-
-const Table: FC<TableProps> = ({ columns, data, classes }: TableProps) => {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function Table<T extends object>({
+  columns,
+  data,
+  classes,
+}: PropsWithChildren<TableProps<T>>): ReactElement {
   const defaultColumn = React.useMemo(
     () => ({
       width: 0,
@@ -33,7 +36,7 @@ const Table: FC<TableProps> = ({ columns, data, classes }: TableProps) => {
     rows,
     prepareRow,
     getTableBodyProps,
-  } = useTable({
+  } = useTable<T>({
     defaultColumn,
     columns,
     data,
@@ -92,6 +95,6 @@ const Table: FC<TableProps> = ({ columns, data, classes }: TableProps) => {
       </MUITable>
     </Paper>
   );
-};
+}
 
 export default Table;

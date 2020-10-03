@@ -1,0 +1,2 @@
+export const MIN_INDEX_DAYS_FOR_FORGETTING = 1;
+export const MAX_INDEX_DAYS_FOR_FORGETTING = 10;

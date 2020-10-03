@@ -1,20 +1,21 @@
-import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import * as Yup from 'yup';
 import { CellProps } from 'react-table';
 import { Link } from 'react-router-dom';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
+import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { WithStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
+import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { WithStyles } from '@material-ui/core/styles';
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 
 import Table from '../Table';
 import { Loader } from '../Loader';
@@ -28,6 +29,12 @@ import ROUTES from '../../constants/router';
 import { CardSetsType, CardSet } from '../../types/app';
 import styles from './styles';
 import Menu from '../Menu';
+import {
+  LIST_CARD_SETS_QUERY,
+  CREATE_CARD_SET_QUERY,
+  UPDATE_CARD_SET_QUERY,
+  DELETE_CARD_SET_QUERY,
+} from './queries';
 
 type ModalDeleteCardSet = {
   show: boolean;
@@ -43,16 +50,7 @@ type ModalManageCardSet = {
   name: string;
 };
 
-interface PageCardSetsProps extends WithStyles<typeof styles> {
-  data?: CardSetsType;
-  isLoading: boolean;
-  getCardSets: () => void;
-  onCreateCardSet: (data: { variables: { name: string } }) => void;
-  onDeleteCardSet: (data: { variables: { cardSetId: string } }) => void;
-  onUpdateCardSet: (data: {
-    variables: { cardSetId: string; name: string };
-  }) => void;
-}
+type PageCardSetsProps = WithStyles<typeof styles>;
 
 const modalInitialStateDeleteCardSet: ModalDeleteCardSet = {
   show: false,
@@ -68,15 +66,26 @@ const modalInitialStateManageCardSet: ModalManageCardSet = {
   name: '',
 };
 
-const PageCardSets = ({
-  data,
-  classes,
-  isLoading,
-  getCardSets,
-  onUpdateCardSet,
-  onCreateCardSet,
-  onDeleteCardSet,
-}: PageCardSetsProps): JSX.Element => {
+const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
+  const { loading: isLoading, refetch: refetchCardSets, data } = useQuery<
+    CardSetsType
+  >(LIST_CARD_SETS_QUERY, {
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'no-cache',
+  });
+
+  const [onCreateCardSet] = useMutation(CREATE_CARD_SET_QUERY, {
+    onCompleted: () => refetchCardSets(),
+  });
+
+  const [onUpdateCardSet] = useMutation(UPDATE_CARD_SET_QUERY, {
+    onCompleted: () => refetchCardSets(),
+  });
+
+  const [onDeleteCardSet] = useMutation(DELETE_CARD_SET_QUERY, {
+    onCompleted: () => refetchCardSets(),
+  });
+
   const intl = useIntl();
   const [deleteCardSet, setDeleteCardSet] = useState<ModalDeleteCardSet>(
     modalInitialStateDeleteCardSet
@@ -92,10 +101,6 @@ const PageCardSets = ({
       onDeleteCardSet({ variables: { cardSetId: deleteCardSet.id } });
     }
   }, [deleteCardSet.id]);
-
-  useEffect(() => {
-    getCardSets();
-  }, []);
 
   const createNewCardSetValidationSchema = Yup.object().shape({
     name: Yup.string()
@@ -390,10 +395,6 @@ const PageCardSets = ({
       />
     </Container>
   );
-};
-
-PageCardSets.defaultProps = {
-  data: null,
 };
 
 export default PageCardSets;
