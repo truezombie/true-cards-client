@@ -1,19 +1,21 @@
-import { InMemoryCache } from '@apollo/client';
+import { InMemoryCache, makeVar } from '@apollo/client';
+import { GraphQLError } from 'graphql';
 
-// TODO: need refactor
+export const isLoggedInVar = makeVar<boolean>(!!localStorage.getItem('token'));
+
+export const graphQLErrorsVar = makeVar<readonly GraphQLError[]>([]);
+
 export const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
         isLoggedIn() {
-          // eslint-disable-next-line no-use-before-define
           return isLoggedInVar();
+        },
+        graphQLErrors() {
+          return graphQLErrorsVar();
         },
       },
     },
   },
 });
-
-export const isLoggedInVar = cache.makeVar<boolean>(
-  !!localStorage.getItem('token')
-);

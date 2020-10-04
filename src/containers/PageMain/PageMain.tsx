@@ -17,7 +17,6 @@ import {
   PageMessage,
   PageContacts,
 } from '../../components';
-
 import PageLearning from '../PageLearning';
 import PageStartLearning from '../PageStartLearning';
 import PageSettings from '../PageSettings';

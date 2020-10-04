@@ -2,10 +2,12 @@ import React, { lazy, Suspense } from 'react';
 import { IntlProvider } from 'react-intl';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { SnackbarProvider } from 'notistack';
 import { ThemeProvider } from '@material-ui/core/styles';
 
 import { Loader, AppWrapper, PrivateRoute } from '../../components';
 import ROUTES from '../../constants/router';
+import CONFIG from '../../utils/config';
 
 import theme from './theme';
 
@@ -32,29 +34,31 @@ const App = (): JSX.Element => {
     <IntlProvider locale='en' messages={messages.en}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <AppWrapper>
-          <Router>
-            <Suspense fallback={<Loader />}>
-              <Switch>
-                <Route path={ROUTES.login}>
-                  <PageLogin />
-                </Route>
-                <Route path={ROUTES.registration} exact>
-                  <PageRegistration />
-                </Route>
-                <Route path={ROUTES.registrationConfirm} exact>
-                  <PageConfirmRegistration />
-                </Route>
-                <Route path={ROUTES.forgotPassword}>
-                  <PageForgotPassword />
-                </Route>
-                <PrivateRoute path={ROUTES.main}>
-                  <PageMain />
-                </PrivateRoute>
-              </Switch>
-            </Suspense>
-          </Router>
-        </AppWrapper>
+        <SnackbarProvider maxSnack={CONFIG.maxErrorMessages}>
+          <AppWrapper>
+            <Router>
+              <Suspense fallback={<Loader />}>
+                <Switch>
+                  <Route path={ROUTES.login}>
+                    <PageLogin />
+                  </Route>
+                  <Route path={ROUTES.registration} exact>
+                    <PageRegistration />
+                  </Route>
+                  <Route path={ROUTES.registrationConfirm} exact>
+                    <PageConfirmRegistration />
+                  </Route>
+                  <Route path={ROUTES.forgotPassword}>
+                    <PageForgotPassword />
+                  </Route>
+                  <PrivateRoute path={ROUTES.main}>
+                    <PageMain />
+                  </PrivateRoute>
+                </Switch>
+              </Suspense>
+            </Router>
+          </AppWrapper>
+        </SnackbarProvider>
       </ThemeProvider>
     </IntlProvider>
   );

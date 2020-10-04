@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
-import { SnackbarProvider, useSnackbar } from 'notistack';
 import {
   Observable,
   ApolloClient,
@@ -12,10 +11,13 @@ import {
   createHttpLink,
 } from '@apollo/client';
 import { resolvers, typeDefs } from './localState';
-import { ERROR_CODES, getErrorMessage } from './utils/errors';
-import { cache, isLoggedInVar } from './cache';
+import { ERROR_CODES } from './utils/errors';
+import { cache, isLoggedInVar, graphQLErrorsVar } from './cache';
 import CONFIG from './utils/config';
 import App from './containers/App';
+
+// TODO: need to refactor
+isLoggedInVar(!!localStorage.getItem('authToken'));
 
 const httpLink = createHttpLink({
   uri: CONFIG.backendUrl,
@@ -25,113 +27,93 @@ const httpLink = createHttpLink({
   },
 });
 
-const ApolloComponent = () => {
-  const { enqueueSnackbar } = useSnackbar();
+const errorLink = onError(
+  // TODO: need to refactor
+  // eslint-disable-next-line consistent-return
+  ({ graphQLErrors, networkError, operation, forward }) => {
+    if (graphQLErrors) {
+      graphQLErrorsVar(graphQLErrors);
 
-  const errorLink = onError(
-    // TODO: need to refactor
-    // eslint-disable-next-line consistent-return
-    ({ graphQLErrors, networkError, operation, forward }) => {
-      if (graphQLErrors) {
-        // const { cache } = operation.getContext();
-        const oldHeaders = operation.getContext().headers;
-        const errorCode = graphQLErrors[0]?.message;
+      const oldHeaders = operation.getContext().headers;
+      const errorCode = graphQLErrors[0]?.message;
 
-        if (errorCode === ERROR_CODES.ERROR_TOKEN_AUTH_IS_NOT_VALID) {
-          const oldRefreshToken = localStorage.getItem('refreshToken');
-
-          return new Observable((observer) => {
-            fetch(CONFIG.backendUrl, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                query: `
-                mutation($token: String!) {
-                  generateTokens(token: $token) {
-                    authToken
-                    refreshToken
-                  }
+      if (errorCode === ERROR_CODES.ERROR_TOKEN_AUTH_IS_NOT_VALID) {
+        return new Observable((observer) => {
+          fetch(CONFIG.backendUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              query: `
+              mutation($token: String!) {
+                generateTokens(token: $token) {
+                  authToken
+                  refreshToken
                 }
-              `,
-                variables: {
-                  token: oldRefreshToken,
+              }
+            `,
+              variables: {
+                token: localStorage.getItem('refreshToken'),
+              },
+            }),
+          })
+            .then((res) => res.json())
+            .then(
+              ({
+                data: {
+                  generateTokens: { authToken, refreshToken },
                 },
-              }),
-            })
-              .then((res) => res.json())
-              .then(
-                ({
-                  data: {
-                    generateTokens: { authToken, refreshToken },
+              }) => {
+                localStorage.setItem('authToken', authToken);
+                localStorage.setItem('refreshToken', refreshToken);
+                operation.setContext({
+                  headers: {
+                    ...oldHeaders,
+                    authorization: authToken,
                   },
-                }) => {
-                  localStorage.setItem('authToken', authToken);
-                  localStorage.setItem('refreshToken', refreshToken);
-                  operation.setContext({
-                    headers: {
-                      ...oldHeaders,
-                      authorization: authToken,
-                    },
-                  });
+                });
 
-                  forward(operation).subscribe({
-                    next: observer.next.bind(observer),
-                    error: observer.error.bind(observer),
-                    complete: observer.complete.bind(observer),
-                  });
-                }
-              )
-              .catch((e) => {
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('refreshToken');
-                isLoggedInVar(false);
-                observer.error(e);
-              });
-          });
-        }
-
-        if (networkError) {
-          console.log(`[Network error]: ${networkError}`); // eslint-disable-line
-        }
-
-        graphQLErrors.forEach((error) => {
-          const errorMessage = getErrorMessage(error.message);
-
-          if (errorMessage) {
-            enqueueSnackbar(errorMessage);
-          }
+                forward(operation).subscribe({
+                  next: observer.next.bind(observer),
+                  error: observer.error.bind(observer),
+                  complete: observer.complete.bind(observer),
+                });
+              }
+            )
+            .catch((e) => {
+              localStorage.removeItem('authToken');
+              localStorage.removeItem('refreshToken');
+              isLoggedInVar(false);
+              observer.error(e);
+            });
         });
       }
+
+      if (networkError) {
+        console.log(`[Network error]: ${networkError}`); // eslint-disable-line
+      }
     }
-  );
+  }
+);
 
-  const authLink = setContext((_, { headers }) => {
-    const token = localStorage.getItem('authToken');
-    return {
-      headers: {
-        ...headers,
-        authorization: token || '',
-      },
-    };
-  });
+const authLink = setContext((_, { headers }) => {
+  return {
+    headers: {
+      ...headers,
+      authorization: localStorage.getItem('authToken') || '',
+    },
+  };
+});
 
-  const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-    cache,
-    link: from([errorLink, authLink.concat(httpLink)]),
-    resolvers,
-    typeDefs,
-  });
-
-  return (
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
-  );
-};
+const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+  cache,
+  link: from([errorLink, authLink.concat(httpLink)]),
+  resolvers,
+  typeDefs,
+});
 
 ReactDOM.render(
-  <SnackbarProvider maxSnack={5}>
-    <ApolloComponent />
-  </SnackbarProvider>,
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>,
   document.getElementById('root')
 );
