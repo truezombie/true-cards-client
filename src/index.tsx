@@ -12,7 +12,7 @@ import {
 } from '@apollo/client';
 import { resolvers, typeDefs } from './localState';
 import { ERROR_CODES } from './utils/errors';
-import { cache, isLoggedInVar, graphQLErrorsVar } from './cache';
+import { cache, isLoggedInVar } from './cache';
 import CONFIG from './utils/config';
 import App from './containers/App';
 
@@ -32,8 +32,6 @@ const errorLink = onError(
   // eslint-disable-next-line consistent-return
   ({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
-      graphQLErrorsVar(graphQLErrors);
-
       const oldHeaders = operation.getContext().headers;
       const errorCode = graphQLErrors[0]?.message;
 

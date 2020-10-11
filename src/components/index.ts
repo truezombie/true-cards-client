@@ -11,21 +11,9 @@ import PageMainHeader from './PageMainHeader';
 import Menu from './Menu';
 import FullBlockMessage from './FullBlockMessage';
 import AppToolBar from './AppToolBar';
-import StartLearning from './StartLearning';
-import Learning from './Learning';
-import LearningDone from './LearningDone';
 import CardSide from './CardSide';
 import CardStatus from './CardStatus';
 import Table from './Table';
-
-import PageMessage from './PageMessage';
-import PageLogin from './PageLogin';
-import PageCards from './PageCards';
-import PageCardSets from './PageCardSets';
-import PageRegistration from './PageRegistration';
-import PageContacts from './PageContacts';
-import PageForgotPassword from './PageForgotPassword';
-import PageConfirmRegistration from './PageConfirmRegistration';
 
 export {
   Loader,
@@ -43,17 +31,6 @@ export {
   FullBlockMessage,
   AppToolBar,
   CardSide,
-  StartLearning,
-  Learning,
   CardStatus,
-  LearningDone,
   Table,
-  PageMessage,
-  PageRegistration,
-  PageLogin,
-  PageCardSets,
-  PageCards,
-  PageContacts,
-  PageForgotPassword,
-  PageConfirmRegistration,
 };

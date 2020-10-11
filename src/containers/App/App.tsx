@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { IntlProvider } from 'react-intl';
+import { useQuery } from '@apollo/client';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { SnackbarProvider } from 'notistack';
@@ -8,6 +9,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { Loader, AppWrapper, PrivateRoute } from '../../components';
 import ROUTES from '../../constants/router';
 import CONFIG from '../../utils/config';
+import { IS_LOGGED_IN_QUERY } from './queries';
 
 import theme from './theme';
 
@@ -15,12 +17,14 @@ import messagesEn from '../../translations/en.json';
 import messagesRu from '../../translations/ru.json';
 import messagesUa from '../../translations/ua.json';
 
-const PageMain = lazy(() => import('../PageMain'));
-const PageLogin = lazy(() => import('../PageLogin'));
-const PageRegistration = lazy(() => import('../PageRegistration'));
-const PageForgotPassword = lazy(() => import('../PageForgotPassword'));
-const PageConfirmRegistration = lazy(
-  () => import('../PageConfirmRegistration')
+const ContainerMain = lazy(() => import('../ContainerMain'));
+const ContainerLogin = lazy(() => import('../ContainerLogin'));
+const ContainerRegistration = lazy(() => import('../ContainerRegistration'));
+const ContainerForgotPassword = lazy(
+  () => import('../ContainerForgotPassword')
+);
+const ContainerConfirmRegistration = lazy(
+  () => import('../ContainerConfirmRegistration')
 );
 
 const messages = {
@@ -30,6 +34,8 @@ const messages = {
 };
 
 const App = (): JSX.Element => {
+  const { data } = useQuery(IS_LOGGED_IN_QUERY);
+
   return (
     <IntlProvider locale='en' messages={messages.en}>
       <ThemeProvider theme={theme}>
@@ -40,19 +46,22 @@ const App = (): JSX.Element => {
               <Suspense fallback={<Loader />}>
                 <Switch>
                   <Route path={ROUTES.login}>
-                    <PageLogin />
+                    <ContainerLogin />
                   </Route>
                   <Route path={ROUTES.registration} exact>
-                    <PageRegistration />
+                    <ContainerRegistration />
                   </Route>
                   <Route path={ROUTES.registrationConfirm} exact>
-                    <PageConfirmRegistration />
+                    <ContainerConfirmRegistration />
                   </Route>
                   <Route path={ROUTES.forgotPassword}>
-                    <PageForgotPassword />
+                    <ContainerForgotPassword />
                   </Route>
-                  <PrivateRoute path={ROUTES.main}>
-                    <PageMain />
+                  <PrivateRoute
+                    isLoggedIn={!!data?.isLoggedIn}
+                    path={ROUTES.main}
+                  >
+                    <ContainerMain />
                   </PrivateRoute>
                 </Switch>
               </Suspense>

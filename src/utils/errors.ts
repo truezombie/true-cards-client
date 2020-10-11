@@ -1,4 +1,4 @@
-import { GraphQLError } from 'graphql';
+import { ApolloError } from '@apollo/client';
 
 import { HasErrorObject } from '../types/app';
 
@@ -53,13 +53,13 @@ export const getErrorMessage: getErrorMessageType = (errorCode) => {
 };
 
 export type HasError = (
-  gqlErrors: readonly GraphQLError[] | undefined,
+  gqlErrors: ApolloError | undefined,
   errorCode: string
 ) => HasErrorObject;
 
-export const hasError: HasError = (gqlErrors, errorCode) => {
-  const currentError = gqlErrors
-    ? gqlErrors.find((error) => error.message === errorCode)
+export const hasError: HasError = (error, errorCode) => {
+  const currentError = error?.graphQLErrors
+    ? error?.graphQLErrors.find((e) => e.message === errorCode)
     : null;
   const currentErrorMessage = currentError ? getErrorMessage(errorCode) : null;
 
