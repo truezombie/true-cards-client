@@ -83,6 +83,8 @@
   "tooltip.start.to.study.card": "Start to study",
   "tooltip.options": "Options",
   "tooltip.go.to.cards": "Go to cards",
+  "tooltip.search": "Search",
+  "tooltip.clear": "Clear",
   "forgetting.factor.page.title": "This is the value that shows the speed of your forgetting",
   "forgetting.factor.page.title.description": "For example. You added a card and start learning session from this card set. At the moment when the card was show you you click I KNOW. It means that next time this card will show you after days (from this input) * number of I KNOW clicks."
 }

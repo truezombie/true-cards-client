@@ -8,19 +8,42 @@ import MUITableBody from '@material-ui/core/TableBody';
 import MUITableRow from '@material-ui/core/TableRow';
 import MUITableCell from '@material-ui/core/TableCell';
 import { WithStyles } from '@material-ui/core/styles';
+import TableSearchInput from './TableSearchInput';
+import TablePagination from './TablePagination';
 
 import styles from '../PageMainHeader/styles';
+import { LoaderLinear, Loader } from '../Loader';
+import FullBlockMessage from '../FullBlockMessage';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export interface TableProps<T extends object = {}>
   extends TableOptions<T>,
-    WithStyles<typeof styles> {}
+    WithStyles<typeof styles> {
+  onSearch: (search: string) => void;
+  onPageChange: (page: number) => void;
+  onRowsPerPageChange: (rows: number) => void;
+  paginationItemsCount: number;
+  page: number;
+  rowsPerPage: number;
+  isLoading: boolean;
+  msgNoData: JSX.Element | string;
+  searchValue: string;
+}
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function Table<T extends object>({
   columns,
   data,
   classes,
+  page,
+  rowsPerPage,
+  onSearch,
+  paginationItemsCount,
+  onRowsPerPageChange,
+  onPageChange,
+  isLoading,
+  searchValue,
+  msgNoData,
 }: PropsWithChildren<TableProps<T>>): ReactElement {
   const defaultColumn = React.useMemo(
     () => ({
@@ -58,42 +81,70 @@ export function Table<T extends object>({
   }, [flatHeaders]);
 
   return (
-    <Paper elevation={0} variant='outlined' className={classes.tableWrapper}>
-      <MUITable {...getTableProps()}>
-        {colGroups}
-        <MUITableHead>
-          {headerGroups.map((headerGroup) => (
-            // eslint-disable-next-line react/jsx-key
-            <MUITableRow {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                // eslint-disable-next-line react/jsx-key
-                <MUITableCell {...column.getHeaderProps()}>
-                  {column.render('Header')}
-                </MUITableCell>
-              ))}
-            </MUITableRow>
-          ))}
-        </MUITableHead>
-        <MUITableBody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            return (
-              // eslint-disable-next-line react/jsx-key
-              <MUITableRow hover {...row.getRowProps()}>
-                {row.cells.map((cell) => {
+    <>
+      <TableSearchInput onSearch={onSearch} searchValue={searchValue} />
+      <LoaderLinear show={isLoading && data.length !== 0} />
+      {isLoading && !data.length ? <Loader /> : null}
+      {!isLoading && !data.length ? (
+        <FullBlockMessage message={msgNoData} />
+      ) : null}
+      {data.length ? (
+        <>
+          <Paper
+            elevation={0}
+            variant='outlined'
+            className={classes.tableWrapper}
+          >
+            <MUITable {...getTableProps()}>
+              {colGroups}
+              <MUITableHead>
+                {headerGroups.map((headerGroup) => (
+                  // eslint-disable-next-line react/jsx-key
+                  <MUITableRow {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      // eslint-disable-next-line react/jsx-key
+                      <MUITableCell {...column.getHeaderProps()}>
+                        {column.render('Header')}
+                      </MUITableCell>
+                    ))}
+                  </MUITableRow>
+                ))}
+              </MUITableHead>
+              <MUITableBody {...getTableBodyProps()}>
+                {rows.map((row) => {
+                  prepareRow(row);
                   return (
                     // eslint-disable-next-line react/jsx-key
-                    <MUITableCell {...cell.getCellProps()}>
-                      {cell.value ? cell.render('Cell') : '-'}
-                    </MUITableCell>
+                    <MUITableRow hover {...row.getRowProps()}>
+                      {row.cells.map((cell) => {
+                        return (
+                          // eslint-disable-next-line react/jsx-key
+                          <MUITableCell
+                            valign='middle'
+                            {...cell.getCellProps()}
+                          >
+                            {cell.value ? cell.render('Cell') : '-'}
+                          </MUITableCell>
+                        );
+                      })}
+                    </MUITableRow>
                   );
                 })}
-              </MUITableRow>
-            );
-          })}
-        </MUITableBody>
-      </MUITable>
-    </Paper>
+              </MUITableBody>
+            </MUITable>
+          </Paper>
+          <TablePagination
+            count={paginationItemsCount}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            onChangePage={(event, newPage) => onPageChange(newPage)}
+            onChangeRowsPerPage={(event) =>
+              onRowsPerPageChange(parseInt(event.target.value, 10))
+            }
+          />
+        </>
+      ) : null}
+    </>
   );
 }
 

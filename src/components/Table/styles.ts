@@ -1,13 +1,14 @@
 import { createStyles, Theme } from '@material-ui/core/styles';
 import { StyleRules } from '@material-ui/styles/withStyles';
 
-export default (theme: Theme): StyleRules =>
+const tableStyles = (theme: Theme): StyleRules =>
   createStyles({
     tableWrapper: {
+      marginTop: theme.spacing(1),
       '& table': {
         tableLayout: 'fixed',
         '& th, td': {
-          height: '54px',
+          height: '52px',
           paddingTop: 0,
           paddingBottom: 0,
           paddingLeft: 0,
@@ -35,3 +36,44 @@ export default (theme: Theme): StyleRules =>
       },
     },
   });
+
+const tableSearchInputStyles = (theme: Theme): StyleRules =>
+  createStyles({
+    searchWrapper: {
+      height: '52px',
+      paddingLeft: theme.spacing(4),
+      paddingRight: theme.spacing(2),
+      marginBottom: theme.spacing(1),
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    btnClear: {
+      marginLeft: theme.spacing(2),
+    },
+    searchInput: {
+      flexGrow: 1,
+      paddingRight: theme.spacing(2),
+    },
+  });
+
+const tablePaginationStyles = (theme: Theme): StyleRules =>
+  createStyles({
+    toolbar: {
+      padding: `0 ${theme.spacing(2)}px`,
+    },
+    selectRoot: {
+      margin: `0 ${theme.spacing(2)}px 0 0`,
+    },
+    caption: {
+      marginRight: theme.spacing(2),
+    },
+    paginationButton: {
+      marginRight: theme.spacing(2),
+      '&:last-child': {
+        marginRight: 0,
+      },
+    },
+  });
+
+export { tableStyles, tableSearchInputStyles, tablePaginationStyles };

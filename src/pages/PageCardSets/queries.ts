@@ -1,12 +1,22 @@
 import gql from 'graphql-tag';
 
 export const LIST_CARD_SETS_QUERY = gql`
-  {
-    cardSets {
-      id
-      name
-      cardsAll
+  query($search: String!, $page: Int!, $rowsPerPage: Int!) {
+    cardSets(search: $search, page: $page, rowsPerPage: $rowsPerPage) {
+      count
+      cardSets {
+        id
+        name
+      }
     }
+  }
+`;
+
+export const SEARCH_CARD_SET_QUERY = gql`
+  query {
+    pageCardSetsSearch @client
+    pageCardSetsPageNumber @client
+    pageCardSetsRowsPerPage @client
   }
 `;
 

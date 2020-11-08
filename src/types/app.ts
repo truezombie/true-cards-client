@@ -12,15 +12,18 @@ export type CardSet = {
   id: string;
   name: string;
   cardsMax: number;
-  cardsAll: number;
 };
 
 export type CardSetsType = {
-  cardSets: CardSet[];
+  cardSets: {
+    cardSets: CardSet[];
+    count: number;
+  };
 };
 
 export type CardType = {
-  uuid: string;
+  id: string;
+  cardSetId: string;
   front: string;
   frontDescription?: string;
   back?: string;
@@ -32,11 +35,12 @@ export type CardType = {
 };
 
 export type CardsType = {
-  cardSetWithCards: {
-    id: string;
-    name: string;
-    cardsMax: number;
+  cards: {
+    cardSetId: string;
+    cardSetName: string;
     cards: CardType[];
+    count: number;
+    cardsMax: number;
   };
 };
 

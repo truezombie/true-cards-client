@@ -11,21 +11,28 @@ export const CREATE_CARD_QUERY = gql`
   ) {
     createCard(
       input: {
+        cardSetId: $cardSetId
         front: $front
         frontDescription: $frontDescription
         back: $back
         backDescription: $backDescription
         hasBackSide: $hasBackSide
       }
-      cardSetId: $cardSetId
     )
+  }
+`;
+
+export const SEARCH_CARD_QUERY = gql`
+  query {
+    pageCardsSearch @client
+    pageCardsPageNumber @client
+    pageCardsRowsPerPage @client
   }
 `;
 
 export const UPDATE_CARD_QUERY = gql`
   mutation(
-    $uuid: String!
-    $cardSetId: String!
+    $cardId: String!
     $front: String!
     $frontDescription: String
     $back: String
@@ -40,14 +47,13 @@ export const UPDATE_CARD_QUERY = gql`
         backDescription: $backDescription
         hasBackSide: $hasBackSide
       }
-      cardSetId: $cardSetId
-      uuid: $uuid
+      cardId: $cardId
     )
   }
 `;
 
 export const DELETE_CARD_QUERY = gql`
-  mutation($cardUuid: String!, $cardSetId: String!) {
-    deleteCard(cardUuid: $cardUuid, cardSetId: $cardSetId)
+  mutation($cardId: String!) {
+    deleteCard(cardId: $cardId)
   }
 `;

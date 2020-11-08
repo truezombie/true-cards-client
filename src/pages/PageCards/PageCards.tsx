@@ -29,12 +29,18 @@ import {
   Table,
   Menu,
 } from '../../components';
-import { LIST_CARD_SET_WITH_CARDS_QUERY } from '../../containers/App/queries';
+import { GET_CARDS_QUERY } from '../../containers/App/queries';
 import {
   CREATE_CARD_QUERY,
   UPDATE_CARD_QUERY,
   DELETE_CARD_QUERY,
+  SEARCH_CARD_QUERY,
 } from './queries';
+import {
+  pageCardsPageNumberVar,
+  pageCardsRowsPerPageVar,
+  pageCardsSearchVar,
+} from '../../cache';
 import { CardsType, CardType } from '../../types/app';
 import { useSnackBarNotification } from '../../hooks';
 import { ERROR_CODES } from '../../utils/errors';
@@ -45,9 +51,9 @@ import styles from './styles';
 
 type manageCard = {
   show: boolean;
+  id: string;
   edit: boolean;
   create: boolean;
-  uuid: string;
   front: string;
   frontDescription?: string;
   back?: string;
@@ -57,7 +63,7 @@ type manageCard = {
 
 type deleteCard = {
   show: boolean;
-  uuid: string;
+  id: string;
   front: string;
 };
 
@@ -65,7 +71,7 @@ type PageCardsProps = WithStyles<typeof styles>;
 
 const initialStateDeleteModal: deleteCard = {
   show: false,
-  uuid: '',
+  id: '',
   front: '',
 };
 
@@ -73,7 +79,7 @@ const initialStateManageModal: manageCard = {
   show: false,
   edit: false,
   create: false,
-  uuid: '',
+  id: '',
   front: '',
   frontDescription: '',
   back: '',
@@ -91,19 +97,36 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
   const [manageCardModalData, setManageCardModalData] = useState<manageCard>(
     initialStateManageModal
   );
+  const {
+    data: { pageCardsSearch, pageCardsPageNumber, pageCardsRowsPerPage },
+  } = useQuery(SEARCH_CARD_QUERY);
 
   const {
     called: calledCardSetWithCards,
     refetch: refetchCardSetWithCards,
     loading: isLoading,
-    data,
-  } = useQuery<CardsType>(LIST_CARD_SET_WITH_CARDS_QUERY, {
+    data = {
+      cards: {
+        cardSetId: '',
+        cardSetName: '',
+        cards: [],
+        cardsMax: 0,
+        count: 0,
+      },
+    },
+  } = useQuery<CardsType>(GET_CARDS_QUERY, {
     variables: {
       cardSetId: urlParams.id,
+      search: pageCardsSearch,
+      page: pageCardsPageNumber,
+      rowsPerPage: pageCardsRowsPerPage,
     },
     notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'no-cache',
   });
+
+  const {
+    cards: { cardSetName, cards, count, cardsMax },
+  } = data;
 
   const [onCreateCard, { error: createCardError }] = useMutation(
     CREATE_CARD_QUERY,
@@ -157,7 +180,7 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
         onClick: () => {
           setDeleteCardModalData({
             show: true,
-            uuid: value,
+            id: value,
             front: original.front,
           });
         },
@@ -202,14 +225,14 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
       {
         id: 'status',
         Header: <FormattedMessage id='table.cards.title.status' />,
-        accessor: 'uuid',
+        accessor: 'id',
         width: 80,
         Cell: statusCell,
       },
       {
         id: 'actions',
         Header: '',
-        accessor: 'uuid',
+        accessor: 'id',
         width: 60,
         Cell: editAndDeleteCell,
       },
@@ -281,6 +304,19 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
         };
   }, [manageCardModalData.edit, manageCardModalData.create]);
 
+  const onSearch = (search: string): void => {
+    pageCardsPageNumberVar(0);
+    pageCardsSearchVar(search);
+  };
+
+  const onPageChange = (page: number): void => {
+    pageCardsPageNumberVar(page);
+  };
+
+  const onRowsPerPageChange = (rows: number): void => {
+    pageCardsRowsPerPageVar(rows);
+  };
+
   return (
     <>
       {loader}
@@ -288,7 +324,7 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
       {data ? (
         <Container maxWidth='md' className={classes.container}>
           <PageMainHeader
-            isLoading={isLoading && !!data.cardSetWithCards.cards.length}
+            // isLoading={isLoading && !!data.cardSetWithCards.cards.length}
             onAdd={() => {
               setManageCardModalData({
                 ...initialStateManageModal,
@@ -296,19 +332,25 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
                 create: true,
               });
             }}
-            currentValue={data.cardSetWithCards.cards.length}
-            maxValue={data.cardSetWithCards.cardsMax}
+            currentValue={cards.length}
+            maxValue={cardsMax}
             link={ROUTES.main}
             msgAddBtn={<FormattedMessage id='btn.new.card' />}
-            msgTitle={data.cardSetWithCards.name}
+            msgTitle={cardSetName}
           />
-
-          {data.cardSetWithCards.cards.length ? (
-            <Table columns={columns} data={data.cardSetWithCards.cards} />
-          ) : (
-            <FullBlockMessage message={<FormattedMessage id='no.data' />} />
-          )}
-
+          <Table
+            columns={columns}
+            data={cards}
+            onSearch={onSearch}
+            onPageChange={onPageChange}
+            onRowsPerPageChange={onRowsPerPageChange}
+            isLoading={isLoading}
+            paginationItemsCount={count}
+            page={pageCardsPageNumber}
+            rowsPerPage={pageCardsRowsPerPage}
+            msgNoData='NO DATA'
+            searchValue={pageCardsSearch}
+          />
           <DialogForm
             isOpen={manageCardModalData.show}
             validationSchema={createCardValidationSchema}
@@ -320,8 +362,7 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
               if (manageCardModalData.edit) {
                 onUpdateCard({
                   variables: {
-                    uuid: manageCardModalData.uuid,
-                    cardSetId: urlParams.id,
+                    cardId: manageCardModalData.id,
                     front: values.front,
                     frontDescription: values.frontDescription,
                     back: values.back,
@@ -470,8 +511,7 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
             handleAgree={() => {
               onDeleteCard({
                 variables: {
-                  cardUuid: deleteCardModalData.uuid,
-                  cardSetId: data.cardSetWithCards.id,
+                  cardId: deleteCardModalData.id,
                 },
               });
             }}

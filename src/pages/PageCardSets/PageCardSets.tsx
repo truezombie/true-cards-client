@@ -19,11 +19,9 @@ import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 
 import {
   Table,
-  Loader,
   DialogForm,
   DialogConfirm,
   PageMainHeader,
-  FullBlockMessage,
   Menu,
 } from '../../components';
 import APP from '../../constants/app';
@@ -35,9 +33,15 @@ import {
   CREATE_CARD_SET_QUERY,
   UPDATE_CARD_SET_QUERY,
   DELETE_CARD_SET_QUERY,
+  SEARCH_CARD_SET_QUERY,
 } from './queries';
 import { ERROR_CODES } from '../../utils/errors';
 import { useSnackBarNotification } from '../../hooks';
+import {
+  pageCardSetsSearchVar,
+  pageCardSetsRowsPerPageVar,
+  pageCardSetsPageNumberVar,
+} from '../../cache';
 
 type ModalDeleteCardSet = {
   show: boolean;
@@ -71,26 +75,40 @@ const modalInitialStateManageCardSet: ModalManageCardSet = {
 
 const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
   const [showErrorSnackBar] = useSnackBarNotification();
-  const { loading: isLoading, refetch: refetchCardSets, data } = useQuery<
-    CardSetsType
-  >(LIST_CARD_SETS_QUERY, {
+  const {
+    data: {
+      pageCardSetsSearch,
+      pageCardSetsPageNumber,
+      pageCardSetsRowsPerPage,
+    },
+  } = useQuery(SEARCH_CARD_SET_QUERY);
+
+  const {
+    loading: cardSetsIsLoading,
+    refetch: cardSetsRefetch,
+    data: { cardSets: { cardSets, count } = { cardSets: [], count: 0 } } = {},
+  } = useQuery<CardSetsType>(LIST_CARD_SETS_QUERY, {
+    variables: {
+      search: pageCardSetsSearch,
+      page: pageCardSetsPageNumber,
+      rowsPerPage: pageCardSetsRowsPerPage,
+    },
     notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'no-cache',
   });
 
   const [onCreateCardSet, { error: createCardSetError }] = useMutation(
     CREATE_CARD_SET_QUERY,
     {
-      onCompleted: () => refetchCardSets(),
+      onCompleted: () => cardSetsRefetch(),
     }
   );
 
   const [onUpdateCardSet] = useMutation(UPDATE_CARD_SET_QUERY, {
-    onCompleted: () => refetchCardSets(),
+    onCompleted: () => cardSetsRefetch(),
   });
 
   const [onDeleteCardSet] = useMutation(DELETE_CARD_SET_QUERY, {
-    onCompleted: () => refetchCardSets(),
+    onCompleted: () => cardSetsRefetch(),
   });
 
   const intl = useIntl();
@@ -109,7 +127,9 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
     );
   }, [createCardSetError]);
 
-  const listCardSets = (data && data.cardSets) || [];
+  useEffect(() => {
+    cardSetsRefetch();
+  }, [pageCardSetsSearch, pageCardSetsPageNumber, pageCardSetsRowsPerPage]);
 
   const handleDeleteCardSet = useCallback(() => {
     if (deleteCardSet.id) {
@@ -165,16 +185,6 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
         };
   }, [manageCardSet.edit, manageCardSet.create]);
 
-  const loader = useMemo(() => {
-    return isLoading && !listCardSets.length ? <Loader /> : null;
-  }, [isLoading, listCardSets]);
-
-  const noData = useMemo(() => {
-    return !listCardSets.length && !isLoading ? (
-      <FullBlockMessage message={<FormattedMessage id='no.data' />} />
-    ) : null;
-  }, [isLoading, listCardSets]);
-
   const getDropDownMenuItems = useCallback(
     (item) => {
       return [
@@ -206,7 +216,7 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
         },
       ];
     },
-    [listCardSets]
+    [cardSets]
   );
 
   const startLearningCell = ({
@@ -214,17 +224,15 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
       row: { original },
     },
   }: CellProps<CardSet>) => {
-    const hasCards = original.cardsAll !== 0;
     return (
       <Tooltip
         disableFocusListener
         title={<FormattedMessage id='tooltip.start.to.study.card' />}
       >
         <IconButton
-          disabled={!hasCards}
           component={Link}
           to={ROUTES.startLearning.replace(':id', original.id)}
-          color={hasCards ? 'primary' : 'default'}
+          color='primary'
           aria-label='play'
         >
           <PlayCircleFilledIcon fontSize='small' />
@@ -328,10 +336,22 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
     []
   );
 
+  const onSearch = (search: string): void => {
+    pageCardSetsPageNumberVar(0);
+    pageCardSetsSearchVar(search);
+  };
+
+  const onPageChange = (page: number): void => {
+    pageCardSetsPageNumberVar(page);
+  };
+
+  const onRowsPerPageChange = (rows: number): void => {
+    pageCardSetsRowsPerPageVar(rows);
+  };
+
   return (
     <Container className={classes.container} maxWidth='md'>
       <PageMainHeader
-        isLoading={isLoading && listCardSets.length !== 0}
         onAdd={() => {
           setOpenManageCardSet({
             ...modalInitialStateManageCardSet,
@@ -342,11 +362,19 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
         msgAddBtn={<FormattedMessage id='btn.new.card.set' />}
         msgTitle={<FormattedMessage id='page.cardSets.title' />}
       />
-      {loader}
-      {noData}
-      {listCardSets.length ? (
-        <Table columns={columns} data={listCardSets} />
-      ) : null}
+      <Table
+        data={cardSets}
+        columns={columns}
+        page={pageCardSetsPageNumber}
+        isLoading={cardSetsIsLoading}
+        rowsPerPage={pageCardSetsRowsPerPage}
+        searchValue={pageCardSetsSearch}
+        onSearch={onSearch}
+        onPageChange={onPageChange}
+        onRowsPerPageChange={onRowsPerPageChange}
+        paginationItemsCount={count}
+        msgNoData={<FormattedMessage id='no.data' />}
+      />
       <DialogForm
         isOpen={manageCardSet.show}
         validationSchema={createNewCardSetValidationSchema}

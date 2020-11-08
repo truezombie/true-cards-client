@@ -48,7 +48,7 @@ const PageStartLearning = ({
       onStartLearningSession({
         variables: {
           numberOfCards: wordsPerSession,
-          cardSetId: preLearningData.cardSetWithCards.id,
+          cardSetId: preLearningData.cards.cardSetId,
           sessionType: LEARNING_SESSION_TYPES.NEW_AND_FORGOT,
         },
       });
@@ -60,7 +60,7 @@ const PageStartLearning = ({
       onStartLearningSession({
         variables: {
           numberOfCards: wordsPerSession,
-          cardSetId: preLearningData.cardSetWithCards.id,
+          cardSetId: preLearningData.cards.cardSetId,
           sessionType: LEARNING_SESSION_TYPES.NEW,
         },
       });
@@ -72,7 +72,7 @@ const PageStartLearning = ({
       onStartLearningSession({
         variables: {
           numberOfCards: wordsPerSession,
-          cardSetId: preLearningData.cardSetWithCards.id,
+          cardSetId: preLearningData.cards.cardSetId,
           sessionType: LEARNING_SESSION_TYPES.FORGOT,
         },
       });
@@ -84,7 +84,7 @@ const PageStartLearning = ({
       onStartLearningSession({
         variables: {
           numberOfCards: wordsPerSession,
-          cardSetId: preLearningData.cardSetWithCards.id,
+          cardSetId: preLearningData.cards.cardSetId,
           sessionType: LEARNING_SESSION_TYPES.LEARNED,
         },
       });
@@ -93,7 +93,7 @@ const PageStartLearning = ({
 
   const cardsInfo: CardsInfoType = useMemo(() => {
     return preLearningData
-      ? getCardsInfo(preLearningData.cardSetWithCards.cards)
+      ? getCardsInfo(preLearningData.cards.cards)
       : getCardsInfo([]);
   }, [preLearningData]);
 
@@ -102,7 +102,7 @@ const PageStartLearning = ({
       <Link className={classes.title} to={ROUTES.main}>
         <ChevronLeftIcon className={classes.chevron} />
         <Typography variant='h5' display='block'>
-          {preLearningData.cardSetWithCards.name}
+          {preLearningData.cards.cardSetName}
         </Typography>
       </Link>
 

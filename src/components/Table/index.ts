@@ -1,6 +1,6 @@
 import { withStyles } from '@material-ui/styles';
 
 import Table from './Table';
-import styles from './styles';
+import { tableStyles } from './styles';
 
-export default withStyles(styles)(Table);
+export default withStyles(tableStyles)(Table);

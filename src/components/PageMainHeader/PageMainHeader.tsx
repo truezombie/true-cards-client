@@ -7,13 +7,10 @@ import AddIcon from '@material-ui/icons/Add';
 import { WithStyles } from '@material-ui/core/styles';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
-import { LoaderLinear } from '../Loader';
-
 import styles from './styles';
 
 interface PageMainHeaderProps extends WithStyles<typeof styles> {
   onAdd: () => void;
-  isLoading: boolean;
   msgAddBtn: JSX.Element | string;
   msgTitle: JSX.Element | string;
   link?: string | null;
@@ -23,7 +20,6 @@ interface PageMainHeaderProps extends WithStyles<typeof styles> {
 
 const PageMainHeader = ({
   classes,
-  isLoading,
   onAdd,
   link,
   msgTitle,
@@ -67,7 +63,6 @@ const PageMainHeader = ({
           </Button>
         </div>
       </div>
-      <LoaderLinear show={isLoading} />
     </div>
   );
 };

@@ -4,7 +4,8 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { WithStyles, withStyles } from '@material-ui/core/styles';
 import { linearLoaderStyles } from './styles';
 
-interface LoaderLinearProps extends WithStyles<typeof linearLoaderStyles> {
+export interface LoaderLinearProps
+  extends WithStyles<typeof linearLoaderStyles> {
   show: boolean;
 }
 

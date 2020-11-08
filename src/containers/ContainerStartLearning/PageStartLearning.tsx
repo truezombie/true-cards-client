@@ -12,7 +12,7 @@ import ROUTES from '../../constants/router';
 import { CardsType } from '../../types/app';
 import { hasError, ERROR_CODES } from '../../utils/errors';
 
-import { LIST_CARD_SET_WITH_CARDS_QUERY } from '../App/queries';
+import { GET_CARDS_QUERY } from '../App/queries';
 import { START_LEARNING_SESSION } from './queries';
 
 import styles from './styles';
@@ -24,11 +24,23 @@ const ContainerStartLearning = ({
 }: ContainerStartLearningProps): JSX.Element => {
   const urlParams = useParams<{ id: string }>();
 
-  const { loading: preLearningDataIsLoading, data: preLearningData } = useQuery<
-    CardsType
-  >(LIST_CARD_SET_WITH_CARDS_QUERY, {
+  const {
+    loading: preLearningDataIsLoading,
+    data: preLearningData = {
+      cards: {
+        cardSetId: '',
+        cardSetName: '',
+        cards: [],
+        cardsMax: 0,
+        count: 0,
+      },
+    },
+  } = useQuery<CardsType>(GET_CARDS_QUERY, {
     variables: {
       cardSetId: urlParams.id,
+      search: '',
+      page: 0,
+      rowsPerPage: 0,
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'no-cache',

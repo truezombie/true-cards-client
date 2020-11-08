@@ -12,14 +12,21 @@ export const GRAPH_QL_ERRORS_QUERY = gql`
   }
 `;
 
-export const LIST_CARD_SET_WITH_CARDS_QUERY = gql`
-  query($cardSetId: String!) {
-    cardSetWithCards(cardSetId: $cardSetId) {
-      id
-      name
+export const GET_CARDS_QUERY = gql`
+  query($cardSetId: String!, $search: String, $page: Int, $rowsPerPage: Int) {
+    cards(
+      cardSetId: $cardSetId
+      search: $search
+      page: $page
+      rowsPerPage: $rowsPerPage
+    ) {
+      cardSetId
+      cardSetName
+      count
       cardsMax
       cards {
-        uuid
+        id
+        cardSetId
         front
         frontDescription
         back
