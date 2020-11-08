@@ -34,13 +34,7 @@ import {
   CREATE_CARD_QUERY,
   UPDATE_CARD_QUERY,
   DELETE_CARD_QUERY,
-  SEARCH_CARD_QUERY,
 } from './queries';
-import {
-  pageCardsPageNumberVar,
-  pageCardsRowsPerPageVar,
-  pageCardsSearchVar,
-} from '../../cache';
 import { CardsType, CardType } from '../../types/app';
 import { useSnackBarNotification } from '../../hooks';
 import { ERROR_CODES } from '../../utils/errors';
@@ -97,9 +91,15 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
   const [manageCardModalData, setManageCardModalData] = useState<manageCard>(
     initialStateManageModal
   );
-  const {
-    data: { pageCardsSearch, pageCardsPageNumber, pageCardsRowsPerPage },
-  } = useQuery(SEARCH_CARD_QUERY);
+  const [searchParams, setSearchParams] = useState<{
+    search: string;
+    page: number;
+    rowsPerPage: number;
+  }>({
+    search: '',
+    page: 0,
+    rowsPerPage: 15,
+  });
 
   const {
     called: calledCardSetWithCards,
@@ -117,9 +117,7 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
   } = useQuery<CardsType>(GET_CARDS_QUERY, {
     variables: {
       cardSetId: urlParams.id,
-      search: pageCardsSearch,
-      page: pageCardsPageNumber,
-      rowsPerPage: pageCardsRowsPerPage,
+      ...searchParams,
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -305,16 +303,25 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
   }, [manageCardModalData.edit, manageCardModalData.create]);
 
   const onSearch = (search: string): void => {
-    pageCardsPageNumberVar(0);
-    pageCardsSearchVar(search);
+    setSearchParams({
+      ...searchParams,
+      page: 0,
+      search,
+    });
   };
 
   const onPageChange = (page: number): void => {
-    pageCardsPageNumberVar(page);
+    setSearchParams({
+      ...searchParams,
+      page,
+    });
   };
 
-  const onRowsPerPageChange = (rows: number): void => {
-    pageCardsRowsPerPageVar(rows);
+  const onRowsPerPageChange = (rowsPerPage: number): void => {
+    setSearchParams({
+      ...searchParams,
+      rowsPerPage,
+    });
   };
 
   return (
@@ -346,10 +353,10 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
             onRowsPerPageChange={onRowsPerPageChange}
             isLoading={isLoading}
             paginationItemsCount={count}
-            page={pageCardsPageNumber}
-            rowsPerPage={pageCardsRowsPerPage}
-            msgNoData='NO DATA'
-            searchValue={pageCardsSearch}
+            page={searchParams.page}
+            rowsPerPage={searchParams.rowsPerPage}
+            msgNoData={<FormattedMessage id='no.data' />}
+            searchValue={searchParams.search}
           />
           <DialogForm
             isOpen={manageCardModalData.show}

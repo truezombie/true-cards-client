@@ -11,12 +11,6 @@ export const pageCardSetsPageNumberVar = makeVar<number>(0);
 
 export const pageCardSetsRowsPerPageVar = makeVar<number>(ROWS_PER_PAGE);
 
-export const pageCardsSearchVar = makeVar<string>('');
-
-export const pageCardsPageNumberVar = makeVar<number>(0);
-
-export const pageCardsRowsPerPageVar = makeVar<number>(ROWS_PER_PAGE);
-
 export const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
     Query: {
@@ -32,15 +26,6 @@ export const cache: InMemoryCache = new InMemoryCache({
         },
         pageCardSetsRowsPerPage() {
           return pageCardSetsRowsPerPageVar();
-        },
-        pageCardsSearch() {
-          return pageCardsSearchVar();
-        },
-        pageCardsPageNumber() {
-          return pageCardsPageNumberVar();
-        },
-        pageCardsRowsPerPage() {
-          return pageCardsRowsPerPageVar();
         },
       },
     },

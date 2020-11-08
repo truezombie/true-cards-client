@@ -22,14 +22,6 @@ export const CREATE_CARD_QUERY = gql`
   }
 `;
 
-export const SEARCH_CARD_QUERY = gql`
-  query {
-    pageCardsSearch @client
-    pageCardsPageNumber @client
-    pageCardsRowsPerPage @client
-  }
-`;
-
 export const UPDATE_CARD_QUERY = gql`
   mutation(
     $cardId: String!
