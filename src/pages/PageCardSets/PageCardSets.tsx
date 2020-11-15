@@ -346,6 +346,7 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
   };
 
   const onRowsPerPageChange = (rows: number): void => {
+    pageCardSetsPageNumberVar(0);
     pageCardSetsRowsPerPageVar(rows);
   };
 

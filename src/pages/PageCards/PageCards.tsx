@@ -320,6 +320,7 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
   const onRowsPerPageChange = (rowsPerPage: number): void => {
     setSearchParams({
       ...searchParams,
+      page: 0,
       rowsPerPage,
     });
   };

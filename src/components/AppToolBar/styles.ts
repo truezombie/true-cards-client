@@ -26,6 +26,6 @@ export default (theme: Theme): StyleRules =>
     },
     userListItem: {
       textAlign: 'center',
-      padding: `${theme.spacing(3)}px 0`,
+      padding: `${theme.spacing(1)}px 0`,
     },
   });
