@@ -78,7 +78,7 @@ const initialStateManageModal: manageCard = {
   frontDescription: '',
   back: '',
   backDescription: '',
-  hasBackSide: false,
+  hasBackSide: true,
 };
 
 const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
@@ -340,7 +340,7 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
                 create: true,
               });
             }}
-            currentValue={cards.length}
+            currentValue={count}
             maxValue={cardsMax}
             link={ROUTES.main}
             msgAddBtn={<FormattedMessage id='btn.new.card' />}

@@ -81,7 +81,7 @@ const ContainerStartLearning = ({
       {learningSessionData && !learningSessionAlreadyExist.hasError ? (
         <Redirect to={ROUTES.learning} />
       ) : null}
-      {preLearningData ? (
+      {preLearningData && !loader ? (
         <PageStartLearning
           preLearningData={preLearningData}
           onStartLearningSession={onStartLearningSession}
