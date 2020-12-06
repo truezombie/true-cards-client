@@ -86,5 +86,13 @@
   "tooltip.search": "Search",
   "tooltip.clear": "Clear",
   "forgetting.factor.page.title": "This is the value that shows the speed of your forgetting",
-  "forgetting.factor.page.title.description": "For example. You added a card and start learning session from this card set. At the moment when the card was show you you click I KNOW. It means that next time this card will show you after days (from this input) * number of I KNOW clicks."
+  "forgetting.factor.page.title.description": "For example. You added a card and start learning session from this card set. At the moment when the card was show you you click I KNOW. It means that next time this card will show you after days (from this input) * number of I KNOW clicks.",
+  "settings.page.forgetting.index": "Forgetting index",
+  "settings.page.personal.data": "Personal data",
+  "settings.page.email": "Email",
+  "settings.page.password": "Password",
+  "settings.page.title.forgetting.index": "Changing the forgetting index",
+  "settings.page.title.personal.data": "Personal data changing",
+  "settings.page.title.email": "Email changing",
+  "settings.page.title.password": "Password changing"
 }

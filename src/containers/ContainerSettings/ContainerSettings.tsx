@@ -1,64 +1,106 @@
-import React from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import React, { useMemo } from 'react';
+import { Link, Route, useLocation } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
+import ListSubheader from '@material-ui/core/ListSubheader';
+import ListItemText from '@material-ui/core/ListItemText';
 import { WithStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Divider from '@material-ui/core/Divider';
+import ListItem from '@material-ui/core/ListItem';
 import Paper from '@material-ui/core/Paper';
+import List from '@material-ui/core/List';
+import Grid from '@material-ui/core/Grid';
 
-import { Loader } from '../../components';
-import FormForgettingFactor from './FormForgettingFactor';
+import ROUTES from '../../constants/router';
+
 import {
-  GET_SETTING_PAGE_DATA_QUERY,
-  UPDATE_FORGETTING_INDEX_QUERY,
-} from './queries';
-import { Me } from '../../types/app';
+  PageSettingsForgettingIndex,
+  PageSettingsPersonalData,
+} from '../../pages';
 
 import styles from './styles';
 
 type PageMessageProps = WithStyles<typeof styles>;
 
 const PageMessage = ({ classes }: PageMessageProps): JSX.Element => {
-  const {
-    loading: settingsPageDataLoading,
-    refetch: refetchSettingsPageData,
-    data: settingsPageData = {
-      me: {
-        email: '',
-        firstName: '',
-        lastName: '',
-        forgettingIndex: 0,
-      },
-    },
-  } = useQuery<Me>(GET_SETTING_PAGE_DATA_QUERY, {
-    notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'no-cache',
-  });
+  const location = useLocation<{ pathname: string }>();
 
-  const [onUpdateForgettingIndex] = useMutation(UPDATE_FORGETTING_INDEX_QUERY, {
-    onCompleted: () => refetchSettingsPageData(),
-  });
+  const PAGES = useMemo(() => {
+    return [
+      {
+        id: 1,
+        name: <FormattedMessage id='settings.page.forgetting.index' />,
+        link: ROUTES.settings,
+        selected: location.pathname === ROUTES.settings,
+        component: <PageSettingsForgettingIndex />,
+      },
+      {
+        id: 2,
+        name: <FormattedMessage id='settings.page.personal.data' />,
+        link: ROUTES.settingsPersonalData,
+        selected: location.pathname === ROUTES.settingsPersonalData,
+        component: <PageSettingsPersonalData />,
+      },
+      {
+        id: 3,
+        name: <FormattedMessage id='settings.page.email' />,
+        link: ROUTES.settingsEmail,
+        selected: location.pathname === ROUTES.settingsEmail,
+        component: <h1>TODO: This page is not existing now</h1>,
+      },
+      {
+        id: 4,
+        name: <FormattedMessage id='settings.page.password' />,
+        link: ROUTES.settingsPassword,
+        selected: location.pathname === ROUTES.settingsPassword,
+        component: <h1>TODO: This page is not existing now</h1>,
+      },
+    ];
+  }, [location.pathname]);
 
   return (
-    <Container maxWidth='md' className={classes.container}>
+    <Container maxWidth='md' component='main'>
       <Paper elevation={0} variant='outlined' className={classes.formContainer}>
-        {settingsPageDataLoading ? (
-          <div className={classes.loaderWrapper}>
-            <Loader />
-          </div>
-        ) : (
-          <>
-            <Typography variant='h5' gutterBottom>
-              Forgetting index
-            </Typography>
-            <Divider className={classes.divider} />
-            <FormForgettingFactor
-              forgettingIndex={Number(settingsPageData.me.forgettingIndex) || 0}
-              onUpdateForgettingIndex={onUpdateForgettingIndex}
-            />
-          </>
-        )}
+        <Grid container spacing={3}>
+          <Grid item xs={3}>
+            <List
+              component='nav'
+              dense
+              subheader={
+                <ListSubheader component='div' id='nested-list-subheader'>
+                  Settings
+                </ListSubheader>
+              }
+            >
+              {PAGES.map(({ id, name, link, selected }) => {
+                return (
+                  <ListItem
+                    key={id}
+                    button
+                    selected={selected}
+                    component={Link}
+                    to={link}
+                    classes={{
+                      root: classes.listITem,
+                      selected: classes.listItemSelected,
+                    }}
+                  >
+                    <ListItemText primary={name} />
+                  </ListItem>
+                );
+              })}
+            </List>
+          </Grid>
+          <Grid item xs={9}>
+            {PAGES.map(({ id, component, link }) => {
+              return (
+                <Route key={id} exact path={link}>
+                  {component}
+                </Route>
+              );
+            })}
+          </Grid>
+        </Grid>
       </Paper>
     </Container>
   );

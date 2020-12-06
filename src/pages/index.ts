@@ -9,6 +9,8 @@ import PageContacts from './PageContacts';
 import PageCardSets from './PageCardSets';
 import PageLearning from './PageLearning';
 import PageLearningDone from './PageLearningDone';
+import PageSettingsForgettingIndex from './PageSettingsForgettingIndex';
+import PageSettingsPersonalData from './PageSettingsPersonalData';
 
 export {
   PageLogin,
@@ -22,4 +24,6 @@ export {
   PageCardSets,
   PageLearning,
   PageLearningDone,
+  PageSettingsForgettingIndex,
+  PageSettingsPersonalData,
 };

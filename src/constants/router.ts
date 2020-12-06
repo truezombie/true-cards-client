@@ -8,6 +8,9 @@ const ROUTES = {
   startLearning: '/start-learning/:id',
   learning: '/learning',
   settings: '/settings',
+  settingsPersonalData: '/settings/personal-data',
+  settingsPassword: '/settings/password',
+  settingsEmail: '/settings/email',
   contacts: '/contacts',
 };
 

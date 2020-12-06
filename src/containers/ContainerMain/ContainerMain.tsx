@@ -97,11 +97,11 @@ const ContainerMain = (): JSX.Element => {
           <Route exact path={ROUTES.learning}>
             <ContainerLearning />
           </Route>
-          <Route exact path={ROUTES.settings}>
-            <ContainerSettings />
-          </Route>
           <Route exact path={ROUTES.contacts}>
             <PageContacts />
+          </Route>
+          <Route path={ROUTES.settings}>
+            <ContainerSettings />
           </Route>
         </>
       ) : null}

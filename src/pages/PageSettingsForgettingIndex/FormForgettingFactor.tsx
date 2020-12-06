@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button';
 import {
   MIN_INDEX_DAYS_FOR_FORGETTING,
   MAX_INDEX_DAYS_FOR_FORGETTING,
-} from './constants';
+} from '../../containers/ContainerSettings/constants';
 
 type FormForgettingFactorProps = {
   forgettingIndex: number;
@@ -60,10 +60,10 @@ const FormForgettingFactor = ({
 
   return (
     <>
-      <Typography variant='subtitle1' align='center' gutterBottom>
+      <Typography variant='subtitle1' gutterBottom>
         <FormattedMessage id='forgetting.factor.page.title' />
       </Typography>
-      <Typography variant='body2' align='center'>
+      <Typography variant='body2'>
         <FormattedMessage id='forgetting.factor.page.title.description' />
       </Typography>
       <Container maxWidth='xs'>
