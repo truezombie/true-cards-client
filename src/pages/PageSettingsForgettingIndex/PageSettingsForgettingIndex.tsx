@@ -20,7 +20,7 @@ type PageSettingsForgettingIndexProps = WithStyles<typeof styles>;
 
 const PageSettingsForgettingIndex = ({
   classes,
-}: PageSettingsForgettingIndexProps) => {
+}: PageSettingsForgettingIndexProps): JSX.Element => {
   const {
     loading: settingsPageDataLoading,
     refetch: refetchSettingsPageData,
