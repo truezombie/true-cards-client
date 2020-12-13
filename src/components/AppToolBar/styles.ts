@@ -9,7 +9,7 @@ export default (theme: Theme): StyleRules =>
     title: {
       display: 'block',
       flexGrow: 1,
-      textAlign: 'center',
+      margin: 0,
     },
     link: {
       textDecoration: 'none',

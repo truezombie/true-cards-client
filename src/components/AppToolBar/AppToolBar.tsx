@@ -1,29 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import cx from 'classnames';
+import { FormattedMessage } from 'react-intl';
 
 import AppBar from '@material-ui/core/AppBar';
-import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { WithStyles } from '@material-ui/core/styles';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
 import SettingsIcon from '@material-ui/icons/Settings';
-import FolderIcon from '@material-ui/icons/Folder';
+import HelpIcon from '@material-ui/icons/Help';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import Menu from '../Menu';
-import { Loader } from '../Loader';
 
 import { MenuItemProps } from '../../types/menu';
+import { isLoggedInVar } from '../../cache';
 import ROUTES from '../../constants/router';
 
 import appConstants from '../../constants/app';
@@ -31,46 +24,47 @@ import appConstants from '../../constants/app';
 import styles from './styles';
 
 interface AppToolBarProps extends WithStyles<typeof styles> {
-  userMenuItems: MenuItemProps[];
   meFirstName?: string;
   meLastName?: string;
   meIsLoading: boolean;
 }
 
-interface MenuItems {
-  text: string;
-  icon: JSX.Element;
-  link: string;
-}
-
 const AppToolBar = ({
   classes,
-  userMenuItems,
   meIsLoading,
   meFirstName,
   meLastName,
 }: AppToolBarProps): JSX.Element => {
-  const [isOpenMenu, setOpenMenu] = React.useState<boolean>(false);
+  const onLogOut = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('refreshToken');
 
-  const onToggleMenu = () => {
-    setOpenMenu(!isOpenMenu);
+    isLoggedInVar(false);
   };
 
-  const menuItems: MenuItems[] = [
+  const menuItems: MenuItemProps[] = [
     {
-      text: 'Card sets',
-      link: ROUTES.main,
-      icon: <FolderIcon />,
+      id: 1,
+      text: `${meFirstName} ${meLastName}`,
+      disabled: true,
     },
     {
+      id: 2,
       text: 'Settings',
       link: ROUTES.settings,
       icon: <SettingsIcon />,
     },
     {
-      text: 'Contacts',
+      id: 3,
+      text: 'Help',
       link: ROUTES.contacts,
-      icon: <MailIcon />,
+      icon: <HelpIcon />,
+    },
+    {
+      id: 5,
+      text: <FormattedMessage id='btn.log.out' />,
+      icon: <ExitToAppIcon />,
+      onClick: onLogOut,
     },
   ];
 
@@ -78,15 +72,6 @@ const AppToolBar = ({
     <AppBar position='sticky' className={classes.appBar}>
       <Container maxWidth='md'>
         <Toolbar disableGutters>
-          <IconButton
-            onClick={onToggleMenu}
-            edge='start'
-            color='inherit'
-            aria-label='open drawer'
-          >
-            <MenuIcon />
-          </IconButton>
-
           <Typography
             className={classes.title}
             variant='button'
@@ -99,8 +84,9 @@ const AppToolBar = ({
           </Typography>
 
           <div className={classes.sectionDesktop}>
-            <Menu items={userMenuItems}>
+            <Menu items={menuItems}>
               <IconButton
+                disabled={meIsLoading}
                 edge='end'
                 aria-label='account of current user'
                 aria-controls='primary-search-account-menu'
@@ -113,42 +99,6 @@ const AppToolBar = ({
           </div>
         </Toolbar>
       </Container>
-      <Drawer anchor='left' open={isOpenMenu} onClose={onToggleMenu}>
-        <div
-          className={cx(
-            {
-              [classes.menuWrapperIsLoading]: meIsLoading,
-            },
-            classes.menuWrapper
-          )}
-        >
-          {meIsLoading ? (
-            <Loader />
-          ) : (
-            <List>
-              <ListItem>
-                <ListItemText
-                  className={classes.userListItem}
-                  primary={`${meFirstName} ${meLastName}`}
-                />
-              </ListItem>
-              <Divider />
-              {menuItems.map(({ text, icon, link }) => (
-                <ListItem
-                  component={Link}
-                  to={link}
-                  onClick={onToggleMenu}
-                  button
-                  key={text}
-                >
-                  <ListItemIcon>{icon}</ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItem>
-              ))}
-            </List>
-          )}
-        </div>
-      </Drawer>
     </AppBar>
   );
 };

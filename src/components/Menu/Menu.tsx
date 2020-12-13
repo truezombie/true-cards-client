@@ -1,10 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import MUIMenu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import ListItem from '@material-ui/core/ListItem';
 import { WithStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 
 import { MenuItemProps } from '../../types/menu';
 import styles from './styles';
@@ -35,35 +36,57 @@ const Menu = ({ children, items, classes }: MenuProps): JSX.Element => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {items.map((item) => {
-          return (
-            <MenuItem
-              onClick={() => {
-                item.onClick();
-                handleClose();
-              }}
-              key={item.id}
-              disabled={item.disabled}
-            >
-              {item.icon ? (
-                <>
+        {items.map((menuItem) => {
+          if (!menuItem.link && !menuItem.onClick) {
+            return (
+              <MenuItem key={menuItem.id} disabled={menuItem.disabled}>
+                <ListItemText primary={menuItem.text} />
+              </MenuItem>
+            );
+          }
+
+          if (menuItem.onClick && !menuItem.link) {
+            return (
+              <MenuItem
+                onClick={() => {
+                  if (menuItem.onClick) {
+                    menuItem.onClick();
+                  }
+                  handleClose();
+                }}
+                key={menuItem.id}
+                disabled={menuItem.disabled}
+              >
+                {menuItem.icon ? (
                   <ListItemIcon className={classes.icon}>
-                    {item.icon}
+                    {menuItem.icon}
                   </ListItemIcon>
-                  {item.text}
-                </>
-              ) : (
-                <ListItem
-                  onClick={() => {
-                    item.onClick();
-                    handleClose();
-                  }}
-                >
-                  {item.text}
-                </ListItem>
-              )}
-            </MenuItem>
-          );
+                ) : null}
+                <ListItemText primary={menuItem.text} />
+              </MenuItem>
+            );
+          }
+
+          if (!menuItem.onClick && menuItem.link) {
+            return (
+              <MenuItem
+                onClick={() => handleClose()}
+                key={menuItem.id}
+                disabled={menuItem.disabled}
+                component={Link}
+                to={menuItem.link}
+              >
+                {menuItem.icon ? (
+                  <ListItemIcon className={classes.icon}>
+                    {menuItem.icon}
+                  </ListItemIcon>
+                ) : null}
+                <ListItemText primary={menuItem.text} />
+              </MenuItem>
+            );
+          }
+
+          return 'Item not found';
         })}
       </MUIMenu>
     </>

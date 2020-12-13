@@ -1,7 +1,8 @@
 export interface MenuItemProps {
-  id: string;
+  id: string | number;
   text: string | JSX.Element;
-  onClick: () => void;
+  onClick?: () => void;
   disabled?: boolean;
   icon?: JSX.Element;
+  link?: string;
 }

@@ -45,15 +45,15 @@ const PageContacts = ({ classes }: PageContactsProps): JSX.Element => {
         <List>
           {contactsList.map(({ id, link, label, labelName }, index) => {
             return (
-              <>
+              <div key={id}>
                 {index >= 1 ? <Divider /> : null}
-                <ListItem key={id}>
+                <ListItem>
                   <ListItemText
                     primary={<Link href={link}>{label}</Link>}
                     secondary={labelName}
                   />
                 </ListItem>
-              </>
+              </div>
             );
           })}
         </List>

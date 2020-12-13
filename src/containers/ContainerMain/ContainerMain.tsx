@@ -3,11 +3,8 @@ import { Route, useLocation } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { useQuery, useLazyQuery } from '@apollo/client';
 
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-
 import { IS_EXIST_LEARNING_SESSION_QUERY, GET_ME_QUERY } from './queries';
 import ROUTES from '../../constants/router';
-import { isLoggedInVar } from '../../cache';
 import { AppToolBar } from '../../components';
 import ContainerStartLearning from '../ContainerStartLearning';
 import ContainerLearning from '../ContainerLearning';
@@ -31,13 +28,6 @@ const ContainerMain = (): JSX.Element => {
   ] = useLazyQuery(IS_EXIST_LEARNING_SESSION_QUERY, {
     fetchPolicy: 'no-cache',
   });
-
-  const onLogOut = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('refreshToken');
-
-    isLoggedInVar(false);
-  };
 
   useEffect(() => {
     getStatusLearningSession();
@@ -73,14 +63,6 @@ const ContainerMain = (): JSX.Element => {
         meFirstName={user?.me?.firstName}
         meLastName={user?.me?.lastName}
         meIsLoading={meIsLoading}
-        userMenuItems={[
-          {
-            id: 'logOut',
-            text: <FormattedMessage id='btn.log.out' />,
-            icon: <ExitToAppIcon />,
-            onClick: onLogOut,
-          },
-        ]}
       />
       {activeSessionAlert}
       {!activeSessionAlert ? (
