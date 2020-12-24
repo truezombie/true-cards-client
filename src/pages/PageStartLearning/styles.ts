@@ -27,7 +27,6 @@ export default (theme: Theme): StyleRules =>
       marginBottom: theme.spacing(1.5),
     },
     gridColumn: {
-      marginBottom: theme.spacing(1.5),
       textAlign: 'center',
     },
     titleAmountOfCards: {
@@ -35,5 +34,8 @@ export default (theme: Theme): StyleRules =>
     },
     inputCardsPerSession: {
       marginBottom: theme.spacing(3),
+    },
+    typeOfStudyTitle: {
+      marginTop: theme.spacing(3),
     },
   });

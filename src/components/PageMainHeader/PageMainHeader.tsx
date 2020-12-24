@@ -34,12 +34,12 @@ const PageMainHeader = ({
           {link ? (
             <Link className={classes.headerTitleLink} to={link}>
               <ChevronLeftIcon className={classes.chevron} />
-              <Typography variant='h5' display='block'>
+              <Typography component='span' variant='subtitle1' display='block'>
                 {msgTitle}
               </Typography>
             </Link>
           ) : (
-            <Typography variant='h5' display='block'>
+            <Typography component='span' variant='subtitle1' display='block'>
               {msgTitle}
             </Typography>
           )}
