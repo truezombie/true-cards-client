@@ -32,7 +32,10 @@ export default (theme: Theme): StyleRules =>
     titleAmountOfCards: {
       marginTop: theme.spacing(1.5),
     },
-    inputCardsPerSession: {
+    cardTitle: {
+      marginBottom: theme.spacing(3),
+    },
+    input: {
       marginBottom: theme.spacing(3),
     },
     typeOfStudyTitle: {

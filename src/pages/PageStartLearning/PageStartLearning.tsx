@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
 import Card from '@material-ui/core/Card';
-import Grid from '@material-ui/core/Grid';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -35,6 +34,13 @@ interface PageStartLearningProps extends WithStyles<typeof styles> {
   }) => void;
 }
 
+type LearningMethods = {
+  id: number;
+  label: string | JSX.Element;
+  cardsAmount: number;
+  onClick: () => void;
+};
+
 const PageStartLearning = ({
   classes,
   preLearningData,
@@ -43,60 +49,74 @@ const PageStartLearning = ({
   const [wordsPerSession, setWordsPerSession] = useState<number>(
     WORDS_PER_LEARNING_SESSION[0]
   );
-
-  const onClickLearningNewAndForgot = () => {
-    if (preLearningData) {
-      onStartLearningSession({
-        variables: {
-          numberOfCards: wordsPerSession,
-          cardSetId: preLearningData.cards.cardSetId,
-          sessionType: LEARNING_SESSION_TYPES.NEW_AND_FORGOT,
-        },
-      });
-    }
-  };
-
-  const onClickNew = () => {
-    if (preLearningData) {
-      onStartLearningSession({
-        variables: {
-          numberOfCards: wordsPerSession,
-          cardSetId: preLearningData.cards.cardSetId,
-          sessionType: LEARNING_SESSION_TYPES.NEW,
-        },
-      });
-    }
-  };
-
-  const onClickForgot = () => {
-    if (preLearningData) {
-      onStartLearningSession({
-        variables: {
-          numberOfCards: wordsPerSession,
-          cardSetId: preLearningData.cards.cardSetId,
-          sessionType: LEARNING_SESSION_TYPES.FORGOT,
-        },
-      });
-    }
-  };
-
-  const onClickLearned = () => {
-    if (preLearningData) {
-      onStartLearningSession({
-        variables: {
-          numberOfCards: wordsPerSession,
-          cardSetId: preLearningData.cards.cardSetId,
-          sessionType: LEARNING_SESSION_TYPES.LEARNED,
-        },
-      });
-    }
-  };
+  const [learningMethod, setLearningMethod] = useState<number>(0);
 
   const cardsInfo: CardsInfoType = useMemo(() => {
     return preLearningData
       ? getCardsInfo(preLearningData.cards.cards)
       : getCardsInfo([]);
   }, [preLearningData]);
+
+  const learnMethods: LearningMethods[] = [
+    {
+      id: 1,
+      label: <FormattedMessage id='btn.learn.forgotten.and.new' />,
+      cardsAmount: cardsInfo.forgotten + cardsInfo.new,
+      onClick: () =>
+        onStartLearningSession({
+          variables: {
+            numberOfCards: wordsPerSession,
+            cardSetId: preLearningData.cards.cardSetId,
+            sessionType: LEARNING_SESSION_TYPES.NEW_AND_FORGOT,
+          },
+        }),
+    },
+    {
+      id: 2,
+      label: <FormattedMessage id='btn.learn.new' />,
+      cardsAmount: cardsInfo.new,
+      onClick: () =>
+        onStartLearningSession({
+          variables: {
+            numberOfCards: wordsPerSession,
+            cardSetId: preLearningData.cards.cardSetId,
+            sessionType: LEARNING_SESSION_TYPES.NEW,
+          },
+        }),
+    },
+    {
+      id: 3,
+      label: <FormattedMessage id='btn.learn.forgotten' />,
+      cardsAmount: cardsInfo.forgotten,
+      onClick: () =>
+        onStartLearningSession({
+          variables: {
+            numberOfCards: wordsPerSession,
+            cardSetId: preLearningData.cards.cardSetId,
+            sessionType: LEARNING_SESSION_TYPES.FORGOT,
+          },
+        }),
+    },
+    {
+      id: 4,
+      label: <FormattedMessage id='btn.learn.learned' />,
+      cardsAmount: cardsInfo.learned,
+      onClick: () =>
+        onStartLearningSession({
+          variables: {
+            numberOfCards: wordsPerSession,
+            cardSetId: preLearningData.cards.cardSetId,
+            sessionType: LEARNING_SESSION_TYPES.LEARNED,
+          },
+        }),
+    },
+    {
+      id: 5,
+      label: 'Repeat all cards',
+      cardsAmount: 0, // TODO: need to add learning method
+      onClick: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+    },
+  ];
 
   return preLearningData ? (
     <>
@@ -107,145 +127,84 @@ const PageStartLearning = ({
         </Typography>
       </Link>
 
-      <FormControl
-        size='small'
-        variant='outlined'
-        className={classes.inputCardsPerSession}
-      >
-        <InputLabel id='demo-simple-select-outlined-label'>
-          <FormattedMessage id='input.words.per.session' />
-        </InputLabel>
-        <Select
-          labelId='demo-simple-select-outlined-label'
-          id='demo-simple-select-outlined'
-          value={wordsPerSession}
-          onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
-            setWordsPerSession(event.target.value as number);
-          }}
-          label={<FormattedMessage id='input.words.per.session' />}
-        >
-          {WORDS_PER_LEARNING_SESSION.map((item) => {
-            return (
-              <MenuItem key={item} value={item}>
-                {item}
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl>
+      <Card variant='outlined'>
+        <CardContent>
+          <Typography
+            component='span'
+            display='block'
+            variant='h6'
+            className={classes.cardTitle}
+          >
+            Learning preparation
+          </Typography>
+          <FormControl
+            fullWidth
+            size='small'
+            variant='outlined'
+            className={classes.input}
+          >
+            <InputLabel id='cards-per-session-input-label'>
+              <FormattedMessage id='input.words.per.session' />
+            </InputLabel>
+            <Select
+              labelId='cards-per-session-input-label'
+              id='cards-per-session-input'
+              value={wordsPerSession}
+              onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
+                setWordsPerSession(event.target.value as number);
+              }}
+              label={<FormattedMessage id='input.words.per.session' />}
+            >
+              {WORDS_PER_LEARNING_SESSION.map((item) => {
+                return (
+                  <MenuItem key={item} value={item}>
+                    {item}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
 
-      <Typography variant='h5' gutterBottom>
-        Learning
-      </Typography>
+          <FormControl
+            fullWidth
+            size='small'
+            variant='outlined'
+            className={classes.input}
+          >
+            <InputLabel id='kind-of-session-input-label'>I want to:</InputLabel>
+            <Select
+              label='I want to:'
+              labelId='kind-of-session-input-label'
+              id='kind-of-session-input'
+              value={learningMethod}
+              onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
+                setLearningMethod(event.target.value as number);
+              }}
+            >
+              {learnMethods.map((learnMethod, index) => {
+                return (
+                  <MenuItem
+                    disabled={learnMethod.cardsAmount === 0}
+                    key={learnMethod.id}
+                    value={index}
+                  >
+                    {learnMethod.label}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
 
-      <Grid container spacing={2}>
-        <Grid className={classes.gridColumn} item xs={12} sm={6} md={4}>
-          <Card variant='outlined'>
-            <CardContent>
-              <Typography
-                className={classes.values}
-                variant='h4'
-                align='center'
-                component='p'
-              >
-                {cardsInfo.forgotten + cardsInfo.new}
-              </Typography>
-
-              <Button
-                onClick={onClickLearningNewAndForgot}
-                fullWidth
-                size='small'
-                variant='outlined'
-                color='primary'
-              >
-                <FormattedMessage id='btn.learn.forgotten.and.new' />
-              </Button>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid className={classes.gridColumn} item xs={12} sm={6} md={4}>
-          <Card variant='outlined'>
-            <CardContent>
-              <Typography
-                className={classes.values}
-                variant='h4'
-                align='center'
-                component='p'
-              >
-                {cardsInfo.new}
-              </Typography>
-              <Button
-                onClick={onClickNew}
-                fullWidth
-                size='small'
-                variant='outlined'
-                color='primary'
-              >
-                <FormattedMessage id='btn.learn.new' />
-              </Button>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid className={classes.gridColumn} item xs={12} sm={6} md={4}>
-          <Card variant='outlined'>
-            <CardContent>
-              <Typography
-                className={classes.values}
-                variant='h4'
-                align='center'
-                component='p'
-              >
-                {cardsInfo.forgotten}
-              </Typography>
-              <Button
-                onClick={onClickForgot}
-                fullWidth
-                size='small'
-                variant='outlined'
-                color='primary'
-              >
-                <FormattedMessage id='btn.learn.forgotten' />
-              </Button>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-
-      <Typography
-        className={classes.typeOfStudyTitle}
-        variant='h5'
-        gutterBottom
-      >
-        Repeat
-      </Typography>
-
-      <Grid container spacing={2}>
-        <Grid className={classes.gridColumn} item xs={12} sm={6} md={4}>
-          <Card variant='outlined'>
-            <CardContent>
-              <Typography
-                className={classes.values}
-                variant='h4'
-                align='center'
-                component='p'
-              >
-                {cardsInfo.learned}
-              </Typography>
-              <Button
-                onClick={onClickLearned}
-                fullWidth
-                size='small'
-                variant='outlined'
-                color='primary'
-              >
-                <FormattedMessage id='btn.learn.learned' />
-              </Button>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+          <Button
+            onClick={learnMethods[learningMethod].onClick}
+            fullWidth
+            variant='contained'
+            color='primary'
+          >
+            Start
+          </Button>
+        </CardContent>
+      </Card>
     </>
   ) : null;
 };
