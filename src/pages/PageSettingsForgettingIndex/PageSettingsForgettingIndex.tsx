@@ -51,7 +51,7 @@ const PageSettingsForgettingIndex = ({
 
   return (
     <>
-      <Typography variant='h5' gutterBottom color='textSecondary'>
+      <Typography variant='h6' gutterBottom>
         <FormattedMessage id='settings.page.title.forgetting.index' />
       </Typography>
       <FormForgettingFactor

@@ -133,6 +133,7 @@ const PageStartLearning = ({
             component='span'
             display='block'
             variant='h6'
+            gutterBottom
             className={classes.cardTitle}
           >
             Learning preparation
@@ -200,6 +201,7 @@ const PageStartLearning = ({
             fullWidth
             variant='contained'
             color='primary'
+            disabled={learnMethods[learningMethod].cardsAmount === 0}
           >
             Start
           </Button>

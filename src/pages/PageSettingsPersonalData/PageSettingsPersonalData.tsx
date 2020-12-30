@@ -51,7 +51,7 @@ const PageSettingsPersonalData = ({
 
   return (
     <>
-      <Typography variant='h5' gutterBottom color='textSecondary'>
+      <Typography component='span' display='block' variant='h6' gutterBottom>
         <FormattedMessage id='settings.page.title.personal.data' />
       </Typography>
       <FormPersonalDataChanging
