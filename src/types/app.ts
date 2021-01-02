@@ -11,6 +11,7 @@ export type Me = {
 export type CardSet = {
   id: string;
   name: string;
+  isShared: boolean;
   cardsMax: number;
 };
 

@@ -7,6 +7,7 @@ export const LIST_CARD_SETS_QUERY = gql`
       cardSets {
         id
         name
+        isShared
       }
     }
   }
@@ -26,9 +27,15 @@ export const CREATE_CARD_SET_QUERY = gql`
   }
 `;
 
-export const UPDATE_CARD_SET_QUERY = gql`
+export const UPDATE_CARD_SET_NAME_QUERY = gql`
   mutation($cardSetId: String!, $name: String!) {
-    updateCardSet(cardSetId: $cardSetId, name: $name)
+    updateCardSetName(cardSetId: $cardSetId, name: $name)
+  }
+`;
+
+export const UPDATE_CARD_SET_SHARING_QUERY = gql`
+  mutation($cardSetId: String!, $isShared: Boolean!) {
+    updateCardSetShare(cardSetId: $cardSetId, isShared: $isShared)
   }
 `;
 

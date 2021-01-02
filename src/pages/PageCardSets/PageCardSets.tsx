@@ -7,6 +7,7 @@ import { useQuery, useMutation } from '@apollo/client';
 
 import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
+import ShareIcon from '@material-ui/icons/Share';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -15,6 +16,8 @@ import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { WithStyles } from '@material-ui/core/styles';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import FolderSharedIcon from '@material-ui/icons/FolderShared';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 
 import {
@@ -31,7 +34,8 @@ import styles from './styles';
 import {
   LIST_CARD_SETS_QUERY,
   CREATE_CARD_SET_QUERY,
-  UPDATE_CARD_SET_QUERY,
+  UPDATE_CARD_SET_NAME_QUERY,
+  UPDATE_CARD_SET_SHARING_QUERY,
   DELETE_CARD_SET_QUERY,
   SEARCH_CARD_SET_QUERY,
 } from './queries';
@@ -57,6 +61,12 @@ type ModalManageCardSet = {
   name: string;
 };
 
+type ModalSharingCardSet = {
+  id: string;
+  name: string;
+  show: boolean;
+};
+
 type PageCardSetsProps = WithStyles<typeof styles>;
 
 const modalInitialStateDeleteCardSet: ModalDeleteCardSet = {
@@ -69,6 +79,18 @@ const modalInitialStateManageCardSet: ModalManageCardSet = {
   show: false,
   edit: false,
   create: false,
+  id: '',
+  name: '',
+};
+
+const modalInitialStateStartSharingCardSet: ModalSharingCardSet = {
+  show: false,
+  id: '',
+  name: '',
+};
+
+const modalInitialStateStopSharingCardSet: ModalSharingCardSet = {
+  show: false,
   id: '',
   name: '',
 };
@@ -103,7 +125,11 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
     }
   );
 
-  const [onUpdateCardSet] = useMutation(UPDATE_CARD_SET_QUERY, {
+  const [onUpdateCardSetName] = useMutation(UPDATE_CARD_SET_NAME_QUERY, {
+    onCompleted: () => cardSetsRefetch(),
+  });
+
+  const [onUpdateCardSetSharing] = useMutation(UPDATE_CARD_SET_SHARING_QUERY, {
     onCompleted: () => cardSetsRefetch(),
   });
 
@@ -118,6 +144,12 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
   const [manageCardSet, setOpenManageCardSet] = useState<ModalManageCardSet>(
     modalInitialStateManageCardSet
   );
+  const [startSharingCardSet, setStartSharingCardSet] = useState<
+    ModalSharingCardSet
+  >(modalInitialStateStartSharingCardSet);
+  const [stopSharingCardSet, setStopSharingCardSet] = useState<
+    ModalSharingCardSet
+  >(modalInitialStateStopSharingCardSet);
 
   useEffect(() => {
     showErrorSnackBar(ERROR_CODES.ERROR_CARD_SET_EXIST, createCardSetError);
@@ -186,8 +218,30 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
   }, [manageCardSet.edit, manageCardSet.create]);
 
   const getDropDownMenuItems = useCallback(
-    (item) => {
+    (item: CardSet) => {
       return [
+        {
+          id: 'sharing',
+          text: item.isShared ? (
+            <FormattedMessage id='btn.stop.sharing' />
+          ) : (
+            <FormattedMessage id='btn.start.sharing' />
+          ),
+          icon: item.isShared ? <HighlightOffIcon /> : <ShareIcon />,
+          onClick: item.isShared
+            ? () =>
+                setStopSharingCardSet({
+                  show: true,
+                  id: item.id,
+                  name: item.name,
+                })
+            : () =>
+                setStartSharingCardSet({
+                  show: true,
+                  id: item.id,
+                  name: item.name,
+                }),
+        },
         {
           id: 'edit',
           text: <FormattedMessage id='btn.edit' />,
@@ -297,7 +351,11 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
           to={ROUTES.cards.replace(':id', original.id)}
           aria-label='cards'
         >
-          <FolderIcon fontSize='small' color='primary' />
+          {original.isShared ? (
+            <FolderSharedIcon fontSize='small' color='primary' />
+          ) : (
+            <FolderIcon fontSize='small' color='primary' />
+          )}
         </IconButton>
       </Tooltip>
     );
@@ -383,7 +441,7 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
         onClose={() => setOpenManageCardSet({ ...manageCardSet, show: false })}
         onSubmit={(values, { setSubmitting }) => {
           if (manageCardSet.edit) {
-            onUpdateCardSet({
+            onUpdateCardSetName({
               variables: { cardSetId: manageCardSet.id, name: values.name },
             });
           }
@@ -436,6 +494,46 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
         }
         msgClose={<FormattedMessage id='btn.close' />}
         msgAgree={<FormattedMessage id='btn.delete' />}
+      />
+      <DialogConfirm
+        isOpen={startSharingCardSet.show}
+        handleAgree={() =>
+          onUpdateCardSetSharing({
+            variables: { cardSetId: startSharingCardSet.id, isShared: true },
+          })
+        }
+        handleClose={() =>
+          setStartSharingCardSet({ ...startSharingCardSet, show: false })
+        }
+        msgTitle={<FormattedMessage id='modal.sharing.start.title' />}
+        msgClose={<FormattedMessage id='btn.close' />}
+        msgAgree={<FormattedMessage id='btn.start.sharing' />}
+        msgBody={
+          <FormattedMessage
+            id='modal.sharing.start.body'
+            values={{ name: startSharingCardSet.name }}
+          />
+        }
+      />
+      <DialogConfirm
+        isOpen={stopSharingCardSet.show}
+        handleAgree={() => {
+          onUpdateCardSetSharing({
+            variables: { cardSetId: stopSharingCardSet.id, isShared: false },
+          });
+        }}
+        handleClose={() =>
+          setStopSharingCardSet({ ...stopSharingCardSet, show: false })
+        }
+        msgTitle={<FormattedMessage id='modal.sharing.stop.title' />}
+        msgClose={<FormattedMessage id='btn.close' />}
+        msgAgree={<FormattedMessage id='btn.stop.sharing' />}
+        msgBody={
+          <FormattedMessage
+            id='modal.sharing.stop.body'
+            values={{ name: stopSharingCardSet.name }}
+          />
+        }
       />
     </Container>
   );
