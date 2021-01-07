@@ -11,6 +11,7 @@ export const GET_ME_QUERY = gql`
     me {
       firstName
       lastName
+      id
     }
   }
 `;

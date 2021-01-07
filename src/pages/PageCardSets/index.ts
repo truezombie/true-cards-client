@@ -1,6 +1,4 @@
-import { withStyles } from '@material-ui/styles';
+import TabCardSets from './TabCardSets';
+import TabCardSetsShared from './TabCardSetsShared';
 
-import PageCardSets from './PageCardSets';
-import styles from './styles';
-
-export default withStyles(styles)(PageCardSets);
+export { TabCardSets, TabCardSetsShared };

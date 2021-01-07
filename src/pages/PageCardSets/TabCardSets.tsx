@@ -8,16 +8,17 @@ import { useQuery, useMutation } from '@apollo/client';
 import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
 import ShareIcon from '@material-ui/icons/Share';
-import TextField from '@material-ui/core/TextField';
-import Container from '@material-ui/core/Container';
+import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
+import TextField from '@material-ui/core/TextField';
+import { WithStyles, withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import FolderIcon from '@material-ui/icons/Folder';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { WithStyles } from '@material-ui/core/styles';
+import UnsubscribeIcon from '@material-ui/icons/Unsubscribe';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import FolderSharedIcon from '@material-ui/icons/FolderShared';
+import FolderSpecialIcon from '@material-ui/icons/FolderSpecial';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 
 import {
@@ -30,7 +31,7 @@ import {
 import APP from '../../constants/app';
 import ROUTES from '../../constants/router';
 import { CardSetsType, CardSet } from '../../types/app';
-import styles from './styles';
+import { tabCardSetsStyles } from './styles';
 import {
   LIST_CARD_SETS_QUERY,
   CREATE_CARD_SET_QUERY,
@@ -38,6 +39,7 @@ import {
   UPDATE_CARD_SET_SHARING_QUERY,
   DELETE_CARD_SET_QUERY,
   SEARCH_CARD_SET_QUERY,
+  UNSUBSCRIBE_QUERY,
 } from './queries';
 import { ERROR_CODES } from '../../utils/errors';
 import { useSnackBarNotification } from '../../hooks';
@@ -46,6 +48,7 @@ import {
   pageCardSetsRowsPerPageVar,
   pageCardSetsPageNumberVar,
 } from '../../cache';
+import { ModalSubscription } from './TabCardSetsShared';
 
 type ModalDeleteCardSet = {
   show: boolean;
@@ -67,7 +70,9 @@ type ModalSharingCardSet = {
   show: boolean;
 };
 
-type PageCardSetsProps = WithStyles<typeof styles>;
+interface TabCardSetsProps extends WithStyles<typeof tabCardSetsStyles> {
+  userId?: string | undefined;
+}
 
 const modalInitialStateDeleteCardSet: ModalDeleteCardSet = {
   show: false,
@@ -95,7 +100,10 @@ const modalInitialStateStopSharingCardSet: ModalSharingCardSet = {
   name: '',
 };
 
-const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
+const TabCardSets = ({ classes, userId }: TabCardSetsProps) => {
+  const [modalUnSubscribe, setModalUnSubscribe] = useState<ModalSubscription>(
+    modalInitialStateStopSharingCardSet
+  );
   const [showErrorSnackBar] = useSnackBarNotification();
   const {
     data: {
@@ -134,6 +142,10 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
   });
 
   const [onDeleteCardSet] = useMutation(DELETE_CARD_SET_QUERY, {
+    onCompleted: () => cardSetsRefetch(),
+  });
+
+  const [onUnSubscribe] = useMutation(UNSUBSCRIBE_QUERY, {
     onCompleted: () => cardSetsRefetch(),
   });
 
@@ -219,58 +231,73 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
 
   const getDropDownMenuItems = useCallback(
     (item: CardSet) => {
-      return [
-        {
-          id: 'sharing',
-          text: item.isShared ? (
-            <FormattedMessage id='btn.stop.sharing' />
-          ) : (
-            <FormattedMessage id='btn.start.sharing' />
-          ),
-          icon: item.isShared ? <HighlightOffIcon /> : <ShareIcon />,
-          onClick: item.isShared
-            ? () =>
-                setStopSharingCardSet({
+      return item.userId === userId
+        ? [
+            {
+              id: 'sharing',
+              text: item.isShared ? (
+                <FormattedMessage id='btn.stop.sharing' />
+              ) : (
+                <FormattedMessage id='btn.start.sharing' />
+              ),
+              icon: item.isShared ? <HighlightOffIcon /> : <ShareIcon />,
+              onClick: item.isShared
+                ? () =>
+                    setStopSharingCardSet({
+                      show: true,
+                      id: item.id,
+                      name: item.name,
+                    })
+                : () =>
+                    setStartSharingCardSet({
+                      show: true,
+                      id: item.id,
+                      name: item.name,
+                    }),
+            },
+            {
+              id: 'edit',
+              text: <FormattedMessage id='btn.edit' />,
+              icon: <EditIcon />,
+              onClick: () => {
+                setOpenManageCardSet({
+                  show: true,
+                  edit: true,
+                  create: false,
+                  id: item.id,
+                  name: item.name,
+                });
+              },
+            },
+            {
+              id: 'delete',
+              text: <FormattedMessage id='btn.delete' />,
+              icon: <DeleteIcon />,
+              onClick: () => {
+                setDeleteCardSet({
                   show: true,
                   id: item.id,
                   name: item.name,
-                })
-            : () =>
-                setStartSharingCardSet({
+                });
+              },
+            },
+          ]
+        : [
+            {
+              id: 'unsubscribe',
+              text: 'Unsubscribe',
+              icon: <UnsubscribeIcon />,
+              onClick: () => {
+                setModalUnSubscribe({
                   show: true,
                   id: item.id,
                   name: item.name,
-                }),
-        },
-        {
-          id: 'edit',
-          text: <FormattedMessage id='btn.edit' />,
-          icon: <EditIcon />,
-          onClick: () => {
-            setOpenManageCardSet({
-              show: true,
-              edit: true,
-              create: false,
-              id: item.id,
-              name: item.name,
-            });
-          },
-        },
-        {
-          id: 'delete',
-          text: <FormattedMessage id='btn.delete' />,
-          icon: <DeleteIcon />,
-          onClick: () => {
-            setDeleteCardSet({
-              show: true,
-              id: item.id,
-              name: item.name,
-            });
-          },
-        },
-      ];
+                });
+              },
+            },
+          ];
     },
-    [cardSets]
+    [cardSets, userId]
   );
 
   const startLearningCell = ({
@@ -336,6 +363,18 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
     );
   };
 
+  const getFolderIcons = (currentUserId: string, isShared: boolean) => {
+    if (currentUserId !== userId) {
+      return <FolderSpecialIcon fontSize='small' color='primary' />;
+    }
+
+    if (isShared && currentUserId === userId) {
+      return <FolderSharedIcon fontSize='small' color='primary' />;
+    }
+
+    return <FolderIcon fontSize='small' color='primary' />;
+  };
+
   const folderIconCell = ({
     cell: {
       row: { original },
@@ -351,11 +390,7 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
           to={ROUTES.cards.replace(':id', original.id)}
           aria-label='cards'
         >
-          {original.isShared ? (
-            <FolderSharedIcon fontSize='small' color='primary' />
-          ) : (
-            <FolderIcon fontSize='small' color='primary' />
-          )}
+          {getFolderIcons(original.userId, original.isShared)}
         </IconButton>
       </Tooltip>
     );
@@ -391,7 +426,7 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
         width: 60,
       },
     ],
-    []
+    [userId]
   );
 
   const onSearch = (search: string): void => {
@@ -409,7 +444,7 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
   };
 
   return (
-    <Container className={classes.container} maxWidth='md'>
+    <>
       <PageMainHeader
         onAdd={() => {
           setOpenManageCardSet({
@@ -535,8 +570,27 @@ const PageCardSets = ({ classes }: PageCardSetsProps): JSX.Element => {
           />
         }
       />
-    </Container>
+      <DialogConfirm
+        isOpen={modalUnSubscribe.show}
+        handleAgree={() =>
+          onUnSubscribe({
+            variables: { cardSetId: modalUnSubscribe.id },
+          })
+        }
+        handleClose={() =>
+          setModalUnSubscribe({ ...modalUnSubscribe, show: false })
+        }
+        msgTitle='Unsubscription'
+        msgClose={<FormattedMessage id='btn.close' />}
+        msgAgree='Unsubscribe'
+        msgBody={`Are you sure you want to unsubscribe from ${modalUnSubscribe.name}? Your progress on this set of cards will be deleted!`}
+      />
+    </>
   );
 };
 
-export default PageCardSets;
+TabCardSets.defaultProps = {
+  userId: undefined,
+};
+
+export default withStyles(tabCardSetsStyles)(TabCardSets);

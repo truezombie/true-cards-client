@@ -1,5 +1,6 @@
 const ROUTES = {
   main: '/',
+  shared: '/shared',
   login: '/login',
   registration: '/registration',
   registrationConfirm: '/registration/:id',

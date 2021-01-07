@@ -8,6 +8,21 @@ export const LIST_CARD_SETS_QUERY = gql`
         id
         name
         isShared
+        userId
+      }
+    }
+  }
+`;
+
+export const LIST_SHARED_CARD_SETS_QUERY = gql`
+  query($search: String!, $page: Int!, $rowsPerPage: Int!) {
+    sharedCardSets(search: $search, page: $page, rowsPerPage: $rowsPerPage) {
+      count
+      subscriptions
+      cardSets {
+        id
+        name
+        isShared
       }
     }
   }
@@ -18,6 +33,14 @@ export const SEARCH_CARD_SET_QUERY = gql`
     pageCardSetsSearch @client
     pageCardSetsPageNumber @client
     pageCardSetsRowsPerPage @client
+  }
+`;
+
+export const SEARCH_SHARED_CARD_SET_QUERY = gql`
+  query {
+    pageSharedCardSetsSearch @client
+    pageSharedCardSetsPageNumber @client
+    pageSharedCardSetsRowsPerPage @client
   }
 `;
 
@@ -42,5 +65,17 @@ export const UPDATE_CARD_SET_SHARING_QUERY = gql`
 export const DELETE_CARD_SET_QUERY = gql`
   mutation($cardSetId: String!) {
     deleteCardSet(cardSetId: $cardSetId)
+  }
+`;
+
+export const SUBSCRIBE_QUERY = gql`
+  mutation($cardSetId: String!) {
+    setSubscription(cardSetId: $cardSetId)
+  }
+`;
+
+export const UNSUBSCRIBE_QUERY = gql`
+  mutation($cardSetId: String!) {
+    setUnSubscription(cardSetId: $cardSetId)
   }
 `;

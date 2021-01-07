@@ -105,6 +105,7 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
     called: calledCardSetWithCards,
     refetch: refetchCardSetWithCards,
     loading: isLoading,
+    error: cardSetsFetchingError,
     data = {
       cards: {
         cardSetId: '',
@@ -276,7 +277,11 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
   }, [calledCardSetWithCards, isLoading, data]);
 
   const noDataFullPage = useMemo(() => {
-    return calledCardSetWithCards && !isLoading && !data ? (
+    const noData = calledCardSetWithCards && !isLoading && !data;
+    const cardSetNotFound =
+      cardSetsFetchingError?.message === ERROR_CODES.ERROR_CARD_SET_NOT_FOUND;
+
+    return noData || cardSetNotFound ? (
       <FullBlockMessage
         message={<FormattedMessage id='no.data' />}
         link={{
@@ -285,7 +290,7 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
         }}
       />
     ) : null;
-  }, [calledCardSetWithCards, isLoading, data]);
+  }, [calledCardSetWithCards, isLoading, data, cardSetsFetchingError]);
 
   const messagesModalManageCard: {
     title: string | JSX.Element;
@@ -329,10 +334,9 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
     <>
       {loader}
       {noDataFullPage}
-      {data ? (
+      {!isLoading && !noDataFullPage ? (
         <Container maxWidth='md' className={classes.container}>
           <PageMainHeader
-            // isLoading={isLoading && !!data.cardSetWithCards.cards.length}
             onAdd={() => {
               setManageCardModalData({
                 ...initialStateManageModal,

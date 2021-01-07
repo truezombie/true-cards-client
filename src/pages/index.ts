@@ -6,7 +6,6 @@ import PageForgotPassword from './PageForgotPassword';
 import PageStartLearning from './PageStartLearning';
 import PageCards from './PageCards';
 import PageContacts from './PageContacts';
-import PageCardSets from './PageCardSets';
 import PageLearning from './PageLearning';
 import PageLearningDone from './PageLearningDone';
 import PageSettingsForgettingIndex from './PageSettingsForgettingIndex';
@@ -21,7 +20,6 @@ export {
   PageStartLearning,
   PageCards,
   PageContacts,
-  PageCardSets,
   PageLearning,
   PageLearningDone,
   PageSettingsForgettingIndex,

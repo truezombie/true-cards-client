@@ -10,8 +10,8 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import styles from './styles';
 
 interface PageMainHeaderProps extends WithStyles<typeof styles> {
-  onAdd: () => void;
-  msgAddBtn: JSX.Element | string;
+  onAdd?: () => void;
+  msgAddBtn?: JSX.Element | string;
   msgTitle: JSX.Element | string;
   link?: string | null;
   currentValue?: number | null;
@@ -51,17 +51,19 @@ const PageMainHeader = ({
           </Typography>
         ) : null}
 
-        <div className={classes.headerBtn}>
-          <Button
-            onClick={onAdd}
-            variant='contained'
-            color='secondary'
-            startIcon={<AddIcon />}
-            disableElevation
-          >
-            {msgAddBtn}
-          </Button>
-        </div>
+        {onAdd && msgAddBtn ? (
+          <div className={classes.headerBtn}>
+            <Button
+              onClick={onAdd}
+              variant='contained'
+              color='secondary'
+              startIcon={<AddIcon />}
+              disableElevation
+            >
+              {msgAddBtn}
+            </Button>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -71,6 +73,8 @@ PageMainHeader.defaultProps = {
   link: null,
   currentValue: null,
   maxValue: null,
+  onAdd: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
+  msgAddBtn: '',
 };
 
 export default PageMainHeader;

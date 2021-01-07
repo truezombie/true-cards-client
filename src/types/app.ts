@@ -13,6 +13,7 @@ export type CardSet = {
   name: string;
   isShared: boolean;
   cardsMax: number;
+  userId: string;
 };
 
 export type CardSetsType = {
