@@ -3,6 +3,5 @@ const CONFIG = {
   maxErrorMessages: 5,
   paginationRowsPerPage: [10, 30, 50],
 };
-3;
 
 export default CONFIG;
