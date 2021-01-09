@@ -203,7 +203,7 @@ const TabCardSetsShared = ({ classes }: TabCardSetsSharedProps) => {
       },
       {
         id: 'name',
-        Header: 'Folder name',
+        Header: <FormattedMessage id='table.title.folder.name' />,
         accessor: 'name',
         Cell: nameCell,
       },
@@ -227,12 +227,7 @@ const TabCardSetsShared = ({ classes }: TabCardSetsSharedProps) => {
 
   return (
     <>
-      {/* TODO: need to delete onAdd button */}
-      <PageMainHeader
-        msgTitle='Shared card sets'
-        onAdd={() => {}} // eslint-disable-line
-        msgAddBtn={<FormattedMessage id='btn.new.card.set' />}
-      />
+      <PageMainHeader msgTitle='Shared card sets' />
       <Table
         data={cardSets}
         columns={columns}
@@ -258,10 +253,13 @@ const TabCardSetsShared = ({ classes }: TabCardSetsSharedProps) => {
         }
         msgTitle='Subscription'
         msgClose={<FormattedMessage id='btn.close' />}
-        msgAgree='Subscribe'
-        msgBody={`After subscription of ${modalSubscribe.name} card set you can find it in your card sets
-            and start learning.
-          `}
+        msgAgree={<FormattedMessage id='btn.subscribe' />}
+        msgBody={
+          <FormattedMessage
+            id='modal.subscribe.body'
+            values={{ name: modalSubscribe.name }}
+          />
+        }
       />
       <DialogConfirm
         isOpen={modalUnSubscribe.show}
@@ -273,10 +271,15 @@ const TabCardSetsShared = ({ classes }: TabCardSetsSharedProps) => {
         handleClose={() =>
           setModalUnSubscribe({ ...modalUnSubscribe, show: false })
         }
-        msgTitle='Unsubscription'
+        msgTitle={<FormattedMessage id='modal.unsubscribe.title' />}
         msgClose={<FormattedMessage id='btn.close' />}
-        msgAgree='Unsubscribe'
-        msgBody={`Are you sure you want to unsubscribe from ${modalUnSubscribe.name}? Your progress on this set of cards will be deleted!`}
+        msgAgree={<FormattedMessage id='btn.unsubscription' />}
+        msgBody={
+          <FormattedMessage
+            id='modal.unsubscribe.body'
+            values={{ name: modalUnSubscribe.name }}
+          />
+        }
       />
     </>
   );

@@ -112,6 +112,7 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
         cardSetName: '',
         cards: [],
         cardsMax: 0,
+        isFollowingCardSet: true,
         count: 0,
       },
     },
@@ -124,7 +125,7 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
   });
 
   const {
-    cards: { cardSetName, cards, count, cardsMax },
+    cards: { cardSetName, cards, count, cardsMax, isFollowingCardSet },
   } = data;
 
   const [onCreateCard, { error: createCardError }] = useMutation(
@@ -337,6 +338,7 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
       {!isLoading && !noDataFullPage ? (
         <Container maxWidth='md' className={classes.container}>
           <PageMainHeader
+            isDisabledAddBtn={isFollowingCardSet}
             onAdd={() => {
               setManageCardModalData({
                 ...initialStateManageModal,

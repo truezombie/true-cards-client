@@ -33,6 +33,7 @@ const ContainerStartLearning = ({
         cards: [],
         cardsMax: 0,
         count: 0,
+        isFollowingCardSet: true,
       },
     },
   } = useQuery<CardsType>(GET_CARDS_QUERY, {

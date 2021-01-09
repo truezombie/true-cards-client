@@ -13,9 +13,10 @@ interface PageMainHeaderProps extends WithStyles<typeof styles> {
   onAdd?: () => void;
   msgAddBtn?: JSX.Element | string;
   msgTitle: JSX.Element | string;
-  link?: string | null;
-  currentValue?: number | null;
-  maxValue?: number | null;
+  link?: string | undefined;
+  currentValue?: number | undefined;
+  maxValue?: number | undefined;
+  isDisabledAddBtn?: boolean | undefined;
 }
 
 const PageMainHeader = ({
@@ -26,6 +27,7 @@ const PageMainHeader = ({
   msgAddBtn,
   currentValue,
   maxValue,
+  isDisabledAddBtn,
 }: PageMainHeaderProps): JSX.Element => {
   return (
     <div className={classes.headerWrapper}>
@@ -34,12 +36,22 @@ const PageMainHeader = ({
           {link ? (
             <Link className={classes.headerTitleLink} to={link}>
               <ChevronLeftIcon className={classes.chevron} />
-              <Typography component='span' variant='subtitle1' display='block'>
+              <Typography
+                className={classes.title}
+                component='span'
+                variant='subtitle1'
+                display='block'
+              >
                 {msgTitle}
               </Typography>
             </Link>
           ) : (
-            <Typography component='span' variant='subtitle1' display='block'>
+            <Typography
+              className={classes.title}
+              component='span'
+              variant='subtitle1'
+              display='block'
+            >
               {msgTitle}
             </Typography>
           )}
@@ -58,6 +70,7 @@ const PageMainHeader = ({
               variant='contained'
               color='secondary'
               startIcon={<AddIcon />}
+              disabled={isDisabledAddBtn}
               disableElevation
             >
               {msgAddBtn}
@@ -70,11 +83,12 @@ const PageMainHeader = ({
 };
 
 PageMainHeader.defaultProps = {
-  link: null,
-  currentValue: null,
-  maxValue: null,
+  link: undefined,
+  currentValue: undefined,
+  maxValue: undefined,
   onAdd: () => {}, // eslint-disable-line @typescript-eslint/no-empty-function
   msgAddBtn: '',
+  isDisabledAddBtn: undefined,
 };
 
 export default PageMainHeader;

@@ -43,6 +43,7 @@ export type CardsType = {
     cards: CardType[];
     count: number;
     cardsMax: number;
+    isFollowingCardSet: boolean;
   };
 };
 

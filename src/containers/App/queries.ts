@@ -24,6 +24,7 @@ export const GET_CARDS_QUERY = gql`
       cardSetName
       count
       cardsMax
+      isFollowingCardSet
       cards {
         id
         cardSetId

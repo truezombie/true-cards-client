@@ -32,4 +32,8 @@ export default (theme: Theme): StyleRules =>
       flexShrink: 0,
       marginLeft: theme.spacing(3),
     },
+    title: {
+      lineHeight: '36px',
+      height: '36px',
+    },
   });

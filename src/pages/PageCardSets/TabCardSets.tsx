@@ -407,7 +407,7 @@ const TabCardSets = ({ classes, userId }: TabCardSetsProps) => {
       },
       {
         id: 'name',
-        Header: 'Folder name',
+        Header: <FormattedMessage id='table.title.folder.name' />,
         accessor: 'name',
         Cell: nameCell,
       },
@@ -580,10 +580,15 @@ const TabCardSets = ({ classes, userId }: TabCardSetsProps) => {
         handleClose={() =>
           setModalUnSubscribe({ ...modalUnSubscribe, show: false })
         }
-        msgTitle='Unsubscription'
+        msgTitle={<FormattedMessage id='modal.unsubscribe.title' />}
         msgClose={<FormattedMessage id='btn.close' />}
-        msgAgree='Unsubscribe'
-        msgBody={`Are you sure you want to unsubscribe from ${modalUnSubscribe.name}? Your progress on this set of cards will be deleted!`}
+        msgAgree={<FormattedMessage id='btn.unsubscription' />}
+        msgBody={
+          <FormattedMessage
+            id='modal.unsubscribe.body'
+            values={{ name: modalUnSubscribe.name }}
+          />
+        }
       />
     </>
   );
