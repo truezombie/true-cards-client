@@ -23,6 +23,7 @@ export const LIST_SHARED_CARD_SETS_QUERY = gql`
         id
         name
         isShared
+        author
       }
     }
   }

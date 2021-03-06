@@ -112,7 +112,7 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
         cardSetName: '',
         cards: [],
         cardsMax: 0,
-        isFollowingCardSet: true,
+        isFollowingCardSet: false,
         count: 0,
       },
     },
@@ -140,7 +140,13 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
   });
 
   const [onDeleteCard] = useMutation(DELETE_CARD_QUERY, {
-    onCompleted: () => refetchCardSetWithCards(),
+    onCompleted: () => {
+      setSearchParams({
+        ...searchParams,
+        page: 0,
+      });
+      refetchCardSetWithCards();
+    },
   });
 
   const statusCell = ({
@@ -195,18 +201,20 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
     },
   }: CellProps<CardType>) => (
     <Menu items={getDropDownMenuItems(original, value)}>
-      <Tooltip
-        disableFocusListener
-        title={<FormattedMessage id='tooltip.options' />}
-      >
-        <IconButton
-          aria-label='more'
-          aria-controls='simple-menu'
-          aria-haspopup='true'
-        >
+      {isFollowingCardSet ? (
+        <IconButton disabled={isFollowingCardSet}>
           <MoreVertIcon fontSize='small' />
         </IconButton>
-      </Tooltip>
+      ) : (
+        <Tooltip
+          disableFocusListener
+          title={<FormattedMessage id='tooltip.options' />}
+        >
+          <IconButton>
+            <MoreVertIcon fontSize='small' />
+          </IconButton>
+        </Tooltip>
+      )}
     </Menu>
   );
 
@@ -237,16 +245,11 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
         Cell: editAndDeleteCell,
       },
     ],
-    []
+    [isFollowingCardSet]
   );
 
   const createCardValidationSchema = Yup.object().shape({
     front: Yup.string()
-      .trim(
-        intl.formatMessage({
-          id: 'input.error.spaces',
-        })
-      )
       .strict(true)
       .min(
         APP.minEnteredCharacters,
@@ -335,7 +338,7 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
     <>
       {loader}
       {noDataFullPage}
-      {!isLoading && !noDataFullPage ? (
+      {!noDataFullPage ? (
         <Container maxWidth='md' className={classes.container}>
           <PageMainHeader
             isDisabledAddBtn={isFollowingCardSet}
@@ -373,15 +376,23 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
               setManageCardModalData({ ...manageCardModalData, show: false })
             }
             onSubmit={(values, { setSubmitting }) => {
+              const {
+                front,
+                frontDescription,
+                back,
+                backDescription,
+                hasBackSide,
+              } = values;
+
               if (manageCardModalData.edit) {
                 onUpdateCard({
                   variables: {
                     cardId: manageCardModalData.id,
-                    front: values.front,
-                    frontDescription: values.frontDescription,
-                    back: values.back,
-                    backDescription: values.backDescription,
-                    hasBackSide: values.hasBackSide,
+                    front,
+                    frontDescription,
+                    back,
+                    backDescription,
+                    hasBackSide,
                   },
                 });
               }
@@ -390,11 +401,11 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
                 onCreateCard({
                   variables: {
                     cardSetId: urlParams.id,
-                    front: values.front,
-                    frontDescription: values.frontDescription,
-                    back: values.back,
-                    backDescription: values.backDescription,
-                    hasBackSide: values.hasBackSide,
+                    front,
+                    frontDescription,
+                    back,
+                    backDescription,
+                    hasBackSide,
                   },
                 });
               }

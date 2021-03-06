@@ -41,6 +41,7 @@ const PageMainHeader = ({
                 component='span'
                 variant='subtitle1'
                 display='block'
+                noWrap
               >
                 {msgTitle}
               </Typography>
@@ -51,6 +52,7 @@ const PageMainHeader = ({
               component='span'
               variant='subtitle1'
               display='block'
+              noWrap
             >
               {msgTitle}
             </Typography>
@@ -58,7 +60,11 @@ const PageMainHeader = ({
         </div>
 
         {currentValue === 0 || (currentValue && maxValue) ? (
-          <Typography variant='button' display='block'>
+          <Typography
+            className={classes.headerCounter}
+            variant='button'
+            display='block'
+          >
             {`${currentValue} / ${maxValue}`}
           </Typography>
         ) : null}

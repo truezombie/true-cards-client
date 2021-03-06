@@ -11,7 +11,6 @@ import ShareIcon from '@material-ui/icons/Share';
 import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
-import { WithStyles, withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -20,6 +19,7 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import FolderSharedIcon from '@material-ui/icons/FolderShared';
 import FolderSpecialIcon from '@material-ui/icons/FolderSpecial';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+import { WithStyles, withStyles } from '@material-ui/core/styles';
 
 import {
   Table,
@@ -177,17 +177,13 @@ const TabCardSets = ({ classes, userId }: TabCardSetsProps) => {
 
   const handleDeleteCardSet = useCallback(() => {
     if (deleteCardSet.id) {
+      pageCardSetsPageNumberVar(0);
       onDeleteCardSet({ variables: { cardSetId: deleteCardSet.id } });
     }
   }, [deleteCardSet.id]);
 
   const createNewCardSetValidationSchema = Yup.object().shape({
     name: Yup.string()
-      .trim(
-        intl.formatMessage({
-          id: 'input.error.spaces',
-        })
-      )
       .strict(true)
       .min(
         APP.minEnteredCharacters,

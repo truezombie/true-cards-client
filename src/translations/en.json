@@ -14,7 +14,6 @@
   "input.error.passwords.must.match": "Passwords must match",
   "input.error.min.length": "Min field length {value} characters",
   "input.error.max.length": "Max filed length {value} characters",
-  "input.error.spaces": "This field cannot include leading and trailing spaces",
   "input.error.uuid": "Uuid is not valid",
   "input.error.is.not.integer": "Value is not integer",
   "input.error.min.days": "Minimum number of days {value}",

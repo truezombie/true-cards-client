@@ -14,7 +14,12 @@ export default (theme: Theme): StyleRules =>
     },
     headerTitle: {
       flexGrow: 1,
+      overflow: 'hidden',
       textTransform: 'uppercase',
+    },
+    headerCounter: {
+      whiteSpace: 'nowrap',
+      paddingLeft: theme.spacing(1),
     },
     chevron: {
       color: theme.palette.primary.main,

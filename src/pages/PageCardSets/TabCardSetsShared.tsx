@@ -208,6 +208,11 @@ const TabCardSetsShared = ({ classes }: TabCardSetsSharedProps) => {
         Cell: nameCell,
       },
       {
+        id: 'cardSetAuthor',
+        Header: 'Author',
+        accessor: 'author',
+      },
+      {
         id: 'startFollowing',
         Header: '',
         accessor: 'id',
