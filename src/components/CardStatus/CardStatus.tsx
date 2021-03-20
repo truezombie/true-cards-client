@@ -13,16 +13,16 @@ type CardStatusProps = {
 };
 
 const CardStatus = ({ card }: CardStatusProps): JSX.Element => {
-  if (isLearnedCard(card)) {
-    return <FormattedMessage id='card.status.learned' />;
-  }
-
   if (isNewCard(card)) {
     return <FormattedMessage id='card.status.new' />;
   }
 
   if (isForgottenCard(card)) {
     return <FormattedMessage id='card.status.forgot' />;
+  }
+
+  if (isLearnedCard(card)) {
+    return <FormattedMessage id='card.status.learned' />;
   }
 
   return <FormattedMessage id='card.status.not.found' />;

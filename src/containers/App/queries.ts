@@ -34,8 +34,10 @@ export const GET_CARDS_QUERY = gql`
         backDescription
         hasBackSide
         timeAdded
-        timeLastSuccess
-        timesSuccess
+        progress {
+          timeLastSuccess
+          timesSuccess
+        }
       }
     }
   }

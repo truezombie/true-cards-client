@@ -62,7 +62,6 @@
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-hooks": "^4.1.2",
     "eslint-watch": "^7.0.0",
-    "hard-source-webpack-plugin": "^0.13.1",
     "html-webpack-plugin": "^4.3.0",
     "husky": "^4.3.0",
     "jest": "^26.0.1",

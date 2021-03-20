@@ -24,6 +24,11 @@ export type CardSetsType = {
   };
 };
 
+export type CardProgress = {
+  timeLastSuccess: number;
+  timesSuccess: number;
+};
+
 export type CardType = {
   id: string;
   cardSetId: string;
@@ -33,8 +38,7 @@ export type CardType = {
   backDescription?: string;
   hasBackSide?: boolean;
   timeAdded: number;
-  timeLastSuccess: number;
-  timesSuccess: number;
+  progress: [CardProgress];
 };
 
 export type CardsType = {

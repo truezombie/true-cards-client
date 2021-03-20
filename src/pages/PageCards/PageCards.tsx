@@ -234,7 +234,7 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
         id: 'status',
         Header: <FormattedMessage id='table.cards.title.status' />,
         accessor: 'id',
-        width: 80,
+        width: 90,
         Cell: statusCell,
       },
       {
