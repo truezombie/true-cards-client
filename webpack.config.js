@@ -12,8 +12,8 @@ module.exports = (env, argv) => {
 
     output: {
       path: path.resolve(__dirname, './dist'),
-      filename: '[name].[chunkhash].js',
-      chunkFilename: '[name].[chunkhash].chunk.js',
+      filename: '[name].[contenthash].js',
+      chunkFilename: '[name].[contenthash].chunk.js',
       publicPath: '/',
     },
 
@@ -67,9 +67,7 @@ module.exports = (env, argv) => {
             },
           },
           minimize: true,
-          minimizer: [
-            new TerserPlugin(),
-          ],
+          minimizer: [new TerserPlugin()],
         }
       : {},
 

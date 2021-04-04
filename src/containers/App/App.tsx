@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { IntlProvider } from 'react-intl';
-import Loadable from 'react-loadable';
 import { useQuery } from '@apollo/client';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,41 +17,15 @@ import messagesEn from '../../translations/en.json';
 import messagesRu from '../../translations/ru.json';
 import messagesUa from '../../translations/ua.json';
 
-const ContainerMain = Loadable({
-  loader: () => import('../ContainerMain'),
-  loading() {
-    return <Loader />;
-  },
-});
-
-const ContainerLogin = Loadable({
-  loader: () => import('../ContainerLogin/ContainerLogin'),
-  loading() {
-    return <Loader />;
-  },
-});
-
-const ContainerRegistration = Loadable({
-  loader: () => import('../ContainerRegistration/ContainerRegistration'),
-  loading() {
-    return <Loader />;
-  },
-});
-
-const ContainerForgotPassword = Loadable({
-  loader: () => import('../ContainerForgotPassword/ContainerForgotPassword'),
-  loading() {
-    return <Loader />;
-  },
-});
-
-const ContainerConfirmRegistration = Loadable({
-  loader: () =>
-    import('../ContainerConfirmRegistration/ContainerConfirmRegistration'),
-  loading() {
-    return <Loader />;
-  },
-});
+const ContainerMain = lazy(() => import('../ContainerMain'));
+const ContainerLogin = lazy(() => import('../ContainerLogin'));
+const ContainerRegistration = lazy(() => import('../ContainerRegistration'));
+const ContainerForgotPassword = lazy(
+  () => import('../ContainerForgotPassword')
+);
+const ContainerConfirmRegistration = lazy(
+  () => import('../ContainerConfirmRegistration')
+);
 
 const messages = {
   en: messagesEn,
@@ -69,28 +42,30 @@ const App = (): JSX.Element => {
         <CssBaseline />
         <SnackbarProvider maxSnack={CONFIG.maxErrorMessages}>
           <AppWrapper>
-            <Router>
-              <Switch>
-                <Route path={ROUTES.login}>
-                  <ContainerLogin />
-                </Route>
-                <Route path={ROUTES.registration} exact>
-                  <ContainerRegistration />
-                </Route>
-                <Route path={ROUTES.registrationConfirm} exact>
-                  <ContainerConfirmRegistration />
-                </Route>
-                <Route path={ROUTES.forgotPassword}>
-                  <ContainerForgotPassword />
-                </Route>
-                <PrivateRoute
-                  isLoggedIn={!!data?.isLoggedIn}
-                  path={ROUTES.main}
-                >
-                  <ContainerMain />
-                </PrivateRoute>
-              </Switch>
-            </Router>
+            <Suspense fallback={<Loader />}>
+              <Router>
+                <Switch>
+                  <Route path={ROUTES.login}>
+                    <ContainerLogin />
+                  </Route>
+                  <Route path={ROUTES.registration} exact>
+                    <ContainerRegistration />
+                  </Route>
+                  <Route path={ROUTES.registrationConfirm} exact>
+                    <ContainerConfirmRegistration />
+                  </Route>
+                  <Route path={ROUTES.forgotPassword}>
+                    <ContainerForgotPassword />
+                  </Route>
+                  <PrivateRoute
+                    isLoggedIn={!!data?.isLoggedIn}
+                    path={ROUTES.main}
+                  >
+                    <ContainerMain />
+                  </PrivateRoute>
+                </Switch>
+              </Router>
+            </Suspense>
           </AppWrapper>
         </SnackbarProvider>
       </ThemeProvider>
