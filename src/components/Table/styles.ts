@@ -59,6 +59,12 @@ const tableSearchInputStyles = (theme: Theme): StyleRules =>
 
 const tablePaginationStyles = (theme: Theme): StyleRules =>
   createStyles({
+    button: {
+      marginRight: theme.spacing(2),
+      '&:last-child': {
+        marginRight: 0,
+      },
+    },
     toolbar: {
       padding: `0 ${theme.spacing(2)}px`,
     },
@@ -67,12 +73,6 @@ const tablePaginationStyles = (theme: Theme): StyleRules =>
     },
     caption: {
       marginRight: theme.spacing(2),
-    },
-    paginationButton: {
-      marginRight: theme.spacing(2),
-      '&:last-child': {
-        marginRight: 0,
-      },
     },
   });
 

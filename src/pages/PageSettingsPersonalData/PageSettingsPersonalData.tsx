@@ -19,7 +19,7 @@ type PageSettingsPersonalDataProps = WithStyles<typeof styles>;
 
 const PageSettingsPersonalData = ({
   classes,
-}: PageSettingsPersonalDataProps) => {
+}: PageSettingsPersonalDataProps): JSX.Element => {
   const {
     loading: settingsPageDataLoading,
     refetch: refetchSettingsPageData,

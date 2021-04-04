@@ -10,9 +10,9 @@ import { WithStyles, useTheme } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/styles';
 
 import CONFIG from '../../utils/config';
-import { tablePaginationStyles, tableSearchInputStyles } from './styles';
+import { tablePaginationStyles } from './styles';
 
-interface PaginationProps extends WithStyles<typeof tableSearchInputStyles> {
+interface PaginationProps extends WithStyles<typeof tablePaginationStyles> {
   count: number;
   page: number;
   rowsPerPage: number;
@@ -33,86 +33,31 @@ const Pagination = ({
   onChangeRowsPerPage,
   classes,
 }: PaginationProps) => {
-  function TablePaginationActions() {
-    const theme = useTheme();
+  const theme = useTheme();
 
-    const handleFirstPageButtonClick = (
-      event: React.MouseEvent<HTMLButtonElement>
-    ) => {
-      onChangePage(event, 0);
-    };
+  const handleFirstPageButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    onChangePage(event, 0);
+  };
 
-    const handleBackButtonClick = (
-      event: React.MouseEvent<HTMLButtonElement>
-    ) => {
-      onChangePage(event, page - 1);
-    };
+  const handleBackButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    onChangePage(event, page - 1);
+  };
 
-    const handleNextButtonClick = (
-      event: React.MouseEvent<HTMLButtonElement>
-    ) => {
-      onChangePage(event, page + 1);
-    };
+  const handleNextButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    onChangePage(event, page + 1);
+  };
 
-    const handleLastPageButtonClick = (
-      event: React.MouseEvent<HTMLButtonElement>
-    ) => {
-      onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-    };
-
-    return (
-      <>
-        <IconButton
-          onClick={handleFirstPageButtonClick}
-          disabled={page === 0}
-          aria-label='first page'
-          className={classes.paginationButton}
-        >
-          {theme.direction === 'rtl' ? (
-            <LastPageIcon fontSize='small' />
-          ) : (
-            <FirstPageIcon fontSize='small' />
-          )}
-        </IconButton>
-        <IconButton
-          onClick={handleBackButtonClick}
-          disabled={page === 0}
-          aria-label='previous page'
-          className={classes.paginationButton}
-        >
-          {theme.direction === 'rtl' ? (
-            <KeyboardArrowRight fontSize='small' />
-          ) : (
-            <KeyboardArrowLeft fontSize='small' />
-          )}
-        </IconButton>
-        <IconButton
-          onClick={handleNextButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          aria-label='next page'
-          className={classes.paginationButton}
-        >
-          {theme.direction === 'rtl' ? (
-            <KeyboardArrowLeft fontSize='small' />
-          ) : (
-            <KeyboardArrowRight fontSize='small' />
-          )}
-        </IconButton>
-        <IconButton
-          onClick={handleLastPageButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          aria-label='last page'
-          className={classes.paginationButton}
-        >
-          {theme.direction === 'rtl' ? (
-            <FirstPageIcon fontSize='small' />
-          ) : (
-            <LastPageIcon fontSize='small' />
-          )}
-        </IconButton>
-      </>
-    );
-  }
+  const handleLastPageButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
 
   return (
     <TablePagination
@@ -133,7 +78,58 @@ const Pagination = ({
       }}
       onChangePage={onChangePage}
       onChangeRowsPerPage={onChangeRowsPerPage}
-      ActionsComponent={TablePaginationActions}
+      ActionsComponent={() => (
+        <>
+          <IconButton
+            onClick={handleFirstPageButtonClick}
+            disabled={page === 0}
+            aria-label='first page'
+            className={classes.button}
+          >
+            {theme.direction === 'rtl' ? (
+              <LastPageIcon fontSize='small' />
+            ) : (
+              <FirstPageIcon fontSize='small' />
+            )}
+          </IconButton>
+          <IconButton
+            onClick={handleBackButtonClick}
+            disabled={page === 0}
+            aria-label='previous page'
+            className={classes.button}
+          >
+            {theme.direction === 'rtl' ? (
+              <KeyboardArrowRight fontSize='small' />
+            ) : (
+              <KeyboardArrowLeft fontSize='small' />
+            )}
+          </IconButton>
+          <IconButton
+            onClick={handleNextButtonClick}
+            disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+            aria-label='next page'
+            className={classes.button}
+          >
+            {theme.direction === 'rtl' ? (
+              <KeyboardArrowLeft fontSize='small' />
+            ) : (
+              <KeyboardArrowRight fontSize='small' />
+            )}
+          </IconButton>
+          <IconButton
+            onClick={handleLastPageButtonClick}
+            disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+            aria-label='last page'
+            className={classes.button}
+          >
+            {theme.direction === 'rtl' ? (
+              <FirstPageIcon fontSize='small' />
+            ) : (
+              <LastPageIcon fontSize='small' />
+            )}
+          </IconButton>
+        </>
+      )}
     />
   );
 };

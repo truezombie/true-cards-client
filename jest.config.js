@@ -88,7 +88,7 @@ module.exports = {
   // notifyMode: "failure-change",
 
   // A preset that is used as a base for Jest's configuration
-  // preset: undefined,
+  preset: 'ts-jest',
 
   // Run tests from one or more projects
   // projects: undefined,
@@ -120,10 +120,10 @@ module.exports = {
   // runner: "jest-runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  setupFiles: ['<rootDir>/enzyme.config.js'],
+  setupFiles: ['./config/enzyme.config.ts'],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  setupFilesAfterEnv: ['./config/setupTest.js'],
+  setupFilesAfterEnv: ['./config/setupTest.ts'],
 
   // A list of paths to snapshot serializer modules Jest should use for snapshot testing
   snapshotSerializers: ['./node_modules/enzyme-to-json/serializer'],
@@ -165,7 +165,7 @@ module.exports = {
 
   // A map from regular expressions to paths to transformers
   transform: {
-    '^.+\\.[t|j]sx?$': 'babel-jest',
+    '^.+\\.[t|j]sx?$': 'ts-jest',
   },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation

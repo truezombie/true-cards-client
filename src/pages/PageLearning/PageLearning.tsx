@@ -35,9 +35,10 @@ const PageLearning = ({
   nextLearningCardIsLoading,
 }: LearningProps): JSX.Element => {
   const [isRotated, setRotated] = useState<boolean>(false);
-  const [isDisabledNewCardButtons, setDisabledNewCardButtons] = useState<
-    boolean
-  >(false);
+  const [
+    isDisabledNewCardButtons,
+    setDisabledNewCardButtons,
+  ] = useState<boolean>(false);
 
   const { front = '', frontDescription, back, backDescription, hasBackSide } =
     (currentLearningCardData &&

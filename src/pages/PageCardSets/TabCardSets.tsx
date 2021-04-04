@@ -156,12 +156,14 @@ const TabCardSets = ({ classes, userId }: TabCardSetsProps) => {
   const [manageCardSet, setOpenManageCardSet] = useState<ModalManageCardSet>(
     modalInitialStateManageCardSet
   );
-  const [startSharingCardSet, setStartSharingCardSet] = useState<
-    ModalSharingCardSet
-  >(modalInitialStateStartSharingCardSet);
-  const [stopSharingCardSet, setStopSharingCardSet] = useState<
-    ModalSharingCardSet
-  >(modalInitialStateStopSharingCardSet);
+  const [
+    startSharingCardSet,
+    setStartSharingCardSet,
+  ] = useState<ModalSharingCardSet>(modalInitialStateStartSharingCardSet);
+  const [
+    stopSharingCardSet,
+    setStopSharingCardSet,
+  ] = useState<ModalSharingCardSet>(modalInitialStateStopSharingCardSet);
 
   useEffect(() => {
     showErrorSnackBar(ERROR_CODES.ERROR_CARD_SET_EXIST, createCardSetError);
@@ -425,32 +427,47 @@ const TabCardSets = ({ classes, userId }: TabCardSetsProps) => {
     [userId]
   );
 
-  const onSearch = (search: string): void => {
-    pageCardSetsPageNumberVar(0);
-    pageCardSetsSearchVar(search);
-  };
+  const onSearch = useCallback(
+    (search: string): void => {
+      pageCardSetsPageNumberVar(0);
+      pageCardSetsSearchVar(search);
+    },
+    [pageCardSetsPageNumberVar, pageCardSetsSearchVar]
+  );
 
-  const onPageChange = (page: number): void => {
-    pageCardSetsPageNumberVar(page);
-  };
+  const onPageChange = useCallback(
+    (page: number): void => {
+      pageCardSetsPageNumberVar(page);
+    },
+    [pageCardSetsPageNumberVar]
+  );
 
-  const onRowsPerPageChange = (rows: number): void => {
-    pageCardSetsPageNumberVar(0);
-    pageCardSetsRowsPerPageVar(rows);
-  };
+  const onRowsPerPageChange = useCallback(
+    (rows: number): void => {
+      pageCardSetsPageNumberVar(0);
+      pageCardSetsRowsPerPageVar(rows);
+    },
+    [pageCardSetsPageNumberVar, pageCardSetsRowsPerPageVar]
+  );
+
+  const onOpenManageCardSet = useCallback(() => {
+    setOpenManageCardSet({
+      ...modalInitialStateManageCardSet,
+      show: true,
+      create: true,
+    });
+  }, [setOpenManageCardSet]);
 
   return (
     <>
       <PageMainHeader
-        onAdd={() => {
-          setOpenManageCardSet({
-            ...modalInitialStateManageCardSet,
-            show: true,
-            create: true,
-          });
-        }}
-        msgAddBtn={<FormattedMessage id='btn.new.card.set' />}
-        msgTitle={<FormattedMessage id='page.cardSets.title' />}
+        onAdd={onOpenManageCardSet}
+        msgAddBtn={intl.formatMessage({
+          id: 'btn.new.card.set',
+        })}
+        msgTitle={intl.formatMessage({
+          id: 'page.cardSets.title',
+        })}
       />
       <Table
         data={cardSets}
@@ -463,7 +480,9 @@ const TabCardSets = ({ classes, userId }: TabCardSetsProps) => {
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}
         paginationItemsCount={count}
-        msgNoData={<FormattedMessage id='no.data' />}
+        msgNoData={intl.formatMessage({
+          id: 'no.data',
+        })}
       />
       <DialogForm
         isOpen={manageCardSet.show}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 
 import Typography from '@material-ui/core/Typography';
@@ -11,8 +11,8 @@ import styles from './styles';
 
 interface PageMainHeaderProps extends WithStyles<typeof styles> {
   onAdd?: () => void;
-  msgAddBtn?: JSX.Element | string;
-  msgTitle: JSX.Element | string;
+  msgAddBtn?: string;
+  msgTitle: string;
   link?: string | undefined;
   currentValue?: number | undefined;
   maxValue?: number | undefined;
@@ -97,4 +97,4 @@ PageMainHeader.defaultProps = {
   isDisabledAddBtn: undefined,
 };
 
-export default PageMainHeader;
+export default memo(PageMainHeader);

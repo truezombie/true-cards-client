@@ -311,28 +311,45 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
         };
   }, [manageCardModalData.edit, manageCardModalData.create]);
 
-  const onSearch = (search: string): void => {
-    setSearchParams({
-      ...searchParams,
-      page: 0,
-      search,
-    });
-  };
+  const onSearch = useCallback(
+    (search: string): void => {
+      setSearchParams({
+        ...searchParams,
+        page: 0,
+        search,
+      });
+    },
+    [setSearchParams]
+  );
 
-  const onPageChange = (page: number): void => {
-    setSearchParams({
-      ...searchParams,
-      page,
-    });
-  };
+  const onPageChange = useCallback(
+    (page: number): void => {
+      setSearchParams({
+        ...searchParams,
+        page,
+      });
+    },
+    [setSearchParams]
+  );
 
-  const onRowsPerPageChange = (rowsPerPage: number): void => {
-    setSearchParams({
-      ...searchParams,
-      page: 0,
-      rowsPerPage,
+  const onRowsPerPageChange = useCallback(
+    (rowsPerPage: number): void => {
+      setSearchParams({
+        ...searchParams,
+        page: 0,
+        rowsPerPage,
+      });
+    },
+    [setSearchParams]
+  );
+
+  const onOpenManageCardSet = useCallback(() => {
+    setManageCardModalData({
+      ...initialStateManageModal,
+      show: true,
+      create: true,
     });
-  };
+  }, [setManageCardModalData]);
 
   return (
     <>
@@ -342,17 +359,13 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
         <Container maxWidth='md' className={classes.container}>
           <PageMainHeader
             isDisabledAddBtn={isFollowingCardSet}
-            onAdd={() => {
-              setManageCardModalData({
-                ...initialStateManageModal,
-                show: true,
-                create: true,
-              });
-            }}
+            onAdd={onOpenManageCardSet}
             currentValue={count}
             maxValue={cardsMax}
             link={ROUTES.main}
-            msgAddBtn={<FormattedMessage id='btn.new.card' />}
+            msgAddBtn={intl.formatMessage({
+              id: 'btn.new.card',
+            })}
             msgTitle={cardSetName}
           />
           <Table
@@ -365,8 +378,10 @@ const PageCards = ({ classes }: PageCardsProps): JSX.Element => {
             paginationItemsCount={count}
             page={searchParams.page}
             rowsPerPage={searchParams.rowsPerPage}
-            msgNoData={<FormattedMessage id='no.data' />}
             searchValue={searchParams.search}
+            msgNoData={intl.formatMessage({
+              id: 'no.data',
+            })}
           />
           <DialogForm
             isOpen={manageCardModalData.show}

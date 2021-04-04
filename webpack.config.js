@@ -2,17 +2,18 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
-module.exports = (env = {}) => {
-  const { mode = 'development' } = env;
+module.exports = (env, argv) => {
+  const { mode = 'development' } = argv;
   const isProd = mode === 'production';
   const isDev = mode === 'development';
 
   return {
-    devtool: isProd ? 'none' : 'inline-source-map',
+    devtool: isProd ? undefined : 'inline-source-map',
 
     output: {
       path: path.resolve(__dirname, './dist'),
-      filename: isProd ? '[name].[contenthash].js' : '[name].bundle.js',
+      filename: '[name].[chunkhash].js',
+      chunkFilename: '[name].[chunkhash].chunk.js',
       publicPath: '/',
     },
 
@@ -26,8 +27,8 @@ module.exports = (env = {}) => {
       rules: [
         {
           test: /\.ts(x?)$/,
-          exclude: /node_modules/,
-          loader: ['babel-loader'],
+          exclude: [/node_modules/],
+          loader: 'ts-loader',
         },
       ],
     },
@@ -35,13 +36,39 @@ module.exports = (env = {}) => {
     optimization: isProd
       ? {
           splitChunks: {
-            chunks: 'all',
+            cacheGroups: {
+              default: false,
+              vendors: false,
+
+              // vendor chunk
+              vendor: {
+                // name of the chunk
+                name: 'vendor',
+
+                // async + async chunks
+                chunks: 'all',
+
+                // import file path containing node_modules
+                test: /node_modules/,
+
+                // priority
+                priority: 20,
+              },
+
+              // common chunk
+              common: {
+                name: 'common',
+                minChunks: 2,
+                chunks: 'all',
+                priority: 10,
+                reuseExistingChunk: true,
+                enforce: true,
+              },
+            },
           },
           minimize: true,
           minimizer: [
-            new TerserPlugin({
-              include: /\/includes/,
-            }),
+            new TerserPlugin(),
           ],
         }
       : {},

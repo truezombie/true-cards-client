@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
+import React, { useState, useEffect, useCallback } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useQuery, useMutation } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import { CellProps } from 'react-table';
@@ -52,6 +52,7 @@ export type SharedCardSetsType = {
 };
 
 const TabCardSetsShared = ({ classes }: TabCardSetsSharedProps) => {
+  const intl = useIntl();
   const [showErrorSnackBar] = useSnackBarNotification();
 
   const [modalSubscribe, setModalSubscribe] = useState<ModalSubscription>(
@@ -100,19 +101,28 @@ const TabCardSetsShared = ({ classes }: TabCardSetsSharedProps) => {
     onCompleted: () => onRefetchSharedCardSets(),
   });
 
-  const onSearch = (search: string): void => {
-    pageSharedCardSetsPageNumberVar(0);
-    pageSharedCardSetsSearchVar(search);
-  };
+  const onSearch = useCallback(
+    (search: string): void => {
+      pageSharedCardSetsPageNumberVar(0);
+      pageSharedCardSetsSearchVar(search);
+    },
+    [pageSharedCardSetsPageNumberVar, pageSharedCardSetsSearchVar]
+  );
 
-  const onPageChange = (page: number): void => {
-    pageSharedCardSetsPageNumberVar(page);
-  };
+  const onPageChange = useCallback(
+    (page: number): void => {
+      pageSharedCardSetsPageNumberVar(page);
+    },
+    [pageSharedCardSetsPageNumberVar]
+  );
 
-  const onRowsPerPageChange = (rows: number): void => {
-    pageSharedCardSetsPageNumberVar(0);
-    pageSharedCardSetsRowsPerPageVar(rows);
-  };
+  const onRowsPerPageChange = useCallback(
+    (rows: number): void => {
+      pageSharedCardSetsPageNumberVar(0);
+      pageSharedCardSetsRowsPerPageVar(rows);
+    },
+    [pageSharedCardSetsPageNumberVar, pageSharedCardSetsRowsPerPageVar]
+  );
 
   const folderIconCell = ({
     cell: {
@@ -244,7 +254,9 @@ const TabCardSetsShared = ({ classes }: TabCardSetsSharedProps) => {
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}
         paginationItemsCount={count}
-        msgNoData={<FormattedMessage id='no.data' />}
+        msgNoData={intl.formatMessage({
+          id: 'no.data',
+        })}
       />
       <DialogConfirm
         isOpen={modalSubscribe.show}
